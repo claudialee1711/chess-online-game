@@ -75,13 +75,53 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
   }
 }
 
+
+/* Penyesuaian sesuai permintaan: warna bidak, tombol permainan, dan panel profil */
+#board .sq > .piece-white {
+  color: #5b351c !important;
+  -webkit-text-fill-color: #5b351c !important;
+  -webkit-text-stroke: 1.15px #17110d !important;
+  paint-order: stroke fill;
+  font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "DejaVu Sans", serif !important;
+  font-weight: 700;
+  text-shadow: 0 1px 1px #0008 !important;
+  filter: none !important;
+}
+#board .sq > .piece-black {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  -webkit-text-stroke: 1.7px #d4af37 !important;
+  paint-order: stroke fill;
+  font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "DejaVu Sans", serif !important;
+  font-weight: 700;
+  text-shadow: 0 0 1px #d4af37, 0 1px 2px #0009 !important;
+  filter: none !important;
+}
+#board .sq.light { background-color: #ffffff !important; }
+#board .sq.dark { background-color: #555b63 !important; }
+.profile-panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.profile-panel-actions { display:flex; align-items:center; gap:7px; }
+.profile-panel-actions #logoutBtn { padding:5px 10px; min-height:32px; font-size:12px; }
+.game-topline { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.game-action-buttons { display:flex; align-items:center; justify-content:flex-end; gap:8px; flex-wrap:wrap; }
+.game-action-buttons button { margin:0 !important; min-height:38px; padding:8px 12px; }
+.game-action-buttons [data-home] { background:#27384d; color:#f2f7ff; border:1px solid #8da9c9; }
+.game-controls { display:flex !important; align-items:center !important; flex-wrap:wrap !important; gap:10px 12px !important; }
+.game-controls .turn-status { flex:1 1 100% !important; width:100% !important; margin:0 !important; }
+@media (max-width:760px) {
+  .game-topline { align-items:flex-start; }
+  .game-action-buttons { width:100%; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
+  .game-action-buttons button { min-width:0; font-size:11px; padding:8px 5px; white-space:normal; }
+  .profile-panel-actions { gap:5px; }
+}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top">
   <div class="top-left"><button id="profileBtn" class="secondary profile-btn hidden" aria-label="Profil pemain" title="Profil pemain"><span id="profileButtonAvatar" class="avatar-fallback">👤</span></button><div class="brand"><div><h1>Chess Arena 1711</h1><div class="sub">Tank1711 app</div></div></div></div>
-  <div class="top-right"><button id="logoutBtn" class="secondary logout-arrow hidden" aria-label="Keluar" title="Keluar">↗</button></div>
+  <div class="top-right"></div>
 </header>
 
 <section id="loginScreen" class="panel">
@@ -105,7 +145,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
     </div>
   </div>
 </section>
-<div id="profilePanel" class="panel hidden" style="position:fixed;z-index:20;top:64px;left:12px;max-width:340px;width:calc(100% - 24px);box-shadow:0 18px 50px #0009"><div class="section-head"><h2>Profil pemain</h2><button id="closeProfileBtn" class="secondary" style="padding:5px 9px">✕</button></div><div class="stack"><label for="profileNameInput">Username</label><input id="profileNameInput" maxlength="24" placeholder="Nama pemain"><label>Foto profil — pilih ikon karakter</label><div class="avatar-options" id="avatarOptions" role="group" aria-label="Pilih ikon profil"><button type="button" class="avatar-option" data-avatar="👨🏻" aria-label="Karakter 1">👨🏻</button><button type="button" class="avatar-option" data-avatar="👩🏻" aria-label="Karakter 2">👩🏻</button><button type="button" class="avatar-option" data-avatar="🧑🏼" aria-label="Karakter 3">🧑🏼</button><button type="button" class="avatar-option" data-avatar="👨🏽" aria-label="Karakter 4">👨🏽</button><button type="button" class="avatar-option" data-avatar="👩🏽" aria-label="Karakter 5">👩🏽</button><button type="button" class="avatar-option" data-avatar="🧑🏽" aria-label="Karakter 6">🧑🏽</button><button type="button" class="avatar-option" data-avatar="🧑🏻‍🎨" aria-label="Karakter 7">🧑🏻‍🎨</button></div><button id="saveProfileBtn">Simpan profil</button><p id="profileStatus" class="muted small" role="status"></p><label for="uidText">UID pemain</label><p id="uidText" style="overflow-wrap:anywhere;font-size:12px;margin:0"></p><button id="copyUidBtn" class="secondary">Salin UID</button></div></div>
+<div id="profilePanel" class="panel hidden" style="position:fixed;z-index:20;top:64px;left:12px;max-width:340px;width:calc(100% - 24px);box-shadow:0 18px 50px #0009"><div class="section-head profile-panel-head"><h2>Profil pemain</h2><div class="profile-panel-actions"><button id="logoutBtn" class="secondary hidden" type="button">Logout</button><button id="closeProfileBtn" class="secondary" style="padding:5px 9px" aria-label="Tutup profil" title="Tutup">✕</button></div></div><div class="stack"><label for="profileNameInput">Username</label><input id="profileNameInput" maxlength="24" placeholder="Nama pemain"><label>Foto profil — pilih ikon karakter</label><div class="avatar-options" id="avatarOptions" role="group" aria-label="Pilih ikon profil"><button type="button" class="avatar-option" data-avatar="👨🏻" aria-label="Karakter 1">👨🏻</button><button type="button" class="avatar-option" data-avatar="👩🏻" aria-label="Karakter 2">👩🏻</button><button type="button" class="avatar-option" data-avatar="🧑🏼" aria-label="Karakter 3">🧑🏼</button><button type="button" class="avatar-option" data-avatar="👨🏽" aria-label="Karakter 4">👨🏽</button><button type="button" class="avatar-option" data-avatar="👩🏽" aria-label="Karakter 5">👩🏽</button><button type="button" class="avatar-option" data-avatar="🧑🏽" aria-label="Karakter 6">🧑🏽</button><button type="button" class="avatar-option" data-avatar="🧑🏻‍🎨" aria-label="Karakter 7">🧑🏻‍🎨</button></div><button id="saveProfileBtn">Simpan profil</button><p id="profileStatus" class="muted small" role="status"></p><label for="uidText">UID pemain</label><p id="uidText" style="overflow-wrap:anywhere;font-size:12px;margin:0"></p><button id="copyUidBtn" class="secondary">Salin UID</button></div></div>
 
 <section id="randomScreen" class="panel hidden">
  <div class="section-head"><h2>🎲 Random Match</h2><button class="secondary" data-home>← Menu</button></div>
@@ -130,7 +170,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 </section>
 
 <section id="gameScreen" class="panel hidden">
- <div class="game-topbar"><div class="game-topline"><h2 id="gameTitle">Permainan</h2><button class="secondary compact" data-home>← Menu</button></div><div class="game-controls"><div class="status turn-status"><div class="muted small">Status giliran</div><strong id="gameStatus">Giliran putih</strong></div><button id="newGameBtn" class="secondary compact" style="margin-left:8px">↻ Ulangi</button><button id="resignBtn" class="danger compact" style="margin-left:8px">Menyerah</button></div></div>
+ <div class="game-topbar"><div class="game-topline"><h2 id="gameTitle">Permainan</h2><div class="game-action-buttons"><button id="newGameBtn" class="secondary compact">↻ Ulangi</button><button id="resignBtn" class="danger compact">Menyerah</button><button class="secondary compact" data-home>← Balik ke Menu</button></div></div><div class="game-controls"><div class="status turn-status"><div class="muted small">Status giliran</div><strong id="gameStatus">Giliran putih</strong></div></div></div>
  <div class="board-layout"><div><div id="board" class="board" aria-label="Papan catur"></div></div><aside class="board-info"><strong id="opponentInfo" class="hidden">—</strong></aside></div>
 </section>
 
