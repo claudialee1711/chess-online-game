@@ -152,6 +152,40 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
   box-shadow: inset 0 1px 2px #ffffff66, 0 5px 13px #0008 !important;
 }
 
+
+/* Papan kembali ke putih dan abu-abu; bidak sedikit lebih besar dan lebih tegas */
+#board .sq.light { background-color: #ffffff !important; }
+#board .sq.dark { background-color: #555b63 !important; }
+#board .sq > span.piece-white,
+#board .sq span.piece-white,
+#board .sq > span.piece-black,
+#board .sq span.piece-black {
+  display: inline-block;
+  font-size: 1.16em !important;
+  line-height: 1 !important;
+  transform: scale(1.08);
+  transform-origin: center;
+  font-family: "Arial Unicode MS", "Segoe UI Symbol", "Noto Sans Symbols 2", "DejaVu Sans", serif !important;
+  font-weight: 900 !important;
+  paint-order: stroke fill;
+}
+#board .sq > span.piece-white,
+#board .sq span.piece-white {
+  color: #6b3d1e !important;
+  -webkit-text-fill-color: #6b3d1e !important;
+  -webkit-text-stroke: 1.8px #090705 !important;
+  text-shadow: 0 0 1px #090705, 0 1px 1px #090705, 0 0 3px #090705 !important;
+  filter: drop-shadow(0 2px 1px #0006) !important;
+}
+#board .sq > span.piece-black,
+#board .sq span.piece-black {
+  color: #080808 !important;
+  -webkit-text-fill-color: #080808 !important;
+  -webkit-text-stroke: 1.8px #d4af37 !important;
+  text-shadow: 0 0 1px #d4af37, 0 0 3px #d4af37, 0 1px 2px #000 !important;
+  filter: drop-shadow(0 2px 1px #0007) !important;
+}
+
 </style>
 </head>
 <body>
