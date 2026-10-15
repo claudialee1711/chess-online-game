@@ -110,9 +110,10 @@ onAuthStateChanged(auth, async user => {
   if(user.isAnonymous && !window.__guestLoginRequested){currentUser=null;await signOut(auth);showScreen("login");return;}
   const shortId=String(Array.from(user.uid).reduce((n,ch)=>(n*31+ch.charCodeAt(0))%10000000,7)).padStart(7,"0");
   $("profileBtn").classList.remove("hidden");
-  $("profileNameInput").value=user.displayName||"";$("profilePhotoInput").value=user.photoURL||"";renderProfileAvatar(user.displayName,user.photoURL);
+  let savedAvatar=null;try{const saved=await getDoc(doc(db,"players",user.uid));if(saved.exists())savedAvatar=saved.data().avatar||null;}catch(e){console.warn("Avatar profil belum bisa dibaca:",e);}
+  selectedAvatar=savedAvatar||"👨🏻";$("profileNameInput").value=user.displayName||"";$("profilePhotoInput").value=user.photoURL||"";renderProfileAvatar(user.displayName,user.photoURL);
   $("logoutBtn").classList.remove("hidden"); $("uidText").textContent=user.uid;
-  try { await setDoc(doc(db,"players",user.uid),{uid:user.uid,name:user.displayName|| (user.isAnonymous?"Pengunjung":"Pemain"),email:user.email||null,anonymous:user.isAnonymous,updatedAt:serverTimestamp()},{merge:true}); } catch(e){console.warn("Profil belum tersimpan:",e);}
+  try { await setDoc(doc(db,"players",user.uid),{uid:user.uid,name:user.displayName|| (user.isAnonymous?"Pengunjung":"Pemain"),email:user.email||null,anonymous:user.isAnonymous,avatar:selectedAvatar,photoURL:user.photoURL||null,updatedAt:serverTimestamp()},{merge:true}); } catch(e){console.warn("Profil belum tersimpan:",e);}
   showScreen("home"); loadFriends();
 });
 let selectedAvatar="👨🏻";function renderProfileAvatar(name,url){const a=$("profileAvatar"),b=$("profileButtonAvatar");a.innerHTML="";b.innerHTML="";if(url){const img=document.createElement("img");img.src=url;img.alt="Foto profil";img.style="width:100%;height:100%;object-fit:cover;border-radius:50%";img.onerror=()=>{a.textContent=selectedAvatar;b.textContent=selectedAvatar;};a.appendChild(img);b.appendChild(img.cloneNode());}else{a.textContent=selectedAvatar;b.textContent=selectedAvatar;}document.querySelectorAll("[data-avatar]").forEach(btn=>btn.classList.toggle("active",btn.dataset.avatar===selectedAvatar));}document.querySelectorAll("[data-avatar]").forEach(btn=>btn.onclick=()=>{selectedAvatar=btn.dataset.avatar;$("profilePhotoInput").value="";renderProfileAvatar($("profileNameInput").value,"");});
