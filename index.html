@@ -16,7 +16,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 <body>
 <div class="wrap">
 <header class="top">
-  <div class="top-left"><button id="profileBtn" class="secondary profile-btn hidden">Profil · <span id="shortUid">0000000</span></button><div class="brand"><div class="logo">♟</div><div><h1>Chess Arena 1711</h1><div class="sub">Tank1711 app</div></div></div></div>
+  <div class="top-left"><button id="profileBtn" class="secondary profile-btn hidden">Profil · <span id="shortUid">0000000</span></button><div class="brand"><div><h1>Chess Arena 1711</h1><div class="sub">Tank1711 app</div></div></div></div>
   <div class="top-right"><button id="logoutBtn" class="secondary logout-arrow hidden" aria-label="Keluar" title="Keluar">↗</button></div>
 </header>
 
@@ -41,7 +41,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
     </div>
   </div>
 </section>
-<div id="profilePanel" class="panel hidden" style="position:fixed;z-index:20;top:64px;left:12px;max-width:340px;width:calc(100% - 24px);box-shadow:0 18px 50px #0009"><div class="section-head"><h2>Profil pemain</h2><button id="closeProfileBtn" class="secondary" style="padding:5px 9px">✕</button></div><p class="muted small">ID tampilan 7 angka</p><h2 id="profileShortUid" class="title">0000000</h2><p class="muted small">UID Firebase untuk menambahkan teman</p><p id="uidText" style="overflow-wrap:anywhere;font-size:12px"></p><button id="copyUidBtn" class="secondary">Salin UID lengkap</button></div>
+<div id="profilePanel" class="panel hidden" style="position:fixed;z-index:20;top:64px;left:12px;max-width:340px;width:calc(100% - 24px);box-shadow:0 18px 50px #0009"><div class="section-head"><h2>Profil pemain</h2><button id="closeProfileBtn" class="secondary" style="padding:5px 9px">✕</button></div><div class="stack"><label for="profileNameInput">Username</label><input id="profileNameInput" maxlength="24" placeholder="Nama pemain"><label for="profilePhotoInput">Foto profil (URL gambar)</label><input id="profilePhotoInput" type="url" placeholder="https://..."><div id="profileAvatar" style="width:64px;height:64px;border-radius:50%;background:#26384b;display:grid;place-items:center;overflow:hidden">♟</div><button id="saveProfileBtn">Simpan profil</button><p id="profileStatus" class="muted small" role="status"></p><p id="uidText" class="hidden"></p><button id="copyUidBtn" class="secondary">Salin UID</button></div></div>
 
 <section id="randomScreen" class="panel hidden">
  <div class="section-head"><h2>🎲 Random Match</h2><button class="secondary" data-home>← Menu</button></div>
@@ -52,7 +52,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 
 <section id="botScreen" class="panel hidden">
  <div class="section-head"><h2>🤖 VS Bot</h2><button class="secondary" data-home>← Menu</button></div>
- <div class="stack"><label for="difficulty">Tingkat kesulitan</label><select id="difficulty" style="background:#0e1622;color:var(--text);padding:11px;border:1px solid var(--line);border-radius:10px"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option><option value="expert">Expert</option></select><p class="muted small">Catatan: versi awal ini memakai pemilih langkah sederhana, bukan mesin catur tingkat ahli. Mesin AI yang kuat bisa ditambahkan berikutnya.</p><button id="startBotBtn">Mulai permainan</button></div>
+ <div class="stack"><label for="difficulty">Tingkat kesulitan</label><select id="difficulty" style="background:#0e1622;color:var(--text);padding:11px;border:1px solid var(--line);border-radius:10px"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option><option value="expert">Expert</option></select><p class="muted small">Expert memakai pencarian beberapa langkah ke depan; hasilnya bisa berbeda dari mesin catur profesional.</p><button id="startBotBtn">Mulai permainan</button></div>
 </section>
 
 <section id="privateScreen" class="panel hidden">
@@ -78,13 +78,13 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
   </aside>
  </div>
 </section>
-<p class="footer">Chess Online · Versi awal · Jangan bagikan kata sandi atau private key.</p>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, getDocs, onSnapshot, serverTimestamp, runTransaction, deleteDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 const Chess = window.Chess;
 
@@ -117,12 +117,15 @@ onAuthStateChanged(auth, async user => {
   currentUser=user;
   if(!user){$("profileBtn").classList.add("hidden");$("logoutBtn").classList.add("hidden");showScreen("login");return;}
   const shortId=String(Array.from(user.uid).reduce((n,ch)=>(n*31+ch.charCodeAt(0))%10000000,7)).padStart(7,"0");
-  $("shortUid").textContent=shortId;$("profileShortUid").textContent=shortId;$("profileBtn").classList.remove("hidden");
+  $("shortUid").textContent=shortId;$("profileBtn").classList.remove("hidden");
+  $("profileNameInput").value=user.displayName||"";$("profilePhotoInput").value=user.photoURL||"";renderProfileAvatar(user.displayName,user.photoURL);
   $("logoutBtn").classList.remove("hidden"); $("uidText").textContent=user.uid;
   try { await setDoc(doc(db,"players",user.uid),{uid:user.uid,name:user.displayName|| (user.isAnonymous?"Pengunjung":"Pemain"),email:user.email||null,anonymous:user.isAnonymous,updatedAt:serverTimestamp()},{merge:true}); } catch(e){console.warn("Profil belum tersimpan:",e);}
   showScreen("home"); loadFriends();
 });
-$("copyUidBtn").onclick=async()=>{try{await navigator.clipboard.writeText(currentUser.uid);$("copyUidBtn").textContent="UID tersalin!";setTimeout(()=> $("copyUidBtn").textContent="Salin UID",1500);}catch{msg("uidText","UID kamu: "+currentUser.uid);}};
+function renderProfileAvatar(name,url){const a=$("profileAvatar");a.innerHTML="";if(url){const img=document.createElement("img");img.src=url;img.alt="Foto profil";img.style="width:100%;height:100%;object-fit:cover";img.onerror=()=>{a.textContent=(name||"♟").slice(0,1).toUpperCase();};a.appendChild(img);}else{a.textContent=(name||"♟").slice(0,1).toUpperCase();}}
+$("saveProfileBtn").onclick=async()=>{if(!currentUser)return;const name=$("profileNameInput").value.trim().slice(0,24);const photoURL=$("profilePhotoInput").value.trim();if(photoURL&&!/^https:\/\//i.test(photoURL)){msg("profileStatus","URL foto harus dimulai dengan https://","error");return;}try{await updateProfile(currentUser,{displayName:name||"Pemain",photoURL:photoURL||null});await setDoc(doc(db,"players",currentUser.uid),{uid:currentUser.uid,name:name||"Pemain",photoURL:photoURL||null,updatedAt:serverTimestamp()},{merge:true});renderProfileAvatar(name,photoURL);msg("profileStatus","Profil berhasil disimpan.","success");}catch(e){msg("profileStatus","Gagal menyimpan: "+(e.code||e.message),"error");}};
+$("copyUidBtn").onclick=async()=>{try{await navigator.clipboard.writeText(currentUser.uid);$("copyUidBtn").textContent="UID tersalin!";setTimeout(()=> $("copyUidBtn").textContent="Salin UID",1500);}catch{msg("profileStatus","Salin UID gagal. Coba browser HTTPS.","error");}};
 $("profileBtn").onclick=()=>$("profilePanel").classList.toggle("hidden");$("closeProfileBtn").onclick=()=>$("profilePanel").classList.add("hidden");
 document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
 document.querySelectorAll("[data-home]").forEach(b=>b.onclick=async()=>{await cleanupListeners();showScreen("home");});
@@ -161,19 +164,9 @@ function handleSquare(sq){
  if(piece&&piece.color===game.turn()&&!(gameMode==="bot"&&piece.color===botColor)){selectedSquare=sq;}else selectedSquare=null;
  renderBoard();
 }
-function botMove(){
- if(!game||game.game_over()||game.turn()!==botColor)return;
- const moves=game.moves();if(!moves.length)return;
- const level=$("difficulty").value;
- let chosen;
- if(level==="easy")chosen=moves[Math.floor(Math.random()*moves.length)];
- else {
-  // Heuristic starter AI: prefer captures/checks, with a small random element.
-  const scored=moves.map(s=>{let copy=new Chess(game.fen());let m=copy.move(s);let score=(m.captured?({p:1,n:3,b:3,r:5,q:9}[m.captured]||1):0)+(copy.in_checkmate()?1000:0)+(copy.in_check()?0.4:0);return {s,score:score+(Math.random()*(level==="normal"?1.5:level==="hard"?0.6:0.25))};}).sort((a,b)=>b.score-a.score);
-  chosen=scored[0].s;
- }
- try{game.move(chosen);}catch{}renderBoard();
-}
+function evaluatePosition(ch){const val={p:100,n:320,b:330,r:500,q:900,k:20000};let score=0;const board=ch.board();for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=board[r][c];if(p){let v=val[p.type]||0;const center=3.5-(Math.abs(3.5-r)+Math.abs(3.5-c))/2;v+=center*(p.type==="p"?8:p.type==="n"||p.type==="b"?5:1);score+=(p.color==="w"?v:-v);}}if(ch.in_check())score+=ch.turn()==="w"?-18:18;return score;}
+function minimax(ch,depth,alpha,beta,maximizing){if(ch.game_over())return ch.in_checkmate()?(ch.turn()==="w"?-100000-depth:100000+depth):0;if(depth<=0)return evaluatePosition(ch);const moves=ch.moves({verbose:true});moves.sort((a,b)=>(b.captured?1:0)-(a.captured?1:0));if(maximizing){let best=-Infinity;for(const m of moves){ch.move(m);const s=minimax(ch,depth-1,alpha,beta,false);ch.undo();best=Math.max(best,s);alpha=Math.max(alpha,best);if(beta<=alpha)break;}return best;}let best=Infinity;for(const m of moves){ch.move(m);const s=minimax(ch,depth-1,alpha,beta,true);ch.undo();best=Math.min(best,s);beta=Math.min(beta,best);if(beta<=alpha)break;}return best;}
+function botMove(){if(!game||game.game_over()||game.turn()!==botColor)return;const moves=game.moves({verbose:true});if(!moves.length)return;const level=$("difficulty").value;if(level==="easy"){game.move(moves[Math.floor(Math.random()*moves.length)]);renderBoard();return;}const depth=level==="normal"?1:level==="hard"?2:3;let best=-Infinity,choices=[];for(const m of moves){game.move(m);const score=minimax(game,depth-1,-Infinity,Infinity,botColor==="w");game.undo();const adjusted=botColor==="w"?score:-score;if(adjusted>best){best=adjusted;choices=[m];}else if(adjusted===best)choices.push(m);}game.move(choices[Math.floor(Math.random()*choices.length)]);renderBoard();}
 async function createRoom(opponentUid=null){
  const code=Math.random().toString(36).slice(2,8).toUpperCase();
  const ref=await addDoc(collection(db,"rooms"),{code,hostUid:currentUser.uid,guestUid:opponentUid,status:"waiting",fen:new Chess().fen(),turn:"w",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
