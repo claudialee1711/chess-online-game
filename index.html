@@ -438,7 +438,7 @@ $("copyUidBtn").onclick=async()=>{try{await navigator.clipboard.writeText($("uid
 $("profileBtn").onclick=()=>$("profilePanel").classList.toggle("hidden");$("closeProfileBtn").onclick=()=>$("profilePanel").classList.add("hidden");
 document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>{showScreen(b.dataset.screen);if(b.dataset.screen==="friends"){loadFriends();loadIncomingChallenges();}if(b.dataset.screen==="chat"){loadChatContacts();}});
 document.querySelectorAll("[data-home]").forEach(b=>b.onclick=async()=>{await cleanupListeners();showScreen("home");});
-async function cleanupListeners(){if(roomUnsub){roomUnsub();roomUnsub=null;}if(queueUnsub){queueUnsub();queueUnsub=null;}if(friendsUnsub){friendsUnsub();friendsUnsub=null;}if(chatUnsub){chatUnsub();chatUnsub=null;}if(inviteUnsub){inviteUnsub();inviteUnsub=null;}if($("findMatchBtn"))$("findMatchBtn").disabled=false;}
+async function cleanupListeners(){if(roomUnsub){roomUnsub();roomUnsub=null;}if(queueUnsub){queueUnsub();queueUnsub=null;}if(friendsUnsub){friendsUnsub();friendsUnsub=null;}if(chatUnsub){chatUnsub();chatUnsub=null;}if(inviteUnsub){inviteUnsub();inviteUnsub=null;}for(const unsub of chatNoticeUnsubs)unsub();chatNoticeUnsubs=[];if($("findMatchBtn"))$("findMatchBtn").disabled=false;}
 function startGame(mode,title,opponent="—",fen=null,preserveRoom=false){
  $("gameResultOverlay")?.classList.add("hidden");
  gameMode=mode;if(!preserveRoom){currentRoomId=null;myRoomColor=null;roomStatus="";}opponentUid="";opponentShortUid="";opponentName=opponent;game=new Chess(fen||undefined);selectedSquare=null;gameOver=false;
@@ -567,7 +567,33 @@ async function loadPlayersDirectory(){
  }catch(e){list.innerHTML='<p class="muted">Daftar pemain tidak bisa dimuat: '+esc(e.message)+'</p>';}
 }
 async function loadChatContacts(){
- if(!currentUser)return;const list=$("chatContacts");list.innerHTML='<p class="muted">Memuat teman…</p>';try{const snap=await getDocs(collection(db,"players",currentUser.uid,"friends"));list.innerHTML="";if(snap.empty){list.innerHTML='<p class="muted">Belum ada teman. Tambahkan teman dari menu Teman.</p>';return;}for(const f of snap.docs){const d=f.data(),uid=d.uid||f.id,name=d.name||"Teman";const row=document.createElement("div");row.className="list-item";row.innerHTML='<div><strong>'+esc(name)+'</strong><div class="muted small">ID '+esc(d.shortUid||uid)+'</div></div><button class="secondary compact" data-open-chat="'+esc(uid)+'" data-name="'+esc(name)+'">Chat</button>';list.appendChild(row);}list.querySelectorAll("[data-open-chat]").forEach(b=>b.onclick=()=>openFriendChat(b.dataset.openChat,b.dataset.name));}catch(e){list.innerHTML='<p class="muted">Kontak gagal dimuat: '+esc(e.message)+'</p>';}}
+ if(!currentUser)return;
+ for(const unsub of chatNoticeUnsubs)unsub();chatNoticeUnsubs=[];
+ const list=$("chatContacts");list.innerHTML='<p class="muted">Memuat teman…</p>';
+ try{
+  const snap=await getDocs(collection(db,"players",currentUser.uid,"friends"));list.innerHTML="";
+  if(snap.empty){list.innerHTML='<p class="muted">Belum ada teman. Tambahkan teman dari menu Teman.</p>';return;}
+  for(const f of snap.docs){
+   const d=f.data(),uid=d.uid||f.id,name=d.name||"Teman";
+   const row=document.createElement("div");row.className="list-item";row.dataset.contactUid=uid;
+   row.innerHTML='<div><strong>'+esc(name)+'</strong><div class="muted small">ID '+esc(d.shortUid||uid)+'</div><div class="muted small" data-chat-preview>Memeriksa pesan…</div></div><button class="secondary compact" data-open-chat="'+esc(uid)+'" data-name="'+esc(name)+'">Chat</button>';
+   list.appendChild(row);
+   const chatId=[currentUser.uid,uid].sort().join("__");
+   const unsub=onSnapshot(collection(db,"friendChats",chatId,"messages"),messagesSnap=>{
+    const msgs=messagesSnap.docs.slice().sort((a,b)=>(b.data().createdAt?.toMillis?.()||0)-(a.data().createdAt?.toMillis?.()||0));
+    const preview=row.querySelector("[data-chat-preview]");
+    if(!msgs.length){preview.textContent="Belum ada pesan";return;}
+    const latest=msgs[0].data(),sender=latest.senderName||name,previewText=String(latest.text||"").slice(0,70);
+    if(latest.senderUid!==currentUser.uid){
+     preview.textContent="💬 Pesan dari "+sender+": "+previewText;
+     if(activeChatUid!==uid){$("chatNotification").textContent="💬 Ada pesan dari "+sender+": "+String(latest.text||"").slice(0,100);$("chatNotification").className="success small";}
+    }else{preview.textContent="Terakhir: "+previewText;}
+   },e=>{console.warn("Notifikasi chat tidak bisa dimuat:",e.message);const preview=row.querySelector("[data-chat-preview]");if(preview)preview.textContent="Notifikasi belum tersedia";});
+   chatNoticeUnsubs.push(unsub);
+  }
+  list.querySelectorAll("[data-open-chat]").forEach(b=>b.onclick=()=>openFriendChat(b.dataset.openChat,b.dataset.name));
+ }catch(e){list.innerHTML='<p class="muted">Kontak gagal dimuat: '+esc(e.message)+'</p>';}
+}
 async function loadFriends(){
  if(!currentUser)return;if(friendsUnsub)friendsUnsub();loadIncomingChallenges();
  friendsUnsub=onSnapshot(collection(db,"players",currentUser.uid,"friends"),async snap=>{
