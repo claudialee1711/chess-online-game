@@ -15,7 +15,10 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 </head>
 <body>
 <div class="wrap">
-<header class="top">\n  <div class="top-left"><button id="profileBtn" class="secondary profile-btn hidden">Profil · <span id="shortUid">0000000</span></button><div class="brand"><div class="logo">♟</div><div><h1>Chess Arena 1711</h1><div class="sub">Tank1711 app</div></div></div></div>\n  <div class="top-right"><button id="logoutBtn" class="secondary logout-arrow hidden" aria-label="Keluar" title="Keluar">↗</button></div>\n</header>
+<header class="top">
+  <div class="top-left"><button id="profileBtn" class="secondary profile-btn hidden">Profil · <span id="shortUid">0000000</span></button><div class="brand"><div class="logo">♟</div><div><h1>Chess Arena 1711</h1><div class="sub">Tank1711 app</div></div></div></div>
+  <div class="top-right"><button id="logoutBtn" class="secondary logout-arrow hidden" aria-label="Keluar" title="Keluar">↗</button></div>
+</header>
 
 <section id="loginScreen" class="panel">
   <div class="eyebrow">Selamat datang</div>
@@ -37,7 +40,8 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
       <button class="menu-card" data-screen="friends"><span class="emoji">👥</span><h3>Teman</h3><p>Tambah teman menggunakan UID dan tantang bermain.</p></button>
     </div>
   </div>
-</section>\n<div id="profilePanel" class="panel hidden" style="position:fixed;z-index:20;top:64px;left:12px;max-width:340px;width:calc(100% - 24px);box-shadow:0 18px 50px #0009"><div class="section-head"><h2>Profil pemain</h2><button id="closeProfileBtn" class="secondary" style="padding:5px 9px">✕</button></div><p class="muted small">ID tampilan 7 angka</p><h2 id="profileShortUid" class="title">0000000</h2><p class="muted small">UID Firebase untuk menambahkan teman</p><p id="uidText" style="overflow-wrap:anywhere;font-size:12px"></p><button id="copyUidBtn" class="secondary">Salin UID lengkap</button></div>
+</section>
+<div id="profilePanel" class="panel hidden" style="position:fixed;z-index:20;top:64px;left:12px;max-width:340px;width:calc(100% - 24px);box-shadow:0 18px 50px #0009"><div class="section-head"><h2>Profil pemain</h2><button id="closeProfileBtn" class="secondary" style="padding:5px 9px">✕</button></div><p class="muted small">ID tampilan 7 angka</p><h2 id="profileShortUid" class="title">0000000</h2><p class="muted small">UID Firebase untuk menambahkan teman</p><p id="uidText" style="overflow-wrap:anywhere;font-size:12px"></p><button id="copyUidBtn" class="secondary">Salin UID lengkap</button></div>
 
 <section id="randomScreen" class="panel hidden">
  <div class="section-head"><h2>🎲 Random Match</h2><button class="secondary" data-home>← Menu</button></div>
@@ -107,11 +111,11 @@ function showScreen(name) {
 function msg(id, text, kind="muted") { const el=$(id); el.textContent=text; el.className=kind; }
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 $("googleBtn").onclick = async () => { try { msg("loginMessage","Membuka login Google…"); await signInWithPopup(auth,new GoogleAuthProvider()); } catch(e){msg("loginMessage",e.message,"error");} };
-$("guestBtn").onclick = async () => { try { msg("loginMessage","Membuat sesi pengunjung…"); await signInAnonymously(auth); } catch(e){msg("loginMessage",e.message,"error");} };
+$("guestBtn").onclick = async () => { const btn=$("guestBtn"); btn.disabled=true; try { msg("loginMessage","Membuat sesi pengunjung…"); await signInAnonymously(auth); msg("loginMessage","Berhasil masuk sebagai pengunjung.","success"); } catch(e){ console.error("Login pengunjung gagal:",e); msg("loginMessage","Gagal masuk: "+(e.code||e.message||"Periksa koneksi dan pengaturan Firebase Authentication."),"error"); } finally { btn.disabled=false; } };
 $("logoutBtn").onclick = async () => { await cleanupListeners(); await signOut(auth); };
 onAuthStateChanged(auth, async user => {
   currentUser=user;
-  if(!user){$("userLabel").textContent="Belum login";$("logoutBtn").classList.add("hidden");showScreen("login");return;}
+  if(!user){$("profileBtn").classList.add("hidden");$("logoutBtn").classList.add("hidden");showScreen("login");return;}
   const shortId=String(Array.from(user.uid).reduce((n,ch)=>(n*31+ch.charCodeAt(0))%10000000,7)).padStart(7,"0");
   $("shortUid").textContent=shortId;$("profileShortUid").textContent=shortId;$("profileBtn").classList.remove("hidden");
   $("logoutBtn").classList.remove("hidden"); $("uidText").textContent=user.uid;
