@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess Online</title>
+<style>
+:root{color-scheme:dark;--bg:#0c111b;--panel:#151e2c;--panel2:#1c293b;--line:#2d3b50;--text:#edf3fb;--muted:#a7b5c9;--accent:#7ce0b3;--accent2:#9cc5ff;--danger:#ff9b9b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#18283a 0,#0c111b 48%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;background:var(--accent);color:#102017;font-weight:750}button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button.danger{background:#49262e;color:#ffdede}button:disabled{opacity:.45;cursor:not-allowed}
+input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px;outline:none}input:focus{border-color:var(--accent2)}
+.wrap{max-width:1120px;margin:auto;padding:24px 16px 48px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}.brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;border-radius:14px;background:var(--accent);color:#102017;display:grid;place-items:center;font-size:26px}.brand h1{font-size:20px;margin:0}.sub{color:var(--muted);font-size:13px}.user{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}.panel{background:rgba(21,30,44,.94);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 16px 40px #0002}.hidden{display:none!important}.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:800}.title{font-size:clamp(26px,4vw,38px);line-height:1.1;margin:8px 0 12px}.muted{color:var(--muted)}.login-grid,.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.login-grid{margin-top:22px}.menu-card{background:linear-gradient(145deg,#1b293a,#131c29);border:1px solid var(--line);border-radius:18px;padding:20px;text-align:left;color:var(--text);min-height:165px}.menu-card:hover{border-color:#7ce0b3;transform:translateY(-1px)}.menu-card .emoji{font-size:26px}.menu-card h3{margin:9px 0 5px;font-size:18px}.menu-card p{margin:0;color:var(--muted);font-weight:400;font-size:13px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.section-head h2{margin:0}.row{display:flex;gap:10px;align-items:center}.row>*{min-width:0}.row input{flex:1}.stack{display:grid;gap:12px}.notice{border:1px solid #655a32;background:#302a1a;color:#f7e5a9;padding:12px 14px;border-radius:12px;font-size:13px}.success{color:var(--accent)}.error{color:var(--danger)}.list{display:grid;gap:8px}.list-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;background:#101927;border:1px solid var(--line);border-radius:12px}.small{font-size:12px}.board-layout{display:grid;grid-template-columns:minmax(0,640px) minmax(220px,1fr);gap:20px;align-items:start}.board{width:100%;aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);border:4px solid #35445a;border-radius:7px;overflow:hidden}.sq{display:grid;place-items:center;position:relative;font-size:clamp(24px,5.2vw,52px);padding:0;line-height:1;border-radius:0;color:#111;background:#e8e4d8;user-select:none}.sq.dark{background:#7e9b8d}.sq.selected{box-shadow:inset 0 0 0 4px #f5d76e}.sq.legal:after{content:"";width:22%;height:22%;border-radius:50%;background:#17271f66;position:absolute}.sq.capture:after{content:"";position:absolute;inset:4px;border:4px solid #a33b45;border-radius:50%}.sq .coord{position:absolute;left:4px;top:3px;font-size:10px;color:#24342b}.sq.dark .coord{color:#f5f4e9}.board-info{display:grid;gap:12px}.status{padding:12px;background:#101927;border:1px solid var(--line);border-radius:12px}.footer{margin-top:20px;color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:760px){.top{align-items:flex-start}.user{flex-direction:column;align-items:flex-end}.menu-grid,.login-grid{grid-template-columns:1fr}.board-layout{grid-template-columns:1fr}.panel{padding:16px}.wrap{padding:16px 12px 32px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><div class="logo">♟</div><div><h1>Chess Online</h1><div class="sub">Main catur bersama teman</div></div></div>
+  <div class="user"><span id="userLabel">Belum login</span><button id="logoutBtn" class="secondary hidden">Keluar</button></div>
+</header>
+
+<section id="loginScreen" class="panel">
+  <div class="eyebrow">Selamat datang</div>
+  <h2 class="title">Satu langkah menuju skakmat.</h2>
+  <p class="muted">Masuk dengan Google atau lanjut sebagai pengunjung. Akun pengunjung dapat ditautkan ke Google nanti hanya jika fitur itu ditambahkan.</p>
+  <div class="login-grid">
+    <button id="googleBtn">Masuk dengan Google</button>
+    <button id="guestBtn" class="secondary">Lanjut sebagai pengunjung</button>
+  </div>
+  <p id="loginMessage" class="muted small" role="status"></p>
+</section>
+
+<section id="homeScreen" class="hidden">
+  <div class="panel" style="margin-bottom:16px">
+    <div class="eyebrow">Arena catur</div>
+    <h2 class="title">Pilih permainanmu.</h2>
+    <p class="muted">Empat cara bermain. Tantang teman atau cari lawan baru.</p>
+    <div class="menu-grid">
+      <button class="menu-card" data-screen="random"><span class="emoji">🎲</span><h3>Random Match</h3><p>Antre untuk dipasangkan dengan pemain online lain.</p></button>
+      <button class="menu-card" data-screen="bot"><span class="emoji">🤖</span><h3>VS Bot</h3><p>Main melawan komputer dengan empat tingkat kesulitan.</p></button>
+      <button class="menu-card" data-screen="private"><span class="emoji">🔐</span><h3>Private Match</h3><p>Buat room pribadi atau masuk memakai kode.</p></button>
+      <button class="menu-card" data-screen="friends"><span class="emoji">👥</span><h3>Teman</h3><p>Tambah teman menggunakan UID dan tantang bermain.</p></button>
+    </div>
+  </div>
+  <div class="panel"><div class="section-head"><h2>Profil pemain</h2><span class="eyebrow">UID</span></div><p id="uidText" style="overflow-wrap:anywhere"></p><button id="copyUidBtn" class="secondary">Salin UID</button></div>
+</section>
+
+<section id="randomScreen" class="panel hidden">
+ <div class="section-head"><h2>🎲 Random Match</h2><button class="secondary" data-home>← Menu</button></div>
+ <p class="muted">Tekan cari lawan untuk masuk antrean. Sistem hanya memasangkan pemain yang juga sedang menunggu.</p>
+ <div class="row"><button id="findMatchBtn">Cari lawan</button><button id="cancelMatchBtn" class="secondary">Batal antre</button></div>
+ <p id="randomStatus" class="muted" role="status">Belum mencari lawan.</p>
+</section>
+
+<section id="botScreen" class="panel hidden">
+ <div class="section-head"><h2>🤖 VS Bot</h2><button class="secondary" data-home>← Menu</button></div>
+ <div class="stack"><label for="difficulty">Tingkat kesulitan</label><select id="difficulty" style="background:#0e1622;color:var(--text);padding:11px;border:1px solid var(--line);border-radius:10px"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option><option value="expert">Expert</option></select><p class="muted small">Catatan: versi awal ini memakai pemilih langkah sederhana, bukan mesin catur tingkat ahli. Mesin AI yang kuat bisa ditambahkan berikutnya.</p><button id="startBotBtn">Mulai permainan</button></div>
+</section>
+
+<section id="privateScreen" class="panel hidden">
+ <div class="section-head"><h2>🔐 Private Match</h2><button class="secondary" data-home>← Menu</button></div>
+ <div class="stack"><button id="createRoomBtn">Buat room baru</button><div class="row"><input id="roomCodeInput" placeholder="Masukkan kode room" maxlength="8" autocomplete="off"><button id="joinRoomBtn">Masuk</button></div><p id="privateStatus" class="muted" role="status"></p></div>
+</section>
+
+<section id="friendsScreen" class="panel hidden">
+ <div class="section-head"><h2>👥 Teman</h2><button class="secondary" data-home>← Menu</button></div>
+ <div class="stack"><div class="row"><input id="friendUidInput" placeholder="Masukkan UID teman"><button id="addFriendBtn">Tambah</button></div><p id="friendsStatus" class="muted small" role="status"></p><h3>Daftar teman</h3><div id="friendsList" class="list"><p class="muted">Login untuk melihat daftar teman.</p></div></div>
+</section>
+
+<section id="gameScreen" class="panel hidden">
+ <div class="section-head"><h2 id="gameTitle">Permainan</h2><button class="secondary" data-home>Keluar ke menu</button></div>
+ <div class="board-layout">
+  <div><div id="board" class="board" aria-label="Papan catur"></div></div>
+  <aside class="board-info">
+   <div class="status"><div class="muted small">Status</div><strong id="gameStatus">Giliran putih</strong></div>
+   <div class="status"><div class="muted small">Room / lawan</div><strong id="opponentInfo">—</strong></div>
+   <button id="newGameBtn" class="secondary">Mulai ulang</button>
+   <button id="resignBtn" class="danger">Menyerah</button>
+   <p class="muted small">Game lokal memakai aturan langkah catur yang valid. Multiplayer perlu sinkronisasi Firestore dan aturan keamanan yang dipasang dengan benar.</p>
+  </aside>
+ </div>
+</section>
+<p class="footer">Chess Online · Versi awal · Jangan bagikan kata sandi atau private key.</p>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, getDocs, onSnapshot, serverTimestamp, runTransaction, deleteDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { Chess } from "https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBeuml-FTBPWI2nraYOsopvKdfEFoKI-YQ",
+  authDomain: "chess-online-game-7cbb9.firebaseapp.com",
+  projectId: "chess-online-game-7cbb9",
+  storageBucket: "chess-online-game-7cbb9.firebasestorage.app",
+  messagingSenderId: "189359456636",
+  appId: "1:189359456636:web:90ebe8b5f10c7223a764f9",
+  measurementId: "G-1HQ1JZJ97Y"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+let currentUser = null, game = null, gameMode = "local", currentRoomId = null, roomUnsub = null, queueUnsub = null, friendsUnsub = null, selectedSquare = null, botColor = "b", gameOver = false;
+
+function showScreen(name) {
+  ["loginScreen","homeScreen","randomScreen","botScreen","privateScreen","friendsScreen","gameScreen"].forEach(id => $(id).classList.add("hidden"));
+  $(name + "Screen")?.classList.remove("hidden");
+  if(name === "game") $("gameScreen").classList.remove("hidden");
+}
+function msg(id, text, kind="muted") { const el=$(id); el.textContent=text; el.className=kind; }
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+$("googleBtn").onclick = async () => { try { msg("loginMessage","Membuka login Google…"); await signInWithPopup(auth,new GoogleAuthProvider()); } catch(e){msg("loginMessage",e.message,"error");} };
+$("guestBtn").onclick = async () => { try { msg("loginMessage","Membuat sesi pengunjung…"); await signInAnonymously(auth); } catch(e){msg("loginMessage",e.message,"error");} };
+$("logoutBtn").onclick = async () => { await cleanupListeners(); await signOut(auth); };
+onAuthStateChanged(auth, async user => {
+  currentUser=user;
+  if(!user){$("userLabel").textContent="Belum login";$("logoutBtn").classList.add("hidden");showScreen("login");return;}
+  $("userLabel").textContent=(user.isAnonymous?"Pengunjung":(user.displayName||user.email||"Pemain"))+" · "+user.uid.slice(0,8);
+  $("logoutBtn").classList.remove("hidden"); $("uidText").textContent=user.uid;
+  try { await setDoc(doc(db,"players",user.uid),{uid:user.uid,name:user.displayName|| (user.isAnonymous?"Pengunjung":"Pemain"),email:user.email||null,anonymous:user.isAnonymous,updatedAt:serverTimestamp()},{merge:true}); } catch(e){console.warn("Profil belum tersimpan:",e);}
+  showScreen("home"); loadFriends();
+});
+$("copyUidBtn").onclick=async()=>{try{await navigator.clipboard.writeText(currentUser.uid);$("copyUidBtn").textContent="UID tersalin!";setTimeout(()=> $("copyUidBtn").textContent="Salin UID",1500);}catch{msg("uidText","UID kamu: "+currentUser.uid);}};
+document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
+document.querySelectorAll("[data-home]").forEach(b=>b.onclick=async()=>{await cleanupListeners();showScreen("home");});
+async function cleanupListeners(){if(roomUnsub){roomUnsub();roomUnsub=null;}if(queueUnsub){queueUnsub();queueUnsub=null;}if(friendsUnsub){friendsUnsub();friendsUnsub=null;}}
+function startGame(mode,title,opponent="—",fen=null){
+ gameMode=mode; currentRoomId=null; game=new Chess(fen||undefined);selectedSquare=null;gameOver=false;
+ $("gameTitle").textContent=title;$("opponentInfo").textContent=opponent;showScreen("game");renderBoard();
+}
+$("startBotBtn").onclick=()=>{botColor="b";startGame("bot","VS Bot · "+$("difficulty").selectedOptions[0].text,"Bot ("+$("difficulty").selectedOptions[0].text+")");};
+$("newGameBtn").onclick=()=>{if(gameMode==="bot")startGame("bot","VS Bot · "+$("difficulty").selectedOptions[0].text,"Bot ("+$("difficulty").selectedOptions[0].text+")");else startGame("local","Permainan baru","Lokal");};
+$("resignBtn").onclick=()=>{if(gameOver)return;gameOver=true;msg("gameStatus","Kamu mengakhiri permainan.","error");};
+function renderBoard(){
+ if(!game)return;
+ const board=$("board");board.innerHTML="";
+ const files="abcdefgh", pieces={w:{k:"♔",q:"♕",r:"♖",b:"♗",n:"♘",p:"♙"},b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}};
+ const legal=selectedSquare?game.moves({square:selectedSquare,verbose:true}).map(m=>m.to):[];
+ for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+  const sq=files[c]+(8-r), piece=game.get(sq), btn=document.createElement("button");
+  btn.className="sq "+((r+c)%2?"dark":"light");btn.setAttribute("aria-label",sq+(piece? " "+piece.color+piece.type:""));
+  if(selectedSquare===sq)btn.classList.add("selected");if(legal.includes(sq))btn.classList.add(piece?"capture":"legal");
+  btn.innerHTML=(c===0?`<span class="coord">${8-r}</span>`:"")+(r===7?`<span class="coord" style="left:auto;right:4px;top:auto;bottom:2px">${files[c]}</span>`:"")+(piece?pieces[piece.color][piece.type]:"");
+  btn.onclick=()=>handleSquare(sq);board.appendChild(btn);
+ }
+ let status=game.turn()==="w"?"Giliran putih":"Giliran hitam";
+ if(game.in_check())status+=" · Skak!";
+ if(game.game_over()){gameOver=true;status=game.in_checkmate()?"Skakmat! "+(game.turn()==="w"?"Hitam":"Putih")+" menang.":game.in_draw()?"Remis.":"Permainan selesai.";}
+ $("gameStatus").textContent=status;
+}
+function handleSquare(sq){
+ if(!game||gameOver)return;
+ const piece=game.get(sq);
+ if(selectedSquare){
+  let move=null;try{move=game.move({from:selectedSquare,to:sq,promotion:"q"});}catch{}
+  if(move){selectedSquare=null;renderBoard();if(gameMode==="bot"&&!game.game_over()&&game.turn()===botColor)setTimeout(botMove,350);return;}
+ }
+ if(piece&&piece.color===game.turn()&&!(gameMode==="bot"&&piece.color===botColor)){selectedSquare=sq;}else selectedSquare=null;
+ renderBoard();
+}
+function botMove(){
+ if(!game||game.game_over()||game.turn()!==botColor)return;
+ const moves=game.moves();if(!moves.length)return;
+ const level=$("difficulty").value;
+ let chosen;
+ if(level==="easy")chosen=moves[Math.floor(Math.random()*moves.length)];
+ else {
+  // Heuristic starter AI: prefer captures/checks, with a small random element.
+  const scored=moves.map(s=>{let copy=new Chess(game.fen());let m=copy.move(s);let score=(m.captured?({p:1,n:3,b:3,r:5,q:9}[m.captured]||1):0)+(copy.in_checkmate()?1000:0)+(copy.in_check()?0.4:0);return {s,score:score+(Math.random()*(level==="normal"?1.5:level==="hard"?0.6:0.25))};}).sort((a,b)=>b.score-a.score);
+  chosen=scored[0].s;
+ }
+ try{game.move(chosen);}catch{}renderBoard();
+}
+async function createRoom(opponentUid=null){
+ const code=Math.random().toString(36).slice(2,8).toUpperCase();
+ const ref=await addDoc(collection(db,"rooms"),{code,hostUid:currentUser.uid,guestUid:opponentUid,status:"waiting",fen:new Chess().fen(),turn:"w",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+ return {id:ref.id,code};
+}
+$("createRoomBtn").onclick=async()=>{try{msg("privateStatus","Membuat room…");const room=await createRoom();$("roomCodeInput").value=room.code;msg("privateStatus","Room dibuat. Bagikan kode "+room.code+" kepada teman. ID room tersimpan di database.","success");startGame("private","Private Match","Kode "+room.code);currentRoomId=room.id;watchRoom(room.id);}catch(e){msg("privateStatus","Gagal membuat room: "+e.message,"error");}};
+$("joinRoomBtn").onclick=async()=>{const code=$("roomCodeInput").value.trim().toUpperCase();if(!code){msg("privateStatus","Masukkan kode room dulu.","error");return;}try{const snap=await getDocs(query(collection(db,"rooms"),where("code","==",code),where("status","==","waiting")));if(snap.empty){msg("privateStatus","Room tidak ditemukan atau sudah dimulai.","error");return;}const d=snap.docs[0];await updateDoc(d.ref,{guestUid:currentUser.uid,status:"playing",updatedAt:serverTimestamp()});startGame("private","Private Match","Kode "+code);currentRoomId=d.id;watchRoom(d.id);}catch(e){msg("privateStatus","Gagal masuk room: "+e.message,"error");}};
+function watchRoom(roomId){
+ if(roomUnsub)roomUnsub();
+ roomUnsub=onSnapshot(doc(db,"rooms",roomId),snap=>{if(!snap.exists())return;const d=snap.data();if(game&&d.fen&&d.fen!==game.fen()){try{game.load(d.fen);renderBoard();}catch{}}$("opponentInfo").textContent="Room "+d.code+" · "+(d.status||"waiting");});
+}
+$("findMatchBtn").onclick=async()=>{
+ try{
+  msg("randomStatus","Mencari pemain…");
+  const existing=await getDocs(query(collection(db,"matchQueue"),where("status","==","waiting")));
+  const other=existing.docs.find(d=>d.data().uid!==currentUser.uid);
+  if(other){
+   const room=await createRoom(other.data().uid);
+   await updateDoc(other.ref,{status:"matched",roomId:room.id,roomCode:room.code,matchedWith:currentUser.uid});
+   await setDoc(doc(db,"matchQueue",currentUser.uid),{uid:currentUser.uid,status:"matched",roomId:room.id,roomCode:room.code,matchedWith:other.data().uid,createdAt:serverTimestamp()});
+   msg("randomStatus","Lawan ditemukan! Kode room: "+room.code+". Kedua pemain perlu masuk room ini.","success");
+  }else{
+   await setDoc(doc(db,"matchQueue",currentUser.uid),{uid:currentUser.uid,status:"waiting",createdAt:serverTimestamp()});
+   msg("randomStatus","Kamu masuk antrean. Biarkan halaman terbuka sambil menunggu pemain lain.");
+   if(queueUnsub)queueUnsub();
+   queueUnsub=onSnapshot(doc(db,"matchQueue",currentUser.uid),snap=>{const d=snap.data();if(d&&d.status==="matched"){msg("randomStatus","Lawan ditemukan! Kode room: "+d.roomCode+". Masukkan kode itu di Private Match untuk mulai.");}});
+  }
+ }catch(e){msg("randomStatus","Antrean belum bisa dipakai: "+e.message,"error");}
+};
+$("cancelMatchBtn").onclick=async()=>{try{await deleteDoc(doc(db,"matchQueue",currentUser.uid));if(queueUnsub){queueUnsub();queueUnsub=null;}msg("randomStatus","Antrean dibatalkan.");}catch(e){msg("randomStatus",e.message,"error");}};
+async function loadFriends(){
+ if(!currentUser)return;if(friendsUnsub)friendsUnsub();
+ friendsUnsub=onSnapshot(collection(db,"players",currentUser.uid,"friends"),async snap=>{
+  const list=$("friendsList");list.innerHTML="";
+  if(snap.empty){list.innerHTML='<p class="muted">Belum ada teman. Tambahkan UID teman di atas.</p>';return;}
+  for(const f of snap.docs){
+   const data=f.data();let name=data.name||data.uid;
+   const el=document.createElement("div");el.className="list-item";
+   el.innerHTML=`<div><strong>${esc(name)}</strong><div class="muted small">${esc(data.uid||f.id)}</div></div><button class="secondary" data-challenge="${esc(data.uid||f.id)}">Tantang</button>`;
+   list.appendChild(el);
+  }
+  list.querySelectorAll("[data-challenge]").forEach(b=>b.onclick=async()=>{try{const room=await createRoom(b.dataset.challenge);$("privateStatus").textContent="Room tantangan dibuat dengan kode "+room.code;startGame("private","Tantang Teman","Menunggu teman · "+room.code);currentRoomId=room.id;watchRoom(room.id);}catch(e){msg("friendsStatus","Gagal membuat tantangan: "+e.message,"error");}});
+ });
+}
+$("addFriendBtn").onclick=async()=>{
+ const uid=$("friendUidInput").value.trim();if(!uid){msg("friendsStatus","Masukkan UID teman.","error");return;}if(uid===currentUser.uid){msg("friendsStatus","Kamu tidak bisa menambahkan UID sendiri.","error");return;}
+ try{
+  const p=await getDoc(doc(db,"players",uid));if(!p.exists()){msg("friendsStatus","UID belum ditemukan. Teman perlu login ke game setidaknya sekali.","error");return;}
+  await setDoc(doc(db,"players",currentUser.uid,"friends",uid),{uid,name:p.data().name||"Pemain",addedAt:serverTimestamp()});
+  await setDoc(doc(db,"players",uid,"friends",currentUser.uid),{uid:currentUser.uid,name:currentUser.displayName||"Pemain",addedAt:serverTimestamp()});
+  $("friendUidInput").value="";msg("friendsStatus","Teman berhasil ditambahkan.","success");
+ }catch(e){msg("friendsStatus","Gagal menambah teman: "+e.message,"error");}
+};
+</script>
+</body>
+</html>
