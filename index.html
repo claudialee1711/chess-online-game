@@ -264,6 +264,19 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
   padding:0 !important;
 }
 
+
+/* Samakan ukuran kuda dengan bidak lain dan rapikan proporsi */
+#board .sq > .knight-glyph {
+  font-size:3.15rem !important;
+  line-height:1 !important;
+  transform:scale(1.02) !important;
+  width:100% !important;
+  height:100% !important;
+}
+@media (max-width:600px) {
+  #board .sq > .knight-glyph { font-size:clamp(1.8rem, 8vw, 2.8rem) !important; }
+}
+
 </style>
 </head>
 <body>
@@ -396,9 +409,9 @@ function pieceSvg(piece){
   k:'<path d="M50 7V26 M40 16H60" fill="none" stroke-width="5.5" stroke-linecap="round"/><path d="M33 31Q50 24 67 31L71 57Q70 64 62 68H38Q30 64 29 57Z"/><path d="M27 66H73L77 76H23Z"/><path d="M18 79Q50 73 82 79L85 88H15Z"/>',
   q:'<circle cx="22" cy="23" r="5.5"/><circle cx="36" cy="15" r="5.5"/><circle cx="50" cy="11" r="5.5"/><circle cx="64" cy="15" r="5.5"/><circle cx="78" cy="23" r="5.5"/><path d="M22 29L33 53H67L78 29L65 41L57 25L50 38L43 25L35 41Z"/><path d="M32 57H68L72 69H28Z"/><path d="M20 73Q50 68 80 73L84 87H16Z"/>',
   r:'<path d="M24 16H36V29H43V20H57V29H64V16H76V39H24Z"/><path d="M30 42H70L66 66Q65 70 60 70H40Q35 70 34 66Z"/><path d="M25 71H75L79 80H21Z"/><path d="M16 83Q50 77 84 83L87 89H13Z"/>',
-  b:'<path d="M50 10Q36 23 38 35Q39 43 46 49L31 64H69L54 49Q61 43 62 35Q64 23 50 10Z"/><path d="M43 24L56 37" fill="none" stroke="#f3e6d3" stroke-width="3.5" stroke-linecap="round"/><path d="M30 66H70L74 76H26Z"/><path d="M18 80Q50 74 82 80L85 88H15Z"/>',
+  b:'<path d="M50 7L60 23Q64 31 60 39Q57 46 51 50L66 64H34L49 50Q41 44 39 36Q36 26 43 17Z"/><path d="M46 21L55 35" fill="none" stroke="#f3e6d3" stroke-width="3.5" stroke-linecap="round"/><path d="M32 65H68L72 75H28Z"/><path d="M19 80Q50 74 81 80L84 88H16Z"/>
   n:'<path d="M25 72L26 56Q26 48 32 40L28 29L38 33L46 19Q52 16 58 23L66 34L75 38L80 48L72 58L67 70Z"/><path d="M38 33L47 26L53 39L66 39L72 47L64 54L51 49L43 65H29L31 53Z"/><path d="M46 26L50 37" fill="none" stroke="#f3e6d3" stroke-width="3" stroke-linecap="round"/><circle cx="64" cy="38" r="2.7" fill="#f3e6d3" stroke="none"/><path d="M26 72H72L76 81H22Z"/><path d="M15 84Q50 78 85 84L88 89H12Z"/>',
-  p:'<circle cx="50" cy="25" r="13"/><path d="M42 39H58L66 62Q67 66 62 68H38Q33 66 34 62Z"/><path d="M29 69H71L75 79H25Z"/><path d="M17 83Q50 77 83 83L86 89H14Z"/>'
+  p:'<circle cx="50" cy="25" r="10.5"/><path d="M44 36H56L61 57Q62 61 58 63H42Q38 61 39 57Z"/><path d="M32 65H68L72 75H28Z"/><path d="M20 80Q50 75 80 80L83 87H17Z"/>
  };
  return '<span class="piece-'+side+'"><svg class="modern-piece" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><defs><linearGradient id="brownPieceMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c18a53"/><stop offset=".32" stop-color="#75431f"/><stop offset=".62" stop-color="#4b2915"/><stop offset="1" stop-color="#9b6635"/></linearGradient><linearGradient id="blackPieceMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#55504a"/><stop offset=".3" stop-color="#151515"/><stop offset=".7" stop-color="#030303"/><stop offset="1" stop-color="#36302a"/></linearGradient></defs><ellipse cx="50" cy="91" rx="31" ry="3.5" fill="#000" opacity=".22"/><g fill="'+fill+'" stroke="'+stroke+'" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round">'+shapes[piece.type]+'</g><path d="M25 84Q50 79 75 84" fill="none" stroke="'+(piece.color==="w"?"#d4a06b":"#e5c75d")+'" stroke-width="1.4" opacity=".85"/></svg></span>';
 }
