@@ -523,6 +523,7 @@ async function openFriendChat(uid,name){
  if(!currentUser||!uid)return;
  activeChatUid=uid;activeChatName=name||"Teman";$("friendChatTitle").textContent="Chat · "+activeChatName;$("friendChatPanel").classList.remove("hidden");$("friendChatMessages").innerHTML='<p class="muted">Memuat pesan…</p>';if(chatUnsub)chatUnsub();
  const chatId=[currentUser.uid,uid].sort().join("__");
+ try{await setDoc(doc(db,"friendChats",chatId),{participants:[currentUser.uid,uid].sort(),updatedAt:serverTimestamp()},{merge:true});}catch(e){msg("friendChatStatus","Gagal membuka chat: "+e.message+". Periksa Firestore Rules untuk friendChats.","error");return;}
  chatUnsub=onSnapshot(collection(db,"friendChats",chatId,"messages"),snap=>{
   const area=$("friendChatMessages");area.innerHTML="";
   if(snap.empty){area.innerHTML='<p class="muted">Belum ada pesan. Sapa temanmu dulu 👋</p>';return;}
