@@ -112,7 +112,7 @@ $("logoutBtn").onclick = async () => { await cleanupListeners(); await signOut(a
 onAuthStateChanged(auth, async user => {
   currentUser=user;
   if(!user){$("userLabel").textContent="Belum login";$("logoutBtn").classList.add("hidden");showScreen("login");return;}
-  $("userLabel").textContent=(user.isAnonymous?"Pengunjung":(user.displayName||user.email||"Pemain"))+" · "+user.uid.slice(0,8);
+  const shortId=String(Array.from(user.uid).reduce((n,ch)=>(n*31+ch.charCodeAt(0))%10000000,7)).padStart(7,"0");\n  $("shortUid").textContent=shortId;$("profileShortUid").textContent=shortId;$("profileBtn").classList.remove("hidden");
   $("logoutBtn").classList.remove("hidden"); $("uidText").textContent=user.uid;
   try { await setDoc(doc(db,"players",user.uid),{uid:user.uid,name:user.displayName|| (user.isAnonymous?"Pengunjung":"Pemain"),email:user.email||null,anonymous:user.isAnonymous,updatedAt:serverTimestamp()},{merge:true}); } catch(e){console.warn("Profil belum tersimpan:",e);}
   showScreen("home"); loadFriends();
