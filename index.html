@@ -84,11 +84,12 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 <p class="footer">Chess Online · Versi awal · Jangan bagikan kata sandi atau private key.</p>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, getDocs, onSnapshot, serverTimestamp, runTransaction, deleteDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-import { Chess } from "https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js";
+const Chess = window.Chess;
 
 const firebaseConfig = {
   apiKey: "AIzaSyBeuml-FTBPWI2nraYOsopvKdfEFoKI-YQ",
