@@ -193,6 +193,27 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 #board .sq span.piece-black { display:inline-flex; align-items:center; justify-content:center; width:100%; height:100%; }
 #board .modern-piece { display:block; width:92%; height:92%; overflow:visible; }
 
+
+/* Neue, elegantere Staunton-Formen mit metallischem Finish */
+#board .sq > span.modern-piece,
+#board .sq span.piece-white,
+#board .sq span.piece-black {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  position:relative;
+  z-index:1;
+}
+#board .modern-piece {
+  display:block;
+  width:98%;
+  height:98%;
+  overflow:visible;
+  filter: drop-shadow(0 2px 1px #0005);
+}
+
 </style>
 </head>
 <body>
@@ -315,17 +336,17 @@ $("newGameBtn").onclick=()=>{if(gameMode==="bot")startGame("bot","VS Bot · "+$(
 $("resignBtn").onclick=()=>{if(gameOver)return;gameOver=true;msg("gameStatus","Kamu mengakhiri permainan.","error");};
 function pieceSvg(piece){
  const side=piece.color==="w"?"white":"black";
- const fill=piece.color==="w"?"#6b3d1e":"#080808";
- const stroke=piece.color==="w"?"#090705":"#d4af37";
+ const fill=piece.color==="w"?"url(#brownPieceMetal)":"url(#blackPieceMetal)";
+ const stroke=piece.color==="w"?"#17100a":"#d4af37";
  const shapes={
-  k:'<path d="M46 8V22 M38 15H54" stroke-linecap="round" stroke-width="5"/><path d="M31 25Q46 19 61 25L66 67H26Z"/><path d="M22 68H70V77H22Z"/><path d="M17 79H75V86H17Z"/>',
-  q:'<circle cx="24" cy="22" r="5"/><circle cx="46" cy="13" r="5"/><circle cx="68" cy="22" r="5"/><path d="M24 28L32 58H60L68 28L56 43L46 24L36 43Z"/><path d="M29 61H63V70H29Z"/><path d="M21 73H71V83H21Z"/>',
-  r:'<path d="M24 18H35V29H43V18H54V29H62V18H72V38H24Z"/><path d="M29 40H67L63 69H33Z"/><path d="M25 70H71V79H25Z"/><path d="M20 81H76V87H20Z"/>',
-  b:'<path d="M46 12C33 25 31 34 39 44L29 62H63L53 44C61 34 59 25 46 12Z"/><path d="M42 25L50 33" stroke-width="3"/><path d="M29 64H63V73H29Z"/><path d="M22 76H70V85H22Z"/>',
-  n:'<path d="M25 67L27 49Q29 34 44 20L51 31L66 32L75 47L68 59L65 69Z"/><path d="M48 24L44 39L58 37L65 47L58 55L43 51L36 67H25L27 49Z"/><circle cx="55" cy="33" r="2.5" fill="#f3e6d3" stroke="none"/><path d="M25 69H69V78H25Z"/><path d="M19 80H75V87H19Z"/>',
-  p:'<circle cx="46" cy="23" r="12"/><path d="M38 37H54L61 63H31Z"/><path d="M28 65H64V75H28Z"/><path d="M21 78H71V86H21Z"/>'
+  k:'<path d="M50 7V26 M40 16H60" fill="none" stroke-width="5.5" stroke-linecap="round"/><path d="M33 31Q50 24 67 31L71 57Q70 64 62 68H38Q30 64 29 57Z"/><path d="M27 66H73L77 76H23Z"/><path d="M18 79Q50 73 82 79L85 88H15Z"/>',
+  q:'<circle cx="22" cy="23" r="5.5"/><circle cx="36" cy="15" r="5.5"/><circle cx="50" cy="11" r="5.5"/><circle cx="64" cy="15" r="5.5"/><circle cx="78" cy="23" r="5.5"/><path d="M22 29L33 53H67L78 29L65 41L57 25L50 38L43 25L35 41Z"/><path d="M32 57H68L72 69H28Z"/><path d="M20 73Q50 68 80 73L84 87H16Z"/>',
+  r:'<path d="M24 16H36V29H43V20H57V29H64V16H76V39H24Z"/><path d="M30 42H70L66 66Q65 70 60 70H40Q35 70 34 66Z"/><path d="M25 71H75L79 80H21Z"/><path d="M16 83Q50 77 84 83L87 89H13Z"/>',
+  b:'<path d="M50 10Q36 23 38 35Q39 43 46 49L31 64H69L54 49Q61 43 62 35Q64 23 50 10Z"/><path d="M43 24L56 37" fill="none" stroke="#f3e6d3" stroke-width="3.5" stroke-linecap="round"/><path d="M30 66H70L74 76H26Z"/><path d="M18 80Q50 74 82 80L85 88H15Z"/>',
+  n:'<path d="M24 70L25 54Q26 43 36 33L48 20L56 31L70 32L79 45L74 57L66 64L65 72Z"/><path d="M37 35L48 24L52 38L67 37L73 46L65 53L51 49L43 66H28L29 53Z"/><path d="M48 27L53 37" fill="none" stroke="#f3e6d3" stroke-width="3" stroke-linecap="round"/><circle cx="64" cy="38" r="2.7" fill="#f3e6d3" stroke="none"/><path d="M26 72H72L76 81H22Z"/><path d="M15 84Q50 78 85 84L88 89H12Z"/>',
+  p:'<circle cx="50" cy="25" r="13"/><path d="M42 39H58L66 62Q67 66 62 68H38Q33 66 34 62Z"/><path d="M29 69H71L75 79H25Z"/><path d="M17 83Q50 77 83 83L86 89H14Z"/>'
  };
- return '<span class="piece-'+side+'"><svg class="modern-piece" viewBox="0 0 92 92" aria-hidden="true" focusable="false"><g fill="'+fill+'" stroke="'+stroke+'" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">'+shapes[piece.type]+'</g></svg></span>';
+ return '<span class="piece-'+side+'"><svg class="modern-piece" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><defs><linearGradient id="brownPieceMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c18a53"/><stop offset=".32" stop-color="#75431f"/><stop offset=".62" stop-color="#4b2915"/><stop offset="1" stop-color="#9b6635"/></linearGradient><linearGradient id="blackPieceMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#55504a"/><stop offset=".3" stop-color="#151515"/><stop offset=".7" stop-color="#030303"/><stop offset="1" stop-color="#36302a"/></linearGradient></defs><ellipse cx="50" cy="91" rx="31" ry="3.5" fill="#000" opacity=".22"/><g fill="'+fill+'" stroke="'+stroke+'" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round">'+shapes[piece.type]+'</g><path d="M25 84Q50 79 75 84" fill="none" stroke="'+(piece.color==="w"?"#d4a06b":"#e5c75d")+'" stroke-width="1.4" opacity=".85"/></svg></span>';
 }
 function renderBoard(){
  if(!game)return;
