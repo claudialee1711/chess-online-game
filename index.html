@@ -62,7 +62,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 
 <section id="friendsScreen" class="panel hidden">
  <div class="section-head"><h2>👥 Teman</h2><button class="secondary" data-home>← Menu</button></div>
- <div class="stack"><div class="row"><input id="friendUidInput" placeholder="Masukkan UID teman"><button id="addFriendBtn">Tambah</button></div><p id="friendsStatus" class="muted small" role="status"></p><h3>Daftar teman</h3><div id="friendsList" class="list"><p class="muted">Login untuk melihat daftar teman.</p></div></div>
+ <div class="stack"><div class="row"><input id="friendUidInput" placeholder="UID teman (7 angka)" maxlength="7" inputmode="numeric" pattern="[0-9]{7}"><button id="addFriendBtn">Tambah</button></div><p id="friendsStatus" class="muted small" role="status"></p><h3>Daftar teman</h3><div id="friendsList" class="list"><p class="muted">Login untuk melihat daftar teman.</p></div></div>
 </section>
 
 <section id="gameScreen" class="panel hidden">
@@ -198,14 +198,14 @@ async function loadFriends(){
   for(const f of snap.docs){
    const data=f.data();let name=data.name||data.uid;
    const el=document.createElement("div");el.className="list-item";
-   el.innerHTML=`<div><strong>${esc(name)}</strong><div class="muted small">${esc(data.uid||f.id)}</div></div><button class="secondary" data-challenge="${esc(data.uid||f.id)}">Tantang</button>`;
+   el.innerHTML=`<div><strong>${esc(name)}</strong><div class="muted small">${esc(data.shortUid||data.uid||f.id)}</div></div><button class="secondary" data-challenge="${esc(data.uid||f.id)}">Tantang</button>`;
    list.appendChild(el);
   }
   list.querySelectorAll("[data-challenge]").forEach(b=>b.onclick=async()=>{try{const room=await createRoom(b.dataset.challenge);$("privateStatus").textContent="Room tantangan dibuat dengan kode "+room.code;startGame("private","Tantang Teman","Menunggu teman · "+room.code);currentRoomId=room.id;watchRoom(room.id);}catch(e){msg("friendsStatus","Gagal membuat tantangan: "+e.message,"error");}});
  });
 }
 $("addFriendBtn").onclick=async()=>{
- const uid=$("friendUidInput").value.trim();if(!uid){msg("friendsStatus","Masukkan UID teman.","error");return;}if(uid===currentUser.uid){msg("friendsStatus","Kamu tidak bisa menambahkan UID sendiri.","error");return;}
+ const uid=$("friendUidInput").value.trim();if(!/^[0-9]{7}$/.test(uid)){msg("friendsStatus","UID harus terdiri dari tepat 7 angka.","error");return;}if(uid===currentUser.uid){msg("friendsStatus","Kamu tidak bisa menambahkan UID sendiri.","error");return;}
  try{
   const matches=await getDocs(query(collection(db,"players"),where("shortUid","==",uid)));if(matches.empty){msg("friendsStatus","UID 7 angka tidak ditemukan. Teman perlu login ke game setidaknya sekali.","error");return;}const p=matches.docs[0];const friendAuthUid=p.id;
   await setDoc(doc(db,"players",currentUser.uid,"friends",friendAuthUid),{uid:friendAuthUid,shortUid:uid,name:p.data().name||"Pemain",addedAt:serverTimestamp()});
