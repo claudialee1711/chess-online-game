@@ -112,12 +112,14 @@ $("logoutBtn").onclick = async () => { await cleanupListeners(); await signOut(a
 onAuthStateChanged(auth, async user => {
   currentUser=user;
   if(!user){$("userLabel").textContent="Belum login";$("logoutBtn").classList.add("hidden");showScreen("login");return;}
-  const shortId=String(Array.from(user.uid).reduce((n,ch)=>(n*31+ch.charCodeAt(0))%10000000,7)).padStart(7,"0");\n  $("shortUid").textContent=shortId;$("profileShortUid").textContent=shortId;$("profileBtn").classList.remove("hidden");
+  const shortId=String(Array.from(user.uid).reduce((n,ch)=>(n*31+ch.charCodeAt(0))%10000000,7)).padStart(7,"0");
+  $("shortUid").textContent=shortId;$("profileShortUid").textContent=shortId;$("profileBtn").classList.remove("hidden");
   $("logoutBtn").classList.remove("hidden"); $("uidText").textContent=user.uid;
   try { await setDoc(doc(db,"players",user.uid),{uid:user.uid,name:user.displayName|| (user.isAnonymous?"Pengunjung":"Pemain"),email:user.email||null,anonymous:user.isAnonymous,updatedAt:serverTimestamp()},{merge:true}); } catch(e){console.warn("Profil belum tersimpan:",e);}
   showScreen("home"); loadFriends();
 });
-$("copyUidBtn").onclick=async()=>{try{await navigator.clipboard.writeText(currentUser.uid);$("copyUidBtn").textContent="UID tersalin!";setTimeout(()=> $("copyUidBtn").textContent="Salin UID",1500);}catch{msg("uidText","UID kamu: "+currentUser.uid);}};\n$("profileBtn").onclick=()=>$("profilePanel").classList.toggle("hidden");$("closeProfileBtn").onclick=()=>$("profilePanel").classList.add("hidden");
+$("copyUidBtn").onclick=async()=>{try{await navigator.clipboard.writeText(currentUser.uid);$("copyUidBtn").textContent="UID tersalin!";setTimeout(()=> $("copyUidBtn").textContent="Salin UID",1500);}catch{msg("uidText","UID kamu: "+currentUser.uid);}};
+$("profileBtn").onclick=()=>$("profilePanel").classList.toggle("hidden");$("closeProfileBtn").onclick=()=>$("profilePanel").classList.add("hidden");
 document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
 document.querySelectorAll("[data-home]").forEach(b=>b.onclick=async()=>{await cleanupListeners();showScreen("home");});
 async function cleanupListeners(){if(roomUnsub){roomUnsub();roomUnsub=null;}if(queueUnsub){queueUnsub();queueUnsub=null;}if(friendsUnsub){friendsUnsub();friendsUnsub=null;}}
