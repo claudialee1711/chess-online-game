@@ -231,6 +231,39 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
   display: none !important;
 }
 
+
+/* Kuda menggunakan simbol catur klasik agar siluetnya jelas dan mudah dikenali */
+#board .sq > .knight-glyph {
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  font-family:"Segoe UI Symbol","DejaVu Sans","Noto Sans Symbols 2",serif !important;
+  font-size:2.45rem !important;
+  line-height:1 !important;
+  font-weight:400 !important;
+  transform:scale(1.08);
+  -webkit-text-fill-color:initial;
+}
+#board .sq > .knight-glyph.piece-white {
+  color:#6b3d1e !important;
+  -webkit-text-stroke:1.5px #090705 !important;
+  text-shadow:0 1px 1px #0005 !important;
+}
+#board .sq > .knight-glyph.piece-black {
+  color:#080808 !important;
+  -webkit-text-stroke:1.5px #d4af37 !important;
+  text-shadow:0 0 2px #d4af37 !important;
+}
+/* Hapus panel kosong/gelap di belakang menu utama; kartu menu tetap tampil */
+#homeScreen > .panel {
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+}
+
 </style>
 </head>
 <body>
@@ -355,6 +388,10 @@ function pieceSvg(piece){
  const side=piece.color==="w"?"white":"black";
  const fill=piece.color==="w"?"url(#brownPieceMetal)":"url(#blackPieceMetal)";
  const stroke=piece.color==="w"?"#17100a":"#d4af37";
+ if(piece.type==="n"){
+  const glyph=piece.color==="w"?"♘":"♞";
+  return '<span class="piece-'+side+' knight-glyph" aria-hidden="true">'+glyph+'</span>';
+ }
  const shapes={
   k:'<path d="M50 7V26 M40 16H60" fill="none" stroke-width="5.5" stroke-linecap="round"/><path d="M33 31Q50 24 67 31L71 57Q70 64 62 68H38Q30 64 29 57Z"/><path d="M27 66H73L77 76H23Z"/><path d="M18 79Q50 73 82 79L85 88H15Z"/>',
   q:'<circle cx="22" cy="23" r="5.5"/><circle cx="36" cy="15" r="5.5"/><circle cx="50" cy="11" r="5.5"/><circle cx="64" cy="15" r="5.5"/><circle cx="78" cy="23" r="5.5"/><path d="M22 29L33 53H67L78 29L65 41L57 25L50 38L43 25L35 41Z"/><path d="M32 57H68L72 69H28Z"/><path d="M20 73Q50 68 80 73L84 87H16Z"/>',
