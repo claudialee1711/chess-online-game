@@ -278,42 +278,42 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 }
 
 
-/* Pemulihan bidak catur klasik dan warna final */
-#board .sq.light { background-color:#ffffff !important; }
-#board .sq.dark { background-color:#555b63 !important; }
+/* Ukuran lebih besar dan isi bidak solid, bukan simbol outline */
 #board .sq > .piece-white {
   display:inline-block !important;
   width:auto !important;
   height:auto !important;
-  font-size:clamp(30px, 4.2vw, 48px) !important;
+  font-size:clamp(36px, 5vw, 58px) !important;
   line-height:1 !important;
   transform:none !important;
-  color:#5b351c !important;
-  -webkit-text-fill-color:#5b351c !important;
-  -webkit-text-stroke:1.1px #090705 !important;
-  text-shadow:0 1px 1px #0006 !important;
+  color:#6b3d1e !important;
+  -webkit-text-fill-color:#6b3d1e !important;
+  -webkit-text-stroke:1.35px #090705 !important;
+  text-shadow:0 0 1px #6b3d1e, 0 1px 1px #0007 !important;
   filter:none !important;
   font-family:"Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",serif !important;
-  font-weight:400 !important;
+  font-weight:900 !important;
+  paint-order:stroke fill;
 }
 #board .sq > .piece-black {
   display:inline-block !important;
   width:auto !important;
   height:auto !important;
-  font-size:clamp(30px, 4.2vw, 48px) !important;
+  font-size:clamp(36px, 5vw, 58px) !important;
   line-height:1 !important;
   transform:none !important;
   color:#080808 !important;
   -webkit-text-fill-color:#080808 !important;
   -webkit-text-stroke:1.5px #d4af37 !important;
-  text-shadow:0 0 1px #d4af37 !important;
+  text-shadow:0 0 1px #d4af37, 0 0 2px #000 !important;
   filter:none !important;
   font-family:"Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",serif !important;
-  font-weight:400 !important;
+  font-weight:900 !important;
+  paint-order:stroke fill;
 }
 @media(max-width:600px) {
   #board .sq > .piece-white,
-  #board .sq > .piece-black { font-size:clamp(25px, 7.2vw, 38px) !important; }
+  #board .sq > .piece-black { font-size:clamp(30px, 8vw, 44px) !important; }
 }
 
 </style>
@@ -439,7 +439,7 @@ $("resignBtn").onclick=()=>{if(gameOver)return;gameOver=true;msg("gameStatus","K
 function renderBoard(){
  if(!game)return;
  const board=$("board");board.innerHTML="";
- const files="abcdefgh", pieces={w:{k:"♔",q:"♕",r:"♖",b:"♗",n:"♘",p:"♙"},b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}};
+ const files="abcdefgh", pieces={w:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"},b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}};
  const legal=selectedSquare?game.moves({square:selectedSquare,verbose:true}).map(m=>m.to):[];
  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
   const sq=files[c]+(8-r), piece=game.get(sq), btn=document.createElement("button");
