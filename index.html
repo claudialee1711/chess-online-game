@@ -536,7 +536,7 @@ $("closeFriendChatBtn").onclick=()=>{$("friendChatPanel").classList.add("hidden"
 $("friendChatForm").onsubmit=async e=>{e.preventDefault();const textValue=$("friendChatInput").value.trim();if(!textValue||!activeChatUid)return;try{const chatId=[currentUser.uid,activeChatUid].sort().join("__");await addDoc(collection(db,"friendChats",chatId,"messages"),{senderUid:currentUser.uid,senderName:currentUser.displayName||"Pemain",text:textValue,createdAt:serverTimestamp()});$("friendChatInput").value="";msg("friendChatStatus","Pesan terkirim.","success");}catch(e){msg("friendChatStatus","Gagal mengirim pesan: "+e.message+". Periksa Firestore Rules untuk friendChats.","error");}};
 async function loadIncomingChallenges(){
  if(!currentUser)return;if(inviteUnsub){inviteUnsub();inviteUnsub=null;}
- inviteUnsub=onSnapshot(query(collection(db,"rooms"),where("guestUid","==",currentUser.uid)),snap=>{
+ inviteUnsub=onSnapshot(query(collection(db,"rooms"),where("guestUid","==",currentUser.uid),where("status","==","waiting")),snap=>{
   const list=$("incomingChallenges");list.innerHTML="";
   const invites=snap.docs.filter(d=>d.data().status==="waiting");
   if(!invites.length){list.innerHTML='<p class="muted">Tidak ada tantangan masuk.</p>';return;}
