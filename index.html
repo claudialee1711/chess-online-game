@@ -598,7 +598,7 @@ async function makeMutualFriends(friendUid,friendData={}){
  await deleteDoc(doc(db,"players",currentUser.uid,"sentFriendRequests",friendUid)).catch(()=>{});
  await deleteDoc(doc(db,"players",friendUid,"sentFriendRequests",currentUser.uid)).catch(()=>{});
 }
-async function openFriendChatasync function openFriendChat(uid,name){
+async function openFriendChat(uid,name){
  if(!currentUser||!uid){msg("friendsStatus","Pilih teman yang valid untuk membuka chat.","error");return;}
  activeChatUid=uid;activeChatName=name||"Teman";showScreen("chat");$("friendChatTitle").textContent="Chat · "+activeChatName;$("friendChatPanel").classList.remove("hidden");$("chatScreenHint").classList.add("hidden");$("friendChatMessages").innerHTML='<p class="muted">Memuat pesan…</p>';$("friendChatPanel").scrollIntoView({behavior:"smooth",block:"nearest"});if(chatUnsub)chatUnsub();
  const chatId=[currentUser.uid,uid].sort().join("__");
