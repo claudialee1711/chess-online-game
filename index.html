@@ -732,24 +732,33 @@ input[type="button"]:focus-visible, input[type="submit"]:focus-visible, input[ty
   outline-offset: 2px;
 }
 
-/* Warm chess-club palette: translucent light-brown panels and dark-brown primary buttons. */
+/* Warm chess-club palette: translucent light-brown panels and dark-brown action buttons.
+   Keep fixed menu navigation anchored to the viewport and preserve the chessboard square colors. */
 .panel {
   background: rgba(174, 125, 78, .34) !important;
   border-color: rgba(222, 181, 135, .48) !important;
   box-shadow: 0 16px 40px rgba(24, 12, 4, .16) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
-button:not(.secondary):not(.danger):not(.avatar-option) {
+/* Do not apply the primary-button palette to menu cards or board squares. */
+button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq) {
   background: linear-gradient(145deg, #684024 0%, #4b2c19 100%) !important;
   color: #fff1df !important;
   border: 1px solid rgba(210, 164, 116, .62) !important;
 }
-button:not(.secondary):not(.danger):not(.avatar-option):hover {
+button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq):hover {
   background: linear-gradient(145deg, #79502f 0%, #57331d 100%) !important;
 }
-button:not(.secondary):not(.danger):not(.avatar-option):active {
+button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq):active {
   box-shadow: 0 0 0 2px rgba(211, 163, 111, .34), 0 0 12px rgba(180, 119, 65, .22) !important;
+}
+/* Keep all five home-menu buttons fixed at the bottom, including on mobile. */
+.menu-grid {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 15 !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
 }
 </style>
 
