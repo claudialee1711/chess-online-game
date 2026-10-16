@@ -332,7 +332,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 @media(max-width:760px){#opponentProfile{margin:8px 0 10px}#opponentProfile .opponent-summary{gap:6px}#opponentProfile #addOpponentBtn{padding:5px 7px;font-size:10px}.game-controls .turn-status{flex-basis:33.333%!important;width:33.333%!important;max-width:33.333%!important}}
 
 /* Animated glow pulses: red for brown side, icy blue for black side */
-@keyframes brownRedPiecePulse { 0%,100% { filter: drop-shadow(0 0 2px rgba(255,70,85,.7)) drop-shadow(0 0 5px rgba(255,0,40,.55)); } 50% { filter: drop-shadow(0 0 5px rgba(255,90,105,1)) drop-shadow(0 0 11px rgba(255,0,40,.98)) drop-shadow(0 0 17px rgba(255,55,75,.78)); } }
+@keyframes brownRedPiecePulse { 0%,100% { filter: drop-shadow(0 0 2px rgba(255,0,0,.78)) drop-shadow(0 0 5px rgba(200,0,0,.68)); } 50% { filter: drop-shadow(0 0 5px rgba(255,25,0,1)) drop-shadow(0 0 11px rgba(235,0,0,1)) drop-shadow(0 0 17px rgba(155,0,0,.92)); } }
 @keyframes blackBluePiecePulse { 0%,100% { filter: drop-shadow(0 0 2px rgba(210,245,255,.72)) drop-shadow(0 0 5px rgba(80,185,255,.58)); } 50% { filter: drop-shadow(0 0 5px rgba(235,250,255,1)) drop-shadow(0 0 11px rgba(80,185,255,.98)) drop-shadow(0 0 17px rgba(55,135,255,.8)); } }
 </style>
 <style>
@@ -894,8 +894,8 @@ function renderBoard(){
       pieceEl.style.setProperty("color","#70421f","important");
       pieceEl.style.setProperty("-webkit-text-fill-color","#70421f","important");
       pieceEl.style.setProperty("-webkit-text-stroke","1.25px #ead0a0","important");
-      pieceEl.style.setProperty("text-shadow","0 0 3px #ffb0b0, 0 0 7px rgba(255,35,55,.98), 0 0 13px rgba(255,0,40,.9), 0 0 20px rgba(255,55,75,.72)","important");
-      pieceEl.style.setProperty("filter","drop-shadow(0 0 3px rgba(255,70,85,.98)) drop-shadow(0 0 8px rgba(255,0,40,.9)) drop-shadow(0 0 13px rgba(255,55,75,.72))","important");
+      pieceEl.style.setProperty("text-shadow","0 0 3px #ff3b30, 0 0 7px rgba(255,0,0,1), 0 0 13px rgba(220,0,0,.98), 0 0 20px rgba(170,0,0,.88)","important");
+      pieceEl.style.setProperty("filter","drop-shadow(0 0 3px rgba(255,0,0,1)) drop-shadow(0 0 8px rgba(220,0,0,.98)) drop-shadow(0 0 13px rgba(170,0,0,.88))","important");
     } else {
       pieceEl.style.setProperty("animation","blackBluePiecePulse 1.8s ease-in-out infinite","important");
       pieceEl.style.setProperty("color","#151c2b","important");
