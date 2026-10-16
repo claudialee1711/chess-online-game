@@ -660,7 +660,6 @@ async function loadFriends(){
   list.querySelectorAll("[data-chat]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{await openFriendChat(b.dataset.chat,b.dataset.name);$("friendChatPanel").scrollIntoView({behavior:"smooth",block:"nearest"});}catch(e){msg("friendChatStatus","Chat gagal dibuka: "+e.message,"error");}finally{b.disabled=false;}});
   list.querySelectorAll("[data-challenge]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{const room=await createRoom(b.dataset.challenge,{name:b.dataset.name,shortUid:b.dataset.shortUid},false);currentRoomId=room.id;pendingRoomMode="private";pendingRoomTitle="Tantang Teman";msg("friendsStatus","Tantangan dikirim ke "+b.dataset.name+". Room "+room.code+" menunggu diterima.");watchRoom(room.id);}catch(e){b.disabled=false;msg("friendsStatus","Gagal membuat tantangan: "+e.message,"error");}});
   list.querySelectorAll("[data-remove-friend]").forEach(b=>b.onclick=async()=>{if(!confirm("Hapus "+b.dataset.name+" dari daftar teman?"))return;b.disabled=true;try{await Promise.all([deleteDoc(doc(db,"players",currentUser.uid,"friends",b.dataset.removeFriend)),deleteDoc(doc(db,"players",b.dataset.removeFriend,"friends",currentUser.uid))]);msg("friendsStatus","Teman berhasil dihapus.","success");}catch(e){b.disabled=false;msg("friendsStatus","Gagal menghapus teman: "+e.message,"error");}});
-  await 
  });
 }
 async function loadFriendRequests(){
