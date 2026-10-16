@@ -623,7 +623,7 @@ async function loadIncomingChallenges(){
   list.querySelectorAll("[data-accept-challenge]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{const ref=doc(db,"rooms",b.dataset.acceptChallenge);const snap=await getDoc(ref);if(!snap.exists()||snap.data().status!=="waiting")throw new Error("Tantangan sudah tidak tersedia.");const room=snap.data();const me=await getDoc(doc(db,"players",currentUser.uid));const md=me.exists()?me.data():{};await updateDoc(ref,{guestName:md.name||currentUser.displayName||"Pemain",guestShortUid:md.shortUid||$("uidText").textContent,status:"playing",updatedAt:serverTimestamp()});currentRoomId=ref.id;pendingRoomMode="private";pendingRoomTitle="Tantang Teman";startGame("private","Tantang Teman","Memulai permainan…",null,true);watchRoom(ref.id);}catch(e){b.disabled=false;msg("friendsStatus","Gagal menerima tantangan: "+e.message,"error");}});
  },e=>{const list=$("incomingChallenges");if(list)list.innerHTML='<p class="muted">Tantangan tidak bisa dimuat: '+esc(e.message)+'</p>';});
 }
-async function loadChatContactsasync function loadChatContacts(){
+async function loadChatContacts(){
  if(!currentUser)return;
  for(const unsub of chatNoticeUnsubs)unsub();chatNoticeUnsubs=[];
  const list=$("chatContacts");list.innerHTML='<p class="muted">Memuat teman…</p>';
