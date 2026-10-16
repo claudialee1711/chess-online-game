@@ -415,6 +415,63 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
   .menu-card::after { border-radius:12px; }
 }
 
+
+/* Header dipadatkan agar judul tidak tertutup tombol permainan */
+.top {display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;flex-wrap:nowrap!important}
+.top-left {flex:1 1 auto!important;min-width:0!important;gap:6px!important}
+.top-right {flex:0 0 auto!important;min-width:0!important}
+.brand {min-width:0!important;gap:0!important}
+.brand h1 {font-size:clamp(14px,1.55vw,20px)!important;white-space:nowrap!important;letter-spacing:-.35px!important}
+.brand .sub {font-size:11px!important;white-space:nowrap!important}
+.game-header-actions.visible {width:min(100%,240px)!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:4px!important}
+.game-header-actions button {min-height:30px!important;padding:4px 3px!important;font-size:9px!important;border-radius:7px!important;line-height:1.05!important}
+.profile-btn {width:46px!important;height:46px!important;min-width:46px!important;min-height:46px!important;padding:0!important;flex:0 0 46px!important;border:2px solid #ffb347!important;box-shadow:0 0 10px #ff6a00aa,0 0 20px #ff3c0066!important}
+.profile-btn .avatar-fallback {display:grid!important;place-items:center!important;width:100%!important;height:100%!important;font-size:29px!important;line-height:1!important}
+.profile-btn img {display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important}
+.brand h1,.brand .sub {position:relative;animation:fireGlow 1.7s ease-in-out infinite alternate}
+.brand h1 {
+ color:#fff1c2!important;
+ background:linear-gradient(180deg,#fffbd1 0%,#ffd36b 22%,#ff8a24 48%,#ff3c16 72%,#a90012 100%);
+ -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+ filter:drop-shadow(0 0 2px #ffbd42) drop-shadow(0 0 6px #ff4b12) drop-shadow(0 0 12px #d10b00);
+}
+.brand .sub {
+ color:#ffb45e!important;text-shadow:0 0 4px #ff8a00,0 0 9px #ff3b00,0 0 16px #d90000;
+}
+@keyframes fireGlow {from{filter:drop-shadow(0 0 2px #ffb22e) drop-shadow(0 0 5px #ff3b00)}to{filter:drop-shadow(0 0 4px #fff08a) drop-shadow(0 0 9px #ff5a00) drop-shadow(0 0 17px #c90000)}}
+.menu-card {
+ color:#fff4d7!important;
+ border:1px solid rgba(255,185,92,.88)!important;
+ box-shadow:0 0 0 1px rgba(255,100,15,.16),0 5px 14px #0008,inset 0 0 14px rgba(255,90,0,.12)!important;
+}
+.menu-card .emoji {
+ display:block!important;font-size:clamp(24px,3vw,34px)!important;line-height:1.15!important;
+ filter:drop-shadow(0 0 3px #ffdf7e) drop-shadow(0 0 8px #ff5b00)!important;
+ animation:iconFlame 2.1s ease-in-out infinite alternate;
+}
+.menu-card h3 {
+ font-size:clamp(10px,1.3vw,15px)!important;font-weight:900!important;letter-spacing:.15px;
+ color:#fff0c4!important;text-shadow:0 0 3px #fff2b3,0 0 7px #ff7400,0 0 13px #d82100!important;
+}
+.menu-card:hover,.menu-card:focus-visible {
+ border-color:#fff0a1!important;
+ box-shadow:0 0 0 1px #ff7b20,0 0 14px #ff6a00,0 0 27px #d92100, inset 0 0 18px #ff6a0033!important;
+}
+@keyframes iconFlame {from{transform:translateY(0) scale(1);filter:drop-shadow(0 0 3px #ffdf7e) drop-shadow(0 0 6px #ff5b00)}to{transform:translateY(-2px) scale(1.07);filter:drop-shadow(0 0 5px #fff0a6) drop-shadow(0 0 12px #ff3900)}}
+@media(max-width:760px) {
+ .top {gap:4px!important}
+ .top-left {gap:4px!important}
+ .brand h1 {font-size:clamp(12px,3.1vw,16px)!important;letter-spacing:-.45px!important}
+ .brand .sub {font-size:9px!important}
+ .profile-btn {width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;flex-basis:40px!important}
+ .profile-btn .avatar-fallback {font-size:26px!important}
+ .game-header-actions.visible {width:min(43vw,190px)!important;gap:3px!important}
+ .game-header-actions button {font-size:8px!important;padding:4px 2px!important;min-height:29px!important}
+ .menu-card .emoji {font-size:clamp(21px,5vw,30px)!important}
+ .menu-card h3 {font-size:clamp(9px,2.3vw,12px)!important}
+}
+@media(prefers-reduced-motion:reduce){.brand h1,.brand .sub,.menu-card .emoji{animation:none!important}}
+
 </style>
 </head>
 <body>
