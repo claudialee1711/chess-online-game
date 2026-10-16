@@ -333,7 +333,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 
 /* Animated glow pulses: red for brown side, icy blue for black side */
 @keyframes brownRedPiecePulse { 0%,100% { filter: drop-shadow(0 0 1.5px rgba(255,125,45,.55)) drop-shadow(0 0 4px rgba(225,65,15,.38)); } 50% { filter: drop-shadow(0 0 3px rgba(255,155,70,.88)) drop-shadow(0 0 7px rgba(255,90,25,.68)) drop-shadow(0 0 10px rgba(195,45,10,.42)); } }
-@keyframes blackBluePiecePulse { 0%,100% { filter: drop-shadow(0 0 2px rgba(210,245,255,.72)) drop-shadow(0 0 5px rgba(80,185,255,.58)); } 50% { filter: drop-shadow(0 0 5px rgba(235,250,255,1)) drop-shadow(0 0 11px rgba(80,185,255,.98)) drop-shadow(0 0 17px rgba(55,135,255,.8)); } }
+@keyframes blackBluePiecePulse { 0%,100% { filter: drop-shadow(0 0 1.5px rgba(210,245,255,.55)) drop-shadow(0 0 3px rgba(80,185,255,.38)); } 50% { filter: drop-shadow(0 0 2.5px rgba(235,250,255,.82)) drop-shadow(0 0 5px rgba(80,185,255,.62)) drop-shadow(0 0 7px rgba(55,135,255,.42)); } }
 </style>
 <style>
 .game-header-actions{display:none;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
@@ -901,8 +901,8 @@ function renderBoard(){
       pieceEl.style.setProperty("color","#151c2b","important");
       pieceEl.style.setProperty("-webkit-text-fill-color","#151c2b","important");
       pieceEl.style.setProperty("-webkit-text-stroke","1.7px #e8f5ff","important");
-      pieceEl.style.setProperty("text-shadow","0 0 3px #ffffff, 0 0 7px rgba(205,240,255,.98), 0 0 14px rgba(80,185,255,.95), 0 0 21px rgba(55,135,255,.75), 0 2px 2px #000000","important");
-      pieceEl.style.setProperty("filter","drop-shadow(0 0 3px rgba(210,245,255,.98)) drop-shadow(0 0 8px rgba(80,185,255,.95)) drop-shadow(0 0 14px rgba(55,135,255,.75))","important");
+      pieceEl.style.setProperty("text-shadow","0 0 2px rgba(255,255,255,.9), 0 0 4px rgba(205,240,255,.72), 0 0 7px rgba(80,185,255,.55), 0 2px 2px #000000","important");
+      pieceEl.style.setProperty("filter","drop-shadow(0 0 2px rgba(210,245,255,.78)) drop-shadow(0 0 4px rgba(80,185,255,.58))","important");
     }
   }
   btn.onclick=()=>handleSquare(sq);board.appendChild(btn);
