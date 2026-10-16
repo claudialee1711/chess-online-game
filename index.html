@@ -763,53 +763,12 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 </style>
 
 
-<style id="indonesia-red-white-brand">
-/* Identitas merah-putih Indonesia dengan cahaya tetap menyala */
-.brand h1{
-  display:flex!important;align-items:center!important;gap:7px!important;
-  flex-wrap:nowrap!important;
-}
-.brand .indonesia-flag{
-  display:inline-block!important;flex:0 0 auto!important;
-  font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif!important;
-  font-size:clamp(20px,2.6vw,29px)!important;line-height:1!important;
-  -webkit-text-fill-color:initial!important;
-  filter:drop-shadow(0 0 3px rgba(255,255,255,.85)) drop-shadow(0 0 8px rgba(255,30,30,.8)) drop-shadow(0 0 13px rgba(210,0,0,.5))!important;
-  animation:indonesiaFlagGlow 1.8s ease-in-out infinite alternate;
-}
-.brand .brand-title-text{
-  display:inline-block!important;
-  color:#fff!important;
-  background:linear-gradient(180deg,#ffffff 0%,#fffafa 42%,#ffb4b4 56%,#ff3434 78%,#c90020 100%)!important;
-  -webkit-background-clip:text!important;background-clip:text!important;
-  -webkit-text-fill-color:transparent!important;
-  -webkit-text-stroke:.45px rgba(255,255,255,.35)!important;
-  filter:drop-shadow(0 0 2px rgba(255,255,255,.9)) drop-shadow(0 0 6px rgba(255,35,45,.95)) drop-shadow(0 0 13px rgba(205,0,20,.78))!important;
-  animation:indonesiaTitleGlow 1.7s ease-in-out infinite alternate;
-}
-.brand .sub{
-  color:#fff!important;
-  text-shadow:0 0 3px #fff,0 0 7px #ff3535,0 0 13px #cf001d!important;
-}
-@keyframes indonesiaTitleGlow{
-  from{filter:drop-shadow(0 0 2px rgba(255,255,255,.8)) drop-shadow(0 0 5px rgba(255,25,35,.72)) drop-shadow(0 0 9px rgba(205,0,20,.6))}
-  to{filter:drop-shadow(0 0 4px rgba(255,255,255,1)) drop-shadow(0 0 9px rgba(255,35,45,1)) drop-shadow(0 0 17px rgba(205,0,20,.9))}
-}
-@keyframes indonesiaFlagGlow{
-  from{filter:drop-shadow(0 0 2px rgba(255,255,255,.7)) drop-shadow(0 0 5px rgba(255,25,35,.65))}
-  to{filter:drop-shadow(0 0 4px rgba(255,255,255,1)) drop-shadow(0 0 10px rgba(255,25,35,.95))}
-}
-@media(prefers-reduced-motion:reduce){.brand .indonesia-flag,.brand .brand-title-text{animation:none!important}}
-@media(max-width:760px){
- .brand h1{gap:4px!important}
- .brand .indonesia-flag{font-size:clamp(17px,4.5vw,23px)!important}
-}
-</style>
+
 </head>
 <body>
 <div class="wrap">
 <header class="top">
-  <div class="top-left"><button id="profileBtn" class="secondary profile-btn hidden" aria-label="Profil pemain" title="Profil pemain"><span id="profileButtonAvatar" class="avatar-fallback">👤</span></button><div class="brand"><div><h1><span class="indonesia-flag" aria-label="Bendera Indonesia" title="Indonesia">🇮🇩</span> <span class="brand-title-text">Chess Arena 171</span></h1><div class="sub">Tank171 app</div></div></div></div>
+  <div class="top-left"><button id="profileBtn" class="secondary profile-btn hidden" aria-label="Profil pemain" title="Profil pemain"><span id="profileButtonAvatar" class="avatar-fallback">👤</span></button><div class="brand"><div><h1>Chess Arena 171</h1><div class="sub">Tank171 app</div></div></div></div>
   <div class="top-right"></div>
 </header>
 
