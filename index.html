@@ -615,12 +615,12 @@ header.top .brand .sub{white-space:nowrap!important}
 }
 /* High contrast + soft glow for every chess piece. */
 #board .sq .piece-white{
- color:#fff4d4!important;
- -webkit-text-fill-color:#fff4d4!important;
- -webkit-text-stroke:1.25px #63370d!important;
+ color:#70421f!important;
+ -webkit-text-fill-color:#70421f!important;
+ -webkit-text-stroke:1.25px #ead0a0!important;
  paint-order:stroke fill!important;
- text-shadow:0 0 2px #ffffff,0 0 5px #ffdc78,0 0 9px #ff9f1c,0 2px 2px #291606!important;
- filter:drop-shadow(0 0 2px #fff1b8) drop-shadow(0 0 4px #ff9a19)!important;
+ text-shadow:0 1px 1px #211306,0 0 2px rgba(194,139,65,.42)!important;
+ filter:drop-shadow(0 0 1.5px rgba(194,139,65,.45))!important;
 }
 #board .sq .piece-black{
  color:#151c2b!important;
@@ -885,11 +885,12 @@ function renderBoard(){
     pieceEl.style.setProperty("line-height","1","important");
     pieceEl.style.setProperty("paint-order","stroke fill","important");
     if(piece.color==="w"){
-      pieceEl.style.setProperty("color","#fff4d4","important");
-      pieceEl.style.setProperty("-webkit-text-fill-color","#fff4d4","important");
-      pieceEl.style.setProperty("-webkit-text-stroke","1.5px #63370d","important");
-      pieceEl.style.setProperty("text-shadow","0 0 2px #ffffff, 0 0 6px #ffdc78, 0 0 12px #ff9f1c, 0 2px 2px #291606","important");
-      pieceEl.style.setProperty("filter","drop-shadow(0 0 3px #fff1b8) drop-shadow(0 0 7px #ff9a19)","important");
+      /* Brown side: clearly brown fill with a restrained amber edge, not a white/gold glare. */
+      pieceEl.style.setProperty("color","#70421f","important");
+      pieceEl.style.setProperty("-webkit-text-fill-color","#70421f","important");
+      pieceEl.style.setProperty("-webkit-text-stroke","1.25px #ead0a0","important");
+      pieceEl.style.setProperty("text-shadow","0 1px 1px #211306, 0 0 2px rgba(194,139,65,.42)","important");
+      pieceEl.style.setProperty("filter","drop-shadow(0 0 1.5px rgba(194,139,65,.45))","important");
     } else {
       pieceEl.style.setProperty("color","#151c2b","important");
       pieceEl.style.setProperty("-webkit-text-fill-color","#151c2b","important");
