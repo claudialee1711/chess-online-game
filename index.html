@@ -635,6 +635,43 @@ header.top .brand .sub{white-space:nowrap!important}
 }
 </style>
 
+<style id="chess-controls-viewport-portal">
+/* The controls are moved directly under body by JS, so they cannot be trapped by header/wrap layout. */
+body > #gameHeaderActions {
+ position:fixed!important;
+ inset:10px 10px auto auto!important;
+ z-index:2147483647!important;
+ margin:0!important;
+ transform:none!important;
+}
+body > #gameHeaderActions.visible {
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:4px!important;
+ width:min(450px,46vw)!important;
+ max-width:calc(100vw - 20px)!important;
+}
+body > #gameHeaderActions button {
+ min-width:0!important;
+ width:100%!important;
+ white-space:normal!important;
+}
+@media(max-width:760px) {
+ body > #gameHeaderActions.visible {
+  inset:8px 8px auto auto!important;
+  width:min(58vw,330px)!important;
+  max-width:calc(100vw - 16px)!important;
+  gap:3px!important;
+ }
+ body > #gameHeaderActions button {
+  font-size:clamp(8px,2.4vw,11px)!important;
+  min-height:30px!important;
+  padding:4px 2px!important;
+  line-height:1.1!important;
+ }
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -725,6 +762,10 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const $ = id => document.getElementById(id);
 let currentUser = null, game = null, gameMode = "local", currentRoomId = null, roomUnsub = null, queueUnsub = null, friendsUnsub = null, chatUnsub = null, inviteUnsub = null, friendRequestsUnsub = null, chatNoticeUnsubs = [], selectedSquare = null, botColor = "b", gameOver = false, myRoomColor = null, roomStatus = "", pendingRoomMode = "private", pendingRoomTitle = "Private Match", opponentUid = "", opponentShortUid = "", opponentName = "Lawan", activeChatUid = "", activeChatName = "";
+
+/* Keep game controls outside transformed/layout containers so fixed positioning is viewport-relative. */
+const gameActionDock = $("gameHeaderActions");
+if (gameActionDock) document.body.appendChild(gameActionDock);
 
 function showScreen(name) {
   ["loginScreen","homeScreen","randomScreen","botScreen","privateScreen","friendsScreen","chatScreen","gameScreen"].forEach(id => $(id).classList.add("hidden"));
