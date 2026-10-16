@@ -712,6 +712,25 @@ body > #gameHeaderActions button {
  }
  #gameScreen .game-controls .turn-status {flex:1 1 100%!important;width:100%!important}
 }
+
+/* Replace the dark press/tap backing with a soft mint highlight across the whole site. */
+button, a, [role="button"], input[type="button"], input[type="submit"], input[type="reset"] {
+  -webkit-tap-highlight-color: transparent !important;
+}
+button:active, a:active, [role="button"]:active,
+input[type="button"]:active, input[type="submit"]:active, input[type="reset"]:active {
+  -webkit-tap-highlight-color: transparent !important;
+  box-shadow: 0 0 0 2px rgba(124,224,179,.32), 0 0 14px rgba(124,224,179,.24) !important;
+  filter: brightness(1.08);
+}
+button:focus:not(:focus-visible), a:focus:not(:focus-visible), [role="button"]:focus:not(:focus-visible) {
+  outline: none !important;
+}
+button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
+input[type="button"]:focus-visible, input[type="submit"]:focus-visible, input[type="reset"]:focus-visible {
+  outline: 2px solid rgba(124,224,179,.85) !important;
+  outline-offset: 2px;
+}
 </style>
 
 </head>
