@@ -334,6 +334,20 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 /* Animated glow pulses: red for brown side, icy blue for black side */
 @keyframes brownRedPiecePulse { 0%,100% { filter: drop-shadow(0 0 1.5px rgba(255,125,45,.55)) drop-shadow(0 0 4px rgba(225,65,15,.38)); } 50% { filter: drop-shadow(0 0 3px rgba(255,155,70,.88)) drop-shadow(0 0 7px rgba(255,90,25,.68)) drop-shadow(0 0 10px rgba(195,45,10,.42)); } }
 @keyframes blackBluePiecePulse { 0%,100% { filter: drop-shadow(0 0 1.5px rgba(210,245,255,.55)) drop-shadow(0 0 3px rgba(80,185,255,.38)); } 50% { filter: drop-shadow(0 0 2.5px rgba(235,250,255,.82)) drop-shadow(0 0 5px rgba(80,185,255,.62)) drop-shadow(0 0 7px rgba(55,135,255,.42)); } }
+
+/* Halaman login: kartu di tengah layar, sedikit diturunkan sesuai permintaan. */
+body:has(#loginScreen:not(.hidden)) .top { display: none !important; }
+body:has(#loginScreen:not(.hidden)) .wrap { min-height: 100vh; padding: 20px 16px !important; display: flex; align-items: center; justify-content: center; }
+#loginScreen { width: min(540px, calc(100vw - 32px)); margin: 0 auto !important; transform: translateY(42px); padding: clamp(24px, 5vw, 38px) !important; background: rgba(33, 23, 15, .94) !important; border: 1px solid rgba(214, 164, 109, .62) !important; border-radius: 24px !important; box-shadow: 0 24px 70px rgba(0,0,0,.48) !important; color: #fff0d8 !important; text-align: center; }
+#loginScreen .eyebrow { color: #d6a46d !important; letter-spacing: .14em; }
+#loginScreen .title { color: #fff0d8 !important; font-size: clamp(30px, 6vw, 42px); margin: 8px 0 10px; }
+#loginScreen .login-tagline { color: #e7bc88 !important; font-size: clamp(19px, 4vw, 24px); margin: 0 0 12px; }
+#loginScreen .login-description { color: #e2d0ba !important; margin: 0 auto; max-width: 410px; }
+#loginScreen .login-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 24px; }
+#loginScreen #googleBtn { background: linear-gradient(145deg, #79502f, #57331d) !important; border: 1px solid #b98a5b !important; color: #fff4e6 !important; min-height: 48px; }
+#loginScreen #guestBtn { background: rgba(112,69,33,.22) !important; border: 1px solid #a77b50 !important; color: #f1d7b4 !important; min-height: 48px; }
+#loginScreen #loginMessage { color: #e2c5a3 !important; }
+@media (max-width: 480px) { #loginScreen { padding: 25px 20px !important; } }
 </style>
 <style>
 .game-header-actions{display:none;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
