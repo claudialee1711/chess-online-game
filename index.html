@@ -329,6 +329,21 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 .board-info{display:block!important}
 @media(max-width:760px){.top{align-items:flex-start}.top-left{min-width:0}.top-right{max-width:58%}.game-header-actions{gap:5px}.game-header-actions.visible{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.game-header-actions button{font-size:10px;padding:6px 5px;min-height:29px;white-space:normal}.game-header-actions #backToMenuBtn{grid-column:1 / -1}.board-layout{grid-template-columns:1fr}.board-info{display:block!important}}
 </style>
+<style>
+.menu-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:7px!important}
+.menu-card{min-width:0!important;min-height:76px!important;height:auto!important;padding:8px 4px!important;text-align:center!important;border-radius:11px!important}
+.menu-card .emoji{display:block;font-size:21px!important;line-height:1.1;margin-bottom:4px}
+.menu-card h3{font-size:clamp(9px,1.15vw,13px)!important;line-height:1.15!important;margin:0!important;overflow-wrap:anywhere}
+.menu-card p{display:none!important}
+.board-info{display:block!important;visibility:visible!important;min-width:0}
+#opponentProfile{display:flex!important;visibility:visible!important;opacity:1!important}
+@media(max-width:760px){
+ .menu-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important;padding:7px 4px!important}
+ .menu-card{min-height:62px!important;padding:6px 2px!important;border-radius:8px!important}
+ .menu-card .emoji{font-size:18px!important}
+ .menu-card h3{font-size:clamp(8px,2.2vw,10px)!important;letter-spacing:-.2px}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -380,7 +395,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 
 <section id="friendsScreen" class="panel hidden">
  <div class="section-head"><h2>👥 Teman & Chat</h2><button class="secondary" data-home>← Menu</button></div>
- <div class="stack"><div class="row"><input id="friendUidInput" placeholder="UID teman (7 angka)" maxlength="7" inputmode="numeric" pattern="[0-9]{7}"><button id="addFriendBtn">+ Tambah</button></div><p id="friendsStatus" class="muted small" role="status"></p><h3>Permintaan pertemanan masuk</h3><div id="incomingFriendRequests" class="list"><p class="muted">Memuat permintaan…</p></div><h3>Tantangan masuk</h3><div id="incomingChallenges" class="list"><p class="muted">Tidak ada tantangan masuk.</p></div><h3>Daftar teman</h3><div id="friendsList" class="list"><p class="muted">Memuat teman…</p></div><h3>Cari pemain untuk ditambahkan</h3><div id="playersDirectory" class="list"><p class="muted">Memuat pemain…</p></div>
+ <div class="stack"><div class="row"><input id="friendUidInput" placeholder="UID teman (7 angka)" maxlength="7" inputmode="numeric" pattern="[0-9]{7}"><button id="addFriendBtn">+ Tambah</button></div><p id="friendsStatus" class="muted small" role="status"></p><h3>Permintaan pertemanan masuk</h3><div id="incomingFriendRequests" class="list"><p class="muted">Memuat permintaan…</p></div><h3>Tantangan masuk</h3><div id="incomingChallenges" class="list"><p class="muted">Tidak ada tantangan masuk.</p></div><h3>Daftar teman</h3><div id="friendsList" class="list"><p class="muted">Memuat teman…</p></div>
  </div>
 </section>
 
@@ -462,8 +477,30 @@ $("copyOpponentIdBtn").onclick=()=>copyOpponentValue(opponentShortUid||opponentU
 $("addOpponentBtn").onclick=async()=>{if(!opponentUid){msg("gameStatus","ID lawan belum tersedia.","error");return;}try{await addFriendByAuthUid(opponentUid,opponentShortUid,opponentName);msg("gameStatus","Permintaan pertemanan dikirim. Tunggu sampai lawan menerimanya.","success");}catch(e){msg("gameStatus","Gagal menambahkan teman: "+e.message,"error");}};
 $("startBotBtn").onclick=()=>{botColor="b";startGame("bot","VS Bot · "+$("difficulty").selectedOptions[0].text,"Bot ("+$("difficulty").selectedOptions[0].text+")");};
 $("newGameBtn").onclick=async()=>{const previousMode=gameMode;await cleanupListeners();if(currentUser&&currentRoomId){try{const r=doc(db,"rooms",currentRoomId);const s=await getDoc(r);if(s.exists()&&s.data().hostUid===currentUser.uid&&s.data().status!=="finished")await updateDoc(r,{status:"finished",updatedAt:serverTimestamp()});}catch(e){console.warn("Room lama belum bisa ditutup:",e);}}currentRoomId=null;roomStatus="";myRoomColor=null;gameOver=false;$("gameResultOverlay")?.classList.add("hidden");if(previousMode==="bot")startGame("bot","VS Bot · "+$("difficulty").selectedOptions[0].text,"Bot ("+$("difficulty").selectedOptions[0].text+")");else if(previousMode==="online"){showScreen("random");$("findMatchBtn").disabled=false;msg("randomStatus","Siap mencari lawan lagi.");}else if(previousMode==="private"){showScreen("private");msg("privateStatus","Room sebelumnya selesai. Buat room baru atau masukkan kode.");}else startGame("local","Permainan baru","Lokal");};
-$("resignBtn").onclick=async()=>{if(gameOver)return;if(!confirm("Yakin ingin menyerah? Kamu akan dinyatakan kalah."))return;gameOver=true;if(currentRoomId&&myRoomColor&&currentUser){try{const roomRef=doc(db,"rooms",currentRoomId);const roomSnap=await getDoc(roomRef);if(roomSnap.exists()){const room=roomSnap.data();const winnerUid=myRoomColor==="w"?(room.guestUid||null):(room.hostUid||null);await updateDoc(roomRef,{status:"finished",winnerUid,result:"resign",updatedAt:serverTimestamp()});}}catch(e){console.error("Hasil menyerah tidak tersinkron:",e);msg("gameStatus","Kamu menyerah, tetapi hasil gagal disimpan: "+e.message,"error");}}showResultOverlay("Kamu kalah — menyerah","🏳️");msg("gameStatus","Kamu menyerah. Lawan menang.","error");};
-function multiplayerColorName(color){return color==="w"?"Bidak coklat":"Bidak hitam";}
+$("resignBtn").onclick=async()=>{
+ if(gameOver)return;
+ if(!confirm("Yakin ingin menyerah? Kamu akan dinyatakan kalah."))return;
+ if(!currentRoomId||!currentUser||!myRoomColor){gameOver=true;showResultOverlay("Kamu kalah — menyerah","🏳️");msg("gameStatus","Kamu menyerah.","error");return;}
+ try{
+  const roomRef=doc(db,"rooms",currentRoomId);
+  const outcome=await runTransaction(db,async tx=>{
+   const snap=await tx.get(roomRef);
+   if(!snap.exists())throw new Error("Room tidak ditemukan.");
+   const room=snap.data();
+   if(room.status!=="playing")return {alreadyFinished:true,winnerUid:room.winnerUid||null};
+   if(room.hostUid!==currentUser.uid&&room.guestUid!==currentUser.uid)throw new Error("Kamu bukan pemain di room ini.");
+   const winnerUid=room.hostUid===currentUser.uid?room.guestUid:room.hostUid;
+   if(!winnerUid)throw new Error("Data lawan belum tersedia. Coba lagi setelah lawan masuk.");
+   tx.update(roomRef,{status:"finished",winnerUid,result:"resign",updatedAt:serverTimestamp()});
+   return {alreadyFinished:false,winnerUid};
+  });
+  gameOver=true;
+  if(outcome.alreadyFinished){const didWin=outcome.winnerUid===currentUser.uid;showResultOverlay(didWin?"Kamu menang!":"Kamu kalah","🏆");msg("gameStatus",didWin?"Kamu menang!":"Kamu kalah.",didWin?"success":"error");return;}
+  showResultOverlay("Kamu kalah — menyerah","🏳️");
+  msg("gameStatus","Kamu menyerah. Lawan menang.","error");
+ }catch(e){msg("gameStatus","Gagal menyimpan hasil menyerah: "+e.message,"error");}
+};
+function multiplayerColorNamefunction multiplayerColorName(color){return color==="w"?"Bidak coklat":"Bidak hitam";}
 function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverlay");if(!overlay)return;overlay.innerHTML='<div class="result-card"><div class="result-trophy">'+emoji+'</div><h2>'+esc(title)+'</h2><p>'+esc(game?.in_draw()?"Permainan berakhir remis.":"Permainan telah selesai.")+'</p><button type="button" id="resultBackBtn">Balik ke Menu</button></div>';overlay.classList.remove("hidden");$("resultBackBtn").onclick=async()=>{overlay.classList.add("hidden");await cleanupListeners();currentRoomId=null;showScreen("home");};}
 function renderBoard(){
  if(!game)return;
@@ -510,7 +547,7 @@ $("copyRoomCodeBtn").onclick=async()=>{const code=$("roomCodeInput").value.trim(
 $("joinRoomBtn").onclick=async()=>{const code=$("roomCodeInput").value.trim().toUpperCase();if(!code){msg("privateStatus","Masukkan kode room dulu.","error");return;}try{const snap=await getDocs(query(collection(db,"rooms"),where("code","==",code),where("status","==","waiting")));if(snap.empty){msg("privateStatus","Room tidak ditemukan atau sudah dimulai.","error");return;}const d=snap.docs[0];if(d.data().hostUid===currentUser.uid){msg("privateStatus","Ini room milikmu. Bagikan kodenya ke teman.","error");return;}const me=await getDoc(doc(db,"players",currentUser.uid));const md=me.exists()?me.data():{};await updateDoc(d.ref,{guestUid:currentUser.uid,guestName:md.name||currentUser.displayName||"Pemain",guestShortUid:md.shortUid||$("uidText").textContent,status:"playing",updatedAt:serverTimestamp()});currentRoomId=d.id;pendingRoomMode="private";pendingRoomTitle="Private Match";startGame("private","Private Match","Menyiapkan permainan…",null,true);watchRoom(d.id);}catch(e){msg("privateStatus","Gagal masuk room: "+e.message,"error");}};
 function watchRoom(roomId){
  if(roomUnsub)roomUnsub();
- roomUnsub=onSnapshot(doc(db,"rooms",roomId),snap=>{if(!snap.exists())return;const d=snap.data();roomStatus=d.status||"waiting";myRoomColor=d.hostUid===currentUser.uid?"w":"b";const otherIsHost=d.hostUid!==currentUser.uid;setOpponentDetails(otherIsHost?(d.hostName||"Lawan"):(d.guestName||"Menunggu teman"),otherIsHost?d.hostUid:d.guestUid,otherIsHost?d.hostShortUid:d.guestShortUid,otherIsHost?(d.hostAvatar||""):(d.guestAvatar||""));if(d.status==="waiting"){if($("privateStatus")&&currentRoomId===roomId)$ ("privateStatus").textContent="Room "+d.code+" menunggu pemain bergabung. Bagikan kodenya.";return;}if(d.status==="playing"&&$("gameScreen").classList.contains("hidden")){startGame(pendingRoomMode,pendingRoomTitle,d.code?"Room "+d.code:"Lawan",d.fen||null,true);setOpponentDetails(otherIsHost?(d.hostName||"Lawan"):(d.guestName||"Menunggu teman"),otherIsHost?d.hostUid:d.guestUid,otherIsHost?d.hostShortUid:d.guestShortUid,otherIsHost?(d.hostAvatar||""):(d.guestAvatar||""));}if(game&&d.fen&&d.fen!==game.fen()){try{game.load(d.fen);selectedSquare=null;renderBoard();}catch(e){console.warn("FEN room tidak valid",e);}}if(d.status==="finished"||game?.game_over()){gameOver=true;let winnerUid=d.winnerUid||null;if(!winnerUid&&game?.in_checkmate()){const winnerColor=game.turn()==="w"?"b":"w";winnerUid=winnerColor==="w"?d.hostUid:d.guestUid;}const didWin=winnerUid===currentUser.uid;const isDraw=game?.in_draw()||d.result==="draw";showResultOverlay(isDraw?"Remis":didWin?"Kamu menang!":"Kamu kalah",isDraw?"🤝":"🏆");msg("gameStatus",isDraw?"Permainan remis.":didWin?"Kamu menang!":"Kamu kalah.","success");}if(game)renderBoard();});
+ roomUnsub=onSnapshot(doc(db,"rooms",roomId),snap=>{if(!snap.exists())return;const d=snap.data();roomStatus=d.status||"waiting";myRoomColor=d.hostUid===currentUser.uid?"w":"b";const otherIsHost=d.hostUid!==currentUser.uid;setOpponentDetails(otherIsHost?(d.hostName||"Lawan"):(d.guestName||"Menunggu teman"),otherIsHost?d.hostUid:d.guestUid,otherIsHost?d.hostShortUid:d.guestShortUid,otherIsHost?(d.hostAvatar||""):(d.guestAvatar||""));if(d.status==="waiting"){if($("privateStatus")&&currentRoomId===roomId)$ ("privateStatus").textContent="Room "+d.code+" menunggu pemain bergabung. Bagikan kodenya.";return;}if(d.status==="playing"&&$("gameScreen").classList.contains("hidden")){startGame(pendingRoomMode,pendingRoomTitle,d.code?"Room "+d.code:"Lawan",d.fen||null,true);setOpponentDetails(otherIsHost?(d.hostName||"Lawan"):(d.guestName||"Menunggu teman"),otherIsHost?d.hostUid:d.guestUid,otherIsHost?d.hostShortUid:d.guestShortUid,otherIsHost?(d.hostAvatar||""):(d.guestAvatar||""));}if(game&&d.fen&&d.fen!==game.fen()){try{game.load(d.fen);selectedSquare=null;renderBoard();}catch(e){console.warn("FEN room tidak valid",e);}}if(d.status==="finished"||game?.game_over()){gameOver=true;const isResign=d.result==="resign";let winnerUid=d.winnerUid||null;if(!winnerUid&&!isResign&&game?.in_checkmate()){const winnerColor=game.turn()==="w"?"b":"w";winnerUid=winnerColor==="w"?d.hostUid:d.guestUid;}const isDraw=d.result==="draw"||(!isResign&&game?.in_draw());const didWin=!!winnerUid&&winnerUid===currentUser.uid;showResultOverlay(isDraw?"Remis":didWin?"Kamu menang!":"Kamu kalah",isDraw?"🤝":didWin?"🏆":"🏳️");msg("gameStatus",isDraw?"Permainan remis.":didWin?"Kamu menang!":"Kamu kalah.",isDraw?"muted":didWin?"success":"error");}if(game)renderBoard();});
 }
 async function enterMatchedRoom(roomId,roomCode,otherUid,otherName){
  currentRoomId=roomId;pendingRoomMode="online";pendingRoomTitle="Random Match";startGame("online","Random Match",otherName||"Lawan",null,true);watchRoom(roomId);$("findMatchBtn").disabled=false;msg("randomStatus","Lawan ditemukan! Permainan dimulai.","success");
@@ -550,15 +587,18 @@ async function addFriendByAuthUid(friendAuthUid,shortUid="",name="Pemain"){
 }
 async function makeMutualFriends(friendUid,friendData={}){
  if(!currentUser||!friendUid||friendUid===currentUser.uid)throw new Error("Permintaan teman tidak valid.");
+ const requestRef=doc(db,"players",currentUser.uid,"friendRequests",friendUid);
+ const requestSnap=await getDoc(requestRef);
+ if(!requestSnap.exists())throw new Error("Permintaan pertemanan sudah tidak tersedia.");
  const meSnap=await getDoc(doc(db,"players",currentUser.uid)),me=meSnap.exists()?meSnap.data():{};
  const otherSnap=await getDoc(doc(db,"players",friendUid)),other=otherSnap.exists()?otherSnap.data():friendData;
  await setDoc(doc(db,"players",currentUser.uid,"friends",friendUid),{uid:friendUid,shortUid:other.shortUid||friendData.senderShortUid||"",name:other.name||friendData.senderName||"Pemain",addedAt:serverTimestamp()});
  await setDoc(doc(db,"players",friendUid,"friends",currentUser.uid),{uid:currentUser.uid,shortUid:me.shortUid||$("uidText").textContent,name:me.name||currentUser.displayName||"Pemain",addedAt:serverTimestamp()});
- await deleteDoc(doc(db,"players",currentUser.uid,"friendRequests",friendUid)).catch(()=>{});
+ await deleteDoc(requestRef);
  await deleteDoc(doc(db,"players",currentUser.uid,"sentFriendRequests",friendUid)).catch(()=>{});
  await deleteDoc(doc(db,"players",friendUid,"sentFriendRequests",currentUser.uid)).catch(()=>{});
 }
-async function openFriendChat(uid,name){
+async function openFriendChatasync function openFriendChat(uid,name){
  if(!currentUser||!uid){msg("friendsStatus","Pilih teman yang valid untuk membuka chat.","error");return;}
  activeChatUid=uid;activeChatName=name||"Teman";showScreen("chat");$("friendChatTitle").textContent="Chat · "+activeChatName;$("friendChatPanel").classList.remove("hidden");$("chatScreenHint").classList.add("hidden");$("friendChatMessages").innerHTML='<p class="muted">Memuat pesan…</p>';$("friendChatPanel").scrollIntoView({behavior:"smooth",block:"nearest"});if(chatUnsub)chatUnsub();
  const chatId=[currentUser.uid,uid].sort().join("__");
@@ -583,18 +623,7 @@ async function loadIncomingChallenges(){
   list.querySelectorAll("[data-accept-challenge]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{const ref=doc(db,"rooms",b.dataset.acceptChallenge);const snap=await getDoc(ref);if(!snap.exists()||snap.data().status!=="waiting")throw new Error("Tantangan sudah tidak tersedia.");const room=snap.data();const me=await getDoc(doc(db,"players",currentUser.uid));const md=me.exists()?me.data():{};await updateDoc(ref,{guestName:md.name||currentUser.displayName||"Pemain",guestShortUid:md.shortUid||$("uidText").textContent,status:"playing",updatedAt:serverTimestamp()});currentRoomId=ref.id;pendingRoomMode="private";pendingRoomTitle="Tantang Teman";startGame("private","Tantang Teman","Memulai permainan…",null,true);watchRoom(ref.id);}catch(e){b.disabled=false;msg("friendsStatus","Gagal menerima tantangan: "+e.message,"error");}});
  },e=>{const list=$("incomingChallenges");if(list)list.innerHTML='<p class="muted">Tantangan tidak bisa dimuat: '+esc(e.message)+'</p>';});
 }
-async function loadPlayersDirectory(){
- if(!currentUser)return;const list=$("playersDirectory");if(!list)return;list.innerHTML='<p class="muted">Memuat pemain…</p>';
- try{
-  const [playersSnap,friendsSnap,sentSnap]=await Promise.all([getDocs(collection(db,"players")),getDocs(collection(db,"players",currentUser.uid,"friends")),getDocs(collection(db,"players",currentUser.uid,"sentFriendRequests"))]);
-  const friendIds=new Set(friendsSnap.docs.map(d=>d.id)),sentIds=new Set(sentSnap.docs.map(d=>d.id));
-  const players=playersSnap.docs.filter(d=>d.id!==currentUser.uid&&!friendIds.has(d.id)).sort((a,b)=>(a.data().name||"").localeCompare(b.data().name||""));
-  list.innerHTML="";if(!players.length){list.innerHTML='<p class="muted">Belum ada pemain lain yang bisa ditambahkan.</p>';return;}
-  for(const p of players){const d=p.data(),sent=sentIds.has(p.id),el=document.createElement("div");el.className="list-item";el.innerHTML='<div><strong>'+esc(d.name||"Pemain")+'</strong><div class="muted small">ID '+esc(d.shortUid||"—")+'</div></div><div class="player-row-actions">'+(sent?'<button class="secondary compact" disabled>Menunggu</button>':'<button class="secondary add-player-btn" type="button" data-add-player="'+esc(p.id)+'" data-short-uid="'+esc(d.shortUid||"")+'" data-player-name="'+esc(d.name||"Pemain")+'">＋</button>')+'</div>';list.appendChild(el);}
-  list.querySelectorAll("[data-add-player]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{await addFriendByAuthUid(b.dataset.addPlayer,b.dataset.shortUid,b.dataset.playerName);msg("friendsStatus","Permintaan pertemanan dikirim. Menunggu persetujuan.","success");await loadPlayersDirectory();}catch(e){b.disabled=false;msg("friendsStatus","Gagal mengirim permintaan: "+e.message,"error");}});
- }catch(e){list.innerHTML='<p class="muted">Daftar pemain tidak bisa dimuat: '+esc(e.message)+'</p>';}
-}
-async function loadChatContacts(){
+async function loadChatContactsasync function loadChatContacts(){
  if(!currentUser)return;
  for(const unsub of chatNoticeUnsubs)unsub();chatNoticeUnsubs=[];
  const list=$("chatContacts");list.innerHTML='<p class="muted">Memuat teman…</p>';
@@ -626,12 +655,12 @@ async function loadFriends(){
  if(!currentUser)return;if(friendsUnsub){friendsUnsub();friendsUnsub=null;}loadIncomingChallenges();loadFriendRequests();
  friendsUnsub=onSnapshot(collection(db,"players",currentUser.uid,"friends"),async snap=>{
   const list=$("friendsList");list.innerHTML="";
-  if(snap.empty){list.innerHTML='<p class="muted">Belum ada teman. Kirim permintaan melalui UID atau daftar pemain.</p>';await loadPlayersDirectory();return;}
+  if(snap.empty){list.innerHTML='<p class="muted">Belum ada teman. Kirim permintaan melalui UID atau daftar pemain.</p>';return;}
   for(const f of snap.docs){const data=f.data(),uid=data.uid||f.id,name=data.name||uid,el=document.createElement("div");el.className="list-item";el.innerHTML='<div><strong>'+esc(name)+'</strong><div class="muted small">ID '+esc(data.shortUid||uid)+'</div></div><div class="player-row-actions"><button class="secondary compact" data-chat="'+esc(uid)+'" data-name="'+esc(name)+'">Chat</button><button class="secondary compact" data-challenge="'+esc(uid)+'" data-name="'+esc(name)+'" data-short-uid="'+esc(data.shortUid||"")+'">Tantang</button><button class="danger compact" data-remove-friend="'+esc(uid)+'" data-name="'+esc(name)+'">Hapus</button></div>';list.appendChild(el);}
   list.querySelectorAll("[data-chat]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{await openFriendChat(b.dataset.chat,b.dataset.name);$("friendChatPanel").scrollIntoView({behavior:"smooth",block:"nearest"});}catch(e){msg("friendChatStatus","Chat gagal dibuka: "+e.message,"error");}finally{b.disabled=false;}});
   list.querySelectorAll("[data-challenge]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{const room=await createRoom(b.dataset.challenge,{name:b.dataset.name,shortUid:b.dataset.shortUid},false);currentRoomId=room.id;pendingRoomMode="private";pendingRoomTitle="Tantang Teman";msg("friendsStatus","Tantangan dikirim ke "+b.dataset.name+". Room "+room.code+" menunggu diterima.");watchRoom(room.id);}catch(e){b.disabled=false;msg("friendsStatus","Gagal membuat tantangan: "+e.message,"error");}});
   list.querySelectorAll("[data-remove-friend]").forEach(b=>b.onclick=async()=>{if(!confirm("Hapus "+b.dataset.name+" dari daftar teman?"))return;b.disabled=true;try{await Promise.all([deleteDoc(doc(db,"players",currentUser.uid,"friends",b.dataset.removeFriend)),deleteDoc(doc(db,"players",b.dataset.removeFriend,"friends",currentUser.uid))]);msg("friendsStatus","Teman berhasil dihapus.","success");}catch(e){b.disabled=false;msg("friendsStatus","Gagal menghapus teman: "+e.message,"error");}});
-  await loadPlayersDirectory();
+  await 
  });
 }
 async function loadFriendRequests(){
