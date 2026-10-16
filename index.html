@@ -473,6 +473,45 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 @media(prefers-reduced-motion:reduce){.brand h1,.brand .sub,.menu-card .emoji{animation:none!important}}
 
 </style>
+
+<style id="chess-arena-header-icons-v2">
+/* Header tetap terlihat, sementara kontrol permainan menempel di pojok kanan atas layar. */
+.top{position:relative;display:flex!important;align-items:flex-start!important;justify-content:flex-start!important;min-height:62px;padding:8px 0 12px!important;padding-right:clamp(230px,38vw,490px)!important;gap:12px!important}
+.top-left{display:flex!important;align-items:center!important;min-width:0!important;flex:0 1 auto!important;position:relative;z-index:2}
+.brand{display:flex!important;visibility:visible!important;opacity:1!important;min-width:0!important}
+.brand h1{display:block!important;visibility:visible!important;opacity:1!important;color:#fff4d6!important;font-size:clamp(19px,2.5vw,27px)!important;font-weight:950!important;letter-spacing:.02em;text-shadow:0 0 4px #fff,0 0 10px #ffb000,0 0 20px #ff5a00,0 0 34px #ed2600!important;white-space:nowrap!important}
+.brand .sub{display:block!important;visibility:visible!important;opacity:1!important;color:#ffdca0!important;text-shadow:0 0 8px #ff6500!important}
+.game-header-actions{position:fixed!important;top:12px!important;right:12px!important;z-index:1000!important;display:none!important;align-items:center!important;justify-content:flex-end!important}
+.game-header-actions.visible{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:min(460px,48vw)!important;gap:7px!important}
+.game-header-actions button{min-height:38px!important;padding:7px 9px!important;font-size:12px!important;font-weight:850!important;letter-spacing:.01em!important;border-radius:11px!important;white-space:normal!important;box-shadow:0 0 8px #ff8a0038,inset 0 1px 0 #ffffff30!important;transition:transform .18s,box-shadow .18s,filter .18s!important}
+.game-header-actions button:hover{transform:translateY(-2px) scale(1.025)!important;filter:brightness(1.2)!important;box-shadow:0 0 10px #ffd166,0 0 22px #ff6500a8,inset 0 1px 0 #ffffff55!important}
+.game-header-actions #newGameBtn{background:linear-gradient(135deg,#553000,#e18b13 55%,#ffcf68)!important;color:#fff8e7!important;border:1px solid #ffd36a!important;text-shadow:0 0 7px #ffb000!important;box-shadow:0 0 12px #ff9d00a0!important}
+.game-header-actions #resignBtn{background:linear-gradient(135deg,#4a0811,#bd2034 55%,#ff5c49)!important;color:#fff!important;border:1px solid #ff9b9b!important;text-shadow:0 0 7px #ff263e!important;box-shadow:0 0 12px #ff243f90!important}
+.game-header-actions #backToMenuBtn{background:linear-gradient(135deg,#38200a,#a84b13 55%,#f3a52f)!important;color:#fff8e7!important;border:1px solid #ffc36a!important;text-shadow:0 0 7px #ff7b00!important;box-shadow:0 0 12px #ff740090!important}
+.menu-card{position:relative!important;overflow:hidden!important;background:linear-gradient(145deg,rgba(36,20,12,.94),rgba(13,19,31,.94))!important;border:1px solid #ff9b35!important;box-shadow:0 0 0 1px #ff6b1930,0 5px 18px #0008,inset 0 0 18px #ff7b0012!important;transition:transform .22s,box-shadow .22s,border-color .22s,filter .22s!important}
+.menu-card:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 20%,#ffd16612 45%,#ff5b0025 55%,transparent 78%);transform:translateX(-120%);transition:transform .45s}
+.menu-card:hover{border-color:#ffe08a!important;transform:translateY(-4px) scale(1.018)!important;filter:brightness(1.12)!important;box-shadow:0 0 8px #ffb02e,0 0 22px #ff5b0066,inset 0 0 20px #ff7b0028!important}
+.menu-card:hover:before{transform:translateX(120%)}
+.menu-card .emoji{display:inline-grid;place-items:center;min-width:42px;min-height:42px;font-size:31px!important;line-height:1;filter:drop-shadow(0 0 5px #ff8a00) drop-shadow(0 0 10px #ff3d00);animation:arenaIconFloat 2.6s ease-in-out infinite;transition:transform .2s,filter .2s!important}
+.menu-card:nth-child(2) .emoji{animation-delay:.25s}.menu-card:nth-child(3) .emoji{animation-delay:.5s}.menu-card:nth-child(4) .emoji{animation-delay:.75s}.menu-card:nth-child(5) .emoji{animation-delay:1s}
+.menu-card:hover .emoji{transform:scale(1.2) rotate(-5deg)!important;filter:drop-shadow(0 0 8px #ffe08a) drop-shadow(0 0 16px #ff4d00)!important}
+.menu-card h3{color:#fff2d4!important;font-weight:950!important;text-shadow:0 0 4px #ffbd52,0 0 11px #ff5a00,0 0 19px #c52c00!important}
+.menu-card p{color:#ffe4c2!important;text-shadow:0 1px 4px #000!important}
+@keyframes arenaIconFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.045)}}
+@media(max-width:760px){
+ .top{padding-right:0!important;padding-top:8px!important;min-height:105px!important;flex-wrap:wrap!important}
+ .top-left{width:100%!important;max-width:100%!important}
+ .brand h1{font-size:clamp(18px,5vw,23px)!important}
+ .game-header-actions{top:auto!important;bottom:12px!important;right:10px!important;left:10px!important;width:auto!important}
+ .game-header-actions.visible{width:auto!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}
+ .game-header-actions button{font-size:10px!important;padding:6px 3px!important;min-height:34px!important}
+ .menu-card .emoji{font-size:25px!important;min-width:32px;min-height:32px}
+ .menu-card h3{font-size:11px!important;line-height:1.15!important}
+ .menu-card p{font-size:9px!important;line-height:1.25!important}
+}
+@media(prefers-reduced-motion:reduce){.menu-card .emoji{animation:none!important}.menu-card,.game-header-actions button{transition:none!important}}
+</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -495,11 +534,11 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 <section id="homeScreen" class="hidden">
   <div class="panel" style="margin-bottom:16px">
 <div class="menu-grid">
-      <button class="menu-card" data-screen="random"><span class="emoji">🎲</span><h3>Random Match</h3><p>Antre untuk dipasangkan dengan pemain online lain.</p></button>
-      <button class="menu-card" data-screen="bot"><span class="emoji">🤖</span><h3>VS Bot</h3><p>Main melawan komputer dengan empat tingkat kesulitan.</p></button>
-      <button class="menu-card" data-screen="private"><span class="emoji">🔐</span><h3>Private Match</h3><p>Buat room pribadi atau masuk memakai kode.</p></button>
-      <button class="menu-card" data-screen="friends"><span class="emoji">👥</span><h3>Teman</h3><p>Tambah teman menggunakan UID dan tantang bermain.</p></button>
-      <button class="menu-card" data-screen="chat"><span class="emoji">💬</span><h3>Chat</h3><p>Obrolan pribadi dengan teman-temanmu.</p></button>
+      <button class="menu-card" data-screen="random"><span class="emoji" aria-hidden="true">⚔️</span><h3>Random Match</h3><p>Antre untuk dipasangkan dengan pemain online lain.</p></button>
+      <button class="menu-card" data-screen="bot"><span class="emoji" aria-hidden="true">🤖</span><h3>VS Bot</h3><p>Main melawan komputer dengan empat tingkat kesulitan.</p></button>
+      <button class="menu-card" data-screen="private"><span class="emoji" aria-hidden="true">🛡️</span><h3>Private Match</h3><p>Buat room pribadi atau masuk memakai kode.</p></button>
+      <button class="menu-card" data-screen="friends"><span class="emoji" aria-hidden="true">🧑‍🤝‍🧑</span><h3>Teman</h3><p>Tambah teman menggunakan UID dan tantang bermain.</p></button>
+      <button class="menu-card" data-screen="chat"><span class="emoji" aria-hidden="true">💬</span><h3>Chat</h3><p>Obrolan pribadi dengan teman-temanmu.</p></button>
     </div>
   </div>
 </section>
