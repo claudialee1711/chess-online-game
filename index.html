@@ -348,6 +348,26 @@ body:has(#loginScreen:not(.hidden)) .wrap { min-height: 100vh; padding: 20px 16p
 #loginScreen #guestBtn { background: rgba(112,69,33,.22) !important; border: 1px solid #a77b50 !important; color: #f1d7b4 !important; min-height: 48px; }
 #loginScreen #loginMessage { color: #e2c5a3 !important; }
 @media (max-width: 480px) { #loginScreen { padding: 25px 20px !important; } }
+
+/* Samakan seluruh tulisan sambutan dengan biru-es bercahaya seperti judul di lobby. */
+@keyframes loginIceGlow {
+  0%, 100% { opacity: 1; text-shadow: 0 1px 0 #06152b, 0 0 3px #8bd5ff, 0 0 8px #168bff, 0 0 13px #ff6a00; }
+  50% { opacity: .88; text-shadow: 0 1px 0 #06152b, 0 0 5px #b8e8ff, 0 0 12px #168bff, 0 0 18px #ff6a00; }
+}
+#loginScreen .eyebrow,
+#loginScreen .title,
+#loginScreen .login-tagline,
+#loginScreen .login-description {
+  color: #d9efff !important;
+  -webkit-text-stroke: .35px #071a35;
+  paint-order: stroke fill;
+  animation: loginIceGlow 2.2s ease-in-out infinite;
+}
+#loginScreen .eyebrow { font-weight: 850; }
+#loginScreen .title { text-shadow: 0 1px 0 #06152b, 0 0 3px #8bd5ff, 0 0 8px #168bff, 0 0 13px #ff6a00 !important; }
+@media (prefers-reduced-motion: reduce) {
+  #loginScreen .eyebrow, #loginScreen .title, #loginScreen .login-tagline, #loginScreen .login-description { animation: none !important; }
+}
 </style>
 <style>
 .game-header-actions{display:none;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
