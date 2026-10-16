@@ -500,7 +500,7 @@ $("resignBtn").onclick=async()=>{
   msg("gameStatus","Kamu menyerah. Lawan menang.","error");
  }catch(e){msg("gameStatus","Gagal menyimpan hasil menyerah: "+e.message,"error");}
 };
-function multiplayerColorNamefunction multiplayerColorName(color){return color==="w"?"Bidak coklat":"Bidak hitam";}
+function multiplayerColorName(color){return color==="w"?"Bidak coklat":"Bidak hitam";}
 function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverlay");if(!overlay)return;overlay.innerHTML='<div class="result-card"><div class="result-trophy">'+emoji+'</div><h2>'+esc(title)+'</h2><p>'+esc(game?.in_draw()?"Permainan berakhir remis.":"Permainan telah selesai.")+'</p><button type="button" id="resultBackBtn">Balik ke Menu</button></div>';overlay.classList.remove("hidden");$("resultBackBtn").onclick=async()=>{overlay.classList.add("hidden");await cleanupListeners();currentRoomId=null;showScreen("home");};}
 function renderBoard(){
  if(!game)return;
@@ -675,7 +675,7 @@ async function loadFriendRequests(){
 }
 $("addFriendBtn").onclick=async()=>{
  const shortUid=$("friendUidInput").value.trim();if(!/^[0-9]{7}$/.test(shortUid)){msg("friendsStatus","UID harus terdiri dari tepat 7 angka.","error");return;}if(shortUid===$("uidText").textContent){msg("friendsStatus","Kamu tidak bisa menambahkan diri sendiri.","error");return;}
- try{const matches=await getDocs(query(collection(db,"players"),where("shortUid","==",shortUid)));if(matches.empty){msg("friendsStatus","UID 7 angka tidak ditemukan. Teman perlu login ke game setidaknya sekali.","error");return;}const p=matches.docs[0];await addFriendByAuthUid(p.id,shortUid,p.data().name||"Pemain");$("friendUidInput").value="";msg("friendsStatus","Permintaan pertemanan dikirim. Tunggu sampai diterima.","success");await loadPlayersDirectory();}
+ try{const matches=await getDocs(query(collection(db,"players"),where("shortUid","==",shortUid)));if(matches.empty){msg("friendsStatus","UID 7 angka tidak ditemukan. Teman perlu login ke game setidaknya sekali.","error");return;}const p=matches.docs[0];await addFriendByAuthUid(p.id,shortUid,p.data().name||"Pemain");$("friendUidInput").value="";msg("friendsStatus","Permintaan pertemanan dikirim. Tunggu sampai diterima.","success");}
  catch(e){msg("friendsStatus","Gagal mengirim permintaan: "+e.message,"error");}
 };
 
