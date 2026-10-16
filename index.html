@@ -763,14 +763,44 @@ const db = getFirestore(app);
 const $ = id => document.getElementById(id);
 let currentUser = null, game = null, gameMode = "local", currentRoomId = null, roomUnsub = null, queueUnsub = null, friendsUnsub = null, chatUnsub = null, inviteUnsub = null, friendRequestsUnsub = null, chatNoticeUnsubs = [], selectedSquare = null, botColor = "b", gameOver = false, myRoomColor = null, roomStatus = "", pendingRoomMode = "private", pendingRoomTitle = "Private Match", opponentUid = "", opponentShortUid = "", opponentName = "Lawan", activeChatUid = "", activeChatName = "";
 
-/* Keep game controls outside transformed/layout containers so fixed positioning is viewport-relative. */
-const gameActionDock = $("gameHeaderActions");
-if (gameActionDock) document.body.appendChild(gameActionDock);
+/* Put game controls at document-body level and set viewport coordinates directly.
+   This avoids any header/grid/flex/transform rule centering them on desktop. */
+function dockGameActions() {
+  const el = $("gameHeaderActions");
+  if (!el) return;
+  if (el.parentElement !== document.body) document.body.appendChild(el);
+  el.style.setProperty("position", "fixed", "important");
+  el.style.setProperty("top", "12px", "important");
+  el.style.setProperty("right", "12px", "important");
+  el.style.setProperty("left", "auto", "important");
+  el.style.setProperty("bottom", "auto", "important");
+  el.style.setProperty("margin", "0", "important");
+  el.style.setProperty("transform", "none", "important");
+  el.style.setProperty("float", "none", "important");
+  el.style.setProperty("z-index", "2147483647", "important");
+  el.style.setProperty("box-sizing", "border-box", "important");
+  el.style.setProperty("width", "min(460px, 48vw)", "important");
+  el.style.setProperty("grid-template-columns", "repeat(3, minmax(0, 1fr))", "important");
+  el.style.setProperty("gap", "7px", "important");
+  if (window.matchMedia("(max-width: 760px)").matches) {
+    el.style.setProperty("top", "8px", "important");
+    el.style.setProperty("right", "8px", "important");
+    el.style.setProperty("width", "min(330px, 58vw)", "important");
+    el.style.setProperty("gap", "3px", "important");
+  }
+  el.querySelectorAll("button").forEach(button => {
+    button.style.setProperty("min-width", "0", "important");
+    button.style.setProperty("width", "100%", "important");
+    button.style.setProperty("box-sizing", "border-box", "important");
+  });
+}
+dockGameActions();
 
 function showScreen(name) {
   ["loginScreen","homeScreen","randomScreen","botScreen","privateScreen","friendsScreen","chatScreen","gameScreen"].forEach(id => $(id).classList.add("hidden"));
   $(name + "Screen")?.classList.remove("hidden");
   if(name === "game") $("gameScreen").classList.remove("hidden");
+  dockGameActions();
   $("gameHeaderActions")?.classList.toggle("visible", name === "game");
   if(name==="chat") $("friendChatPanel").classList.remove("hidden");
 }
