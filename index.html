@@ -672,12 +672,50 @@ body > #gameHeaderActions button {
 }
 </style>
 
+<style id="chess-controls-next-to-turn-status">
+/* Keep the game actions in the game toolbar beside the turn status. */
+#gameHeaderActions,
+#gameHeaderActions.visible {
+ position:static!important;
+ inset:auto!important;
+ top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
+ transform:none!important;float:none!important;clear:none!important;
+ z-index:1!important;margin:0!important;
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ width:min(520px,62%)!important;max-width:100%!important;
+ flex:1 1 480px!important;align-self:center!important;
+ gap:6px!important;
+}
+#gameScreen .game-controls {
+ display:flex!important;flex-flow:row wrap!important;
+ align-items:center!important;justify-content:flex-start!important;
+ gap:8px!important;width:100%!important;
+}
+#gameScreen .game-controls .turn-status {
+ flex:0 0 auto!important;width:auto!important;
+ min-width:140px!important;margin:0!important;
+}
+#gameHeaderActions button {
+ min-width:0!important;width:100%!important;
+ min-height:36px!important;padding:6px 8px!important;
+ font-size:11px!important;white-space:normal!important;
+}
+@media(max-width:760px) {
+ #gameHeaderActions,#gameHeaderActions.visible {
+  flex:1 1 100%!important;width:100%!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ }
+ #gameScreen .game-controls .turn-status {flex:1 1 100%!important;width:100%!important}
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
 <header class="top">
   <div class="top-left"><button id="profileBtn" class="secondary profile-btn hidden" aria-label="Profil pemain" title="Profil pemain"><span id="profileButtonAvatar" class="avatar-fallback">👤</span></button><div class="brand"><div><h1>Chess Arena 171</h1><div class="sub">Tank171 app</div></div></div></div>
-  <div class="top-right"><div id="gameHeaderActions" class="game-header-actions"><button id="newGameBtn" class="secondary compact">↻ Ulangi</button><button id="resignBtn" class="danger compact">Menyerah</button><button id="backToMenuBtn" class="secondary compact" data-home>← Balik ke Menu</button></div></div>
+  <div class="top-right"></div>
 </header>
 
 <section id="loginScreen" class="panel">
@@ -733,7 +771,7 @@ body > #gameHeaderActions button {
 </section>
 
 <section id="gameScreen" class="panel hidden">
- <div class="game-topbar"><div class="game-topline"><h2 id="gameTitle">Permainan</h2></div><div class="game-controls"><div class="status turn-status"><div class="muted small">Status giliran</div><strong id="gameStatus">Giliran putih</strong></div></div></div>
+ <div class="game-topbar"><div class="game-topline"><h2 id="gameTitle">Permainan</h2></div><div class="game-controls"><div class="status turn-status"><div class="muted small">Status giliran</div><strong id="gameStatus">Giliran putih</strong></div><div id="gameHeaderActions" class="game-header-actions"><button id="newGameBtn" class="secondary compact">↻ Ulangi</button><button id="resignBtn" class="danger compact">Menyerah</button><button id="backToMenuBtn" class="secondary compact" data-home>← Balik ke Menu</button></div></div></div>
   <div id="opponentProfile" class="opponent-profile"><div id="opponentAvatar" class="opponent-avatar">♟</div><div class="opponent-summary"><div class="opponent-identity"><strong id="opponentInfo">—</strong><div id="opponentProfileMeta" class="muted small">Profil lawan</div></div><div id="opponentActions" class="opponent-actions hidden"><button id="addOpponentBtn" type="button" class="secondary compact">＋ Tambah teman</button></div></div></div>
   <div id="gameResultOverlay" class="game-result-overlay hidden" role="dialog" aria-modal="true" aria-live="assertive"></div><div class="board-layout"><div><div id="board" class="board" aria-label="Papan catur"></div></div></div>
 </section>
@@ -763,44 +801,10 @@ const db = getFirestore(app);
 const $ = id => document.getElementById(id);
 let currentUser = null, game = null, gameMode = "local", currentRoomId = null, roomUnsub = null, queueUnsub = null, friendsUnsub = null, chatUnsub = null, inviteUnsub = null, friendRequestsUnsub = null, chatNoticeUnsubs = [], selectedSquare = null, botColor = "b", gameOver = false, myRoomColor = null, roomStatus = "", pendingRoomMode = "private", pendingRoomTitle = "Private Match", opponentUid = "", opponentShortUid = "", opponentName = "Lawan", activeChatUid = "", activeChatName = "";
 
-/* Put game controls at document-body level and set viewport coordinates directly.
-   This avoids any header/grid/flex/transform rule centering them on desktop. */
-function dockGameActions() {
-  const el = $("gameHeaderActions");
-  if (!el) return;
-  if (el.parentElement !== document.body) document.body.appendChild(el);
-  el.style.setProperty("position", "fixed", "important");
-  el.style.setProperty("top", "12px", "important");
-  el.style.setProperty("right", "12px", "important");
-  el.style.setProperty("left", "auto", "important");
-  el.style.setProperty("bottom", "auto", "important");
-  el.style.setProperty("margin", "0", "important");
-  el.style.setProperty("transform", "none", "important");
-  el.style.setProperty("float", "none", "important");
-  el.style.setProperty("z-index", "2147483647", "important");
-  el.style.setProperty("box-sizing", "border-box", "important");
-  el.style.setProperty("width", "min(460px, 48vw)", "important");
-  el.style.setProperty("grid-template-columns", "repeat(3, minmax(0, 1fr))", "important");
-  el.style.setProperty("gap", "7px", "important");
-  if (window.matchMedia("(max-width: 760px)").matches) {
-    el.style.setProperty("top", "8px", "important");
-    el.style.setProperty("right", "8px", "important");
-    el.style.setProperty("width", "min(330px, 58vw)", "important");
-    el.style.setProperty("gap", "3px", "important");
-  }
-  el.querySelectorAll("button").forEach(button => {
-    button.style.setProperty("min-width", "0", "important");
-    button.style.setProperty("width", "100%", "important");
-    button.style.setProperty("box-sizing", "border-box", "important");
-  });
-}
-dockGameActions();
-
 function showScreen(name) {
   ["loginScreen","homeScreen","randomScreen","botScreen","privateScreen","friendsScreen","chatScreen","gameScreen"].forEach(id => $(id).classList.add("hidden"));
   $(name + "Screen")?.classList.remove("hidden");
   if(name === "game") $("gameScreen").classList.remove("hidden");
-  dockGameActions();
   $("gameHeaderActions")?.classList.toggle("visible", name === "game");
   if(name==="chat") $("friendChatPanel").classList.remove("hidden");
 }
