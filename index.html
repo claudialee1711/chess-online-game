@@ -583,6 +583,58 @@ header.top .brand .sub{white-space:nowrap!important}
 }
 </style>
 
+
+<style id="chess-mobile-controls-piece-glow">
+/* Force action controls to the upper-right viewport on narrow screens too. */
+#gameHeaderActions,
+#gameHeaderActions.visible{
+ position:fixed!important;
+ top:8px!important;
+ right:8px!important;
+ left:auto!important;
+ bottom:auto!important;
+ margin:0!important;
+ transform:none!important;
+ z-index:2147483000!important;
+}
+#gameHeaderActions.visible{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ width:min(450px,46vw)!important;
+ max-width:calc(100vw - 16px)!important;
+}
+@media(max-width:760px){
+ #gameHeaderActions.visible{
+  position:fixed!important;
+  top:8px!important;right:8px!important;left:auto!important;bottom:auto!important;
+  width:58vw!important;max-width:330px!important;min-width:0!important;
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:3px!important;float:none!important;clear:none!important;
+ }
+ #gameHeaderActions button{width:100%!important;min-width:0!important;white-space:normal!important}
+}
+/* High contrast + soft glow for every chess piece. */
+#board .sq .piece-white{
+ color:#fff4d4!important;
+ -webkit-text-fill-color:#fff4d4!important;
+ -webkit-text-stroke:1.25px #63370d!important;
+ paint-order:stroke fill!important;
+ text-shadow:0 0 2px #ffffff,0 0 5px #ffdc78,0 0 9px #ff9f1c,0 2px 2px #291606!important;
+ filter:drop-shadow(0 0 2px #fff1b8) drop-shadow(0 0 4px #ff9a19)!important;
+}
+#board .sq .piece-black{
+ color:#151c2b!important;
+ -webkit-text-fill-color:#151c2b!important;
+ -webkit-text-stroke:1.5px #e8f5ff!important;
+ paint-order:stroke fill!important;
+ text-shadow:0 0 2px #fff,0 0 5px #9ddcff,0 0 9px #55aaff,0 2px 2px #000!important;
+ filter:drop-shadow(0 0 2px #c8edff) drop-shadow(0 0 4px #4faeff)!important;
+}
+#board .sq.selected .piece-white,#board .sq.selected .piece-black{
+ filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 9px #ffe36a)!important;
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
