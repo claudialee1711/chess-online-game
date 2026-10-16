@@ -351,22 +351,22 @@ body:has(#loginScreen:not(.hidden)) .wrap { min-height: 100vh; padding: 20px 16p
 
 /* Samakan seluruh tulisan sambutan dengan biru-es bercahaya seperti judul di lobby. */
 @keyframes loginIceGlow {
-  0%, 100% { opacity: 1; text-shadow: 0 1px 0 #06152b, 0 0 3px #8bd5ff, 0 0 8px #168bff, 0 0 13px #ff6a00; }
-  50% { opacity: .88; text-shadow: 0 1px 0 #06152b, 0 0 5px #b8e8ff, 0 0 12px #168bff, 0 0 18px #ff6a00; }
+  0%, 100% { opacity: 1; text-shadow: 0 1px 0 #06152b, 0 0 2px #ffffff, 0 0 5px #bdeaff, 0 0 10px #168bff, 0 0 16px rgba(22,139,255,.65); }
+  50% { opacity: .92; text-shadow: 0 1px 0 #06152b, 0 0 4px #ffffff, 0 0 8px #d9f4ff, 0 0 15px #168bff, 0 0 22px rgba(22,139,255,.8); }
 }
 #loginScreen .eyebrow,
 #loginScreen .title,
 #loginScreen .login-tagline,
 #loginScreen .login-description {
-  color: #d9efff !important;
+  color: #ffffff !important;
   -webkit-text-stroke: .35px #071a35;
   paint-order: stroke fill;
   animation: loginIceGlow 2.2s ease-in-out infinite;
 }
 #loginScreen .eyebrow { font-weight: 850; }
-#loginScreen .title { text-shadow: 0 1px 0 #06152b, 0 0 3px #8bd5ff, 0 0 8px #168bff, 0 0 13px #ff6a00 !important; }
 @media (prefers-reduced-motion: reduce) {
   #loginScreen .eyebrow, #loginScreen .title, #loginScreen .login-tagline, #loginScreen .login-description { animation: none !important; }
+}
 }
 </style>
 <style>
