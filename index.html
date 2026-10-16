@@ -875,6 +875,29 @@ function renderBoard(){
   btn.className="sq "+((files.indexOf(file)+rank)%2?"dark":"light");btn.setAttribute("aria-label",sq+(piece? " "+piece.color+piece.type:""));
   if(selectedSquare===sq)btn.classList.add("selected");if(legal.includes(sq))btn.classList.add(piece?"capture":"legal");
   btn.innerHTML=(c===0?`<span class="coord">${rank}</span>`:"")+(r===7?`<span class="coord" style="left:auto;right:4px;top:auto;bottom:2px">${file}</span>`:"")+(piece?'<span class="piece-'+(piece.color==="w"?"white":"black")+'">'+pieces[piece.color][piece.type]+'</span>':"");
+  /* Inline !important styles ensure the requested piece colors/glow win over older CSS rules. */
+  const pieceEl=btn.querySelector(".piece-white, .piece-black");
+  if(pieceEl){
+    pieceEl.style.setProperty("display","inline-block","important");
+    pieceEl.style.setProperty("font-family",'"Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",serif',"important");
+    pieceEl.style.setProperty("font-size","clamp(36px, 5vw, 58px)","important");
+    pieceEl.style.setProperty("font-weight","900","important");
+    pieceEl.style.setProperty("line-height","1","important");
+    pieceEl.style.setProperty("paint-order","stroke fill","important");
+    if(piece.color==="w"){
+      pieceEl.style.setProperty("color","#fff4d4","important");
+      pieceEl.style.setProperty("-webkit-text-fill-color","#fff4d4","important");
+      pieceEl.style.setProperty("-webkit-text-stroke","1.5px #63370d","important");
+      pieceEl.style.setProperty("text-shadow","0 0 2px #ffffff, 0 0 6px #ffdc78, 0 0 12px #ff9f1c, 0 2px 2px #291606","important");
+      pieceEl.style.setProperty("filter","drop-shadow(0 0 3px #fff1b8) drop-shadow(0 0 7px #ff9a19)","important");
+    } else {
+      pieceEl.style.setProperty("color","#151c2b","important");
+      pieceEl.style.setProperty("-webkit-text-fill-color","#151c2b","important");
+      pieceEl.style.setProperty("-webkit-text-stroke","1.7px #e8f5ff","important");
+      pieceEl.style.setProperty("text-shadow","0 0 2px #ffffff, 0 0 6px #9ddcff, 0 0 12px #55aaff, 0 2px 2px #000000","important");
+      pieceEl.style.setProperty("filter","drop-shadow(0 0 3px #c8edff) drop-shadow(0 0 7px #4faeff)","important");
+    }
+  }
   btn.onclick=()=>handleSquare(sq);board.appendChild(btn);
  }
  let status=game.turn()==="w"?"Giliran bidak coklat":"Giliran bidak hitam";
