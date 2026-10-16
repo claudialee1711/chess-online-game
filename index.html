@@ -333,13 +333,13 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
 </style>
 <style>
 .game-header-actions{display:none;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
-.game-header-actions.visible{display:flex}
-.game-header-actions button{min-height:30px;padding:6px 9px;font-size:11px;border-radius:9px;white-space:nowrap}
+.game-header-actions.visible{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:min(100%,480px);gap:6px}
+.game-header-actions button{display:inline-flex;align-items:center;justify-content:center;width:100%;box-sizing:border-box;min-width:0;min-height:34px;padding:6px 8px;margin:0!important;font-size:11px;border-radius:9px;white-space:normal;line-height:1.2}
 .game-header-actions #newGameBtn{background:#243d55;color:#eaf5ff;border:1px solid #79a6d4}
 .game-header-actions #resignBtn{background:#7b2633;color:#fff;border:1px solid #ff9b9b}
 .game-header-actions #backToMenuBtn{background:#275b48;color:#e8fff3;border:1px solid #76d9af}
 .board-info{display:block!important}
-@media(max-width:760px){.top{align-items:flex-start}.top-left{min-width:0}.top-right{max-width:58%}.game-header-actions{gap:5px}.game-header-actions.visible{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.game-header-actions button{font-size:10px;padding:6px 5px;min-height:29px;white-space:normal}.game-header-actions #backToMenuBtn{grid-column:1 / -1}.board-layout{grid-template-columns:1fr}.board-info{display:block!important}}
+@media(max-width:760px){.top{align-items:flex-start}.top-left{min-width:0}.top-right{max-width:100%;width:100%}.game-header-actions{gap:5px}.game-header-actions.visible{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%}.game-header-actions button{font-size:10px;padding:6px 4px;min-height:32px;white-space:normal}.game-header-actions #backToMenuBtn{grid-column:auto}.board-layout{grid-template-columns:1fr}.board-info{display:block!important}}
 </style>
 <style>
 .menu-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:7px!important}
@@ -386,7 +386,7 @@ input{width:100%;background:#0e1622;color:var(--text);border:1px solid var(--lin
     </div>
   </div>
 </section>
-<div id="profilePanel" class="panel hidden" style="position:fixed;z-index:20;top:64px;left:12px;max-width:340px;width:calc(100% - 24px);box-shadow:0 18px 50px #0009"><div class="section-head profile-panel-head"><h2>Profil pemain</h2><div class="profile-panel-actions"><button id="logoutBtn" class="secondary hidden" type="button">Logout</button><button id="closeProfileBtn" class="secondary" style="padding:5px 9px" aria-label="Tutup profil" title="Tutup">✕</button></div></div><div class="stack"><label for="profileNameInput">Username</label><input id="profileNameInput" maxlength="24" placeholder="Nama pemain"><label>Foto profil — pilih ikon karakter</label><div class="avatar-options" id="avatarOptions" role="group" aria-label="Pilih ikon profil"><button type="button" class="avatar-option" data-avatar="👨🏻" aria-label="Karakter 1">👨🏻</button><button type="button" class="avatar-option" data-avatar="👩🏻" aria-label="Karakter 2">👩🏻</button><button type="button" class="avatar-option" data-avatar="🧑🏼" aria-label="Karakter 3">🧑🏼</button><button type="button" class="avatar-option" data-avatar="👨🏽" aria-label="Karakter 4">👨🏽</button><button type="button" class="avatar-option" data-avatar="👩🏽" aria-label="Karakter 5">👩🏽</button><button type="button" class="avatar-option" data-avatar="🧑🏽" aria-label="Karakter 6">🧑🏽</button><button type="button" class="avatar-option" data-avatar="🧑🏻‍🦰" aria-label="Karakter 7">🧑🏻‍🦰</button></div><button id="saveProfileBtn">Simpan profil</button><p id="profileStatus" class="muted small" role="status"></p><label for="uidText">UID pemain</label><p id="uidText" style="overflow-wrap:anywhere;font-size:12px;margin:0"></p><button id="copyUidBtn" class="secondary">Salin UID</button></div></div>
+<div id="profilePanel" class="panel hidden" style="position:fixed;z-index:20;top:64px;left:12px;max-width:340px;width:calc(100% - 24px);box-shadow:0 18px 50px #0009"><div class="section-head profile-panel-head"><h2>Profil pemain</h2><div class="profile-panel-actions"><button id="logoutBtn" class="secondary hidden" type="button">Logout</button><button id="closeProfileBtn" class="secondary" style="padding:5px 9px" aria-label="Tutup profil" title="Tutup">✕</button></div></div><div class="stack"><label for="profileNameInput">Username</label><input id="profileNameInput" maxlength="24" placeholder="Nama pemain"><label>Foto profil — pilih ikon karakter</label><div class="avatar-options" id="avatarOptions" role="group" aria-label="Pilih ikon profil"><button type="button" class="avatar-option" data-avatar="👨🏻" aria-label="Karakter 1">👨🏻</button><button type="button" class="avatar-option" data-avatar="👩🏻" aria-label="Karakter 2">👩🏻</button><button type="button" class="avatar-option" data-avatar="🧑🏼" aria-label="Karakter 3">🧑🏼</button><button type="button" class="avatar-option" data-avatar="👨🏽" aria-label="Karakter 4">👨🏽</button><button type="button" class="avatar-option" data-avatar="👩🏽" aria-label="Karakter 5">👩🏽</button><button type="button" class="avatar-option" data-avatar="🧑🏽" aria-label="Karakter 6">🧑🏽</button><button type="button" class="avatar-option" data-avatar="🦊" aria-label="Karakter 7">🦊</button></div><button id="saveProfileBtn">Simpan profil</button><p id="profileStatus" class="muted small" role="status"></p><label for="uidText">UID pemain</label><p id="uidText" style="overflow-wrap:anywhere;font-size:12px;margin:0"></p><button id="copyUidBtn" class="secondary">Salin UID</button></div></div>
 
 <section id="randomScreen" class="panel hidden">
  <div class="section-head"><h2>🎲 Random Match</h2><button class="secondary" data-home>← Menu</button></div>
@@ -466,7 +466,7 @@ onAuthStateChanged(auth, async user => {
   $("profileBtn").classList.remove("hidden");
   let savedData={};try{const saved=await getDoc(doc(db,"players",user.uid));if(saved.exists())savedData=saved.data()||{};}catch(e){console.warn("Profil belum bisa dibaca:",e);}
   selectedAvatar=savedData.avatar||"👨🏻";const savedName=savedData.name||user.displayName||(user.isAnonymous?"Pengunjung":"Pemain");$("profileNameInput").value=savedName;renderProfileAvatar(savedName,"");
-  $("logoutBtn").classList.toggle("hidden",!!user.isAnonymous); $("uidText").textContent=savedData.shortUid||shortId;
+  $("logoutBtn").classList.remove("hidden"); $("uidText").textContent=savedData.shortUid||shortId;
   try { await setDoc(doc(db,"players",user.uid),{uid:user.uid,shortUid:savedData.shortUid||shortId,name:savedName,email:user.email||null,anonymous:user.isAnonymous,avatar:selectedAvatar,photoURL:null,updatedAt:serverTimestamp()},{merge:true}); } catch(e){console.warn("Profil belum tersimpan:",e);}
   showScreen("home"); loadFriends();
 });
