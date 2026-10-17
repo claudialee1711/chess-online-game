@@ -907,6 +907,15 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
  .opponent-chat-layout .room-chat-form button{padding:7px 7px}
 }
 </style>
+
+<style>
+/* Sudut pandang benar-benar dari atas: kepala langsung menyatu ke bahu/baju, tanpa leher terlihat */
+.topdown-head{position:relative!important;z-index:2!important;margin-bottom:-8px!important;box-shadow:0 3px 6px #0008!important}
+.topdown-head:after{display:none!important;content:none!important}
+.topdown-shoulders{margin-top:0!important;border-radius:46% 46% 18px 18px!important}
+.topdown-shoulders:before{background:linear-gradient(135deg,#263e54,#7890a4 48%,#304a62)!important;clip-path:polygon(0 0,100% 0,70% 100%,50% 72%,30% 100%)!important;border:0!important;border-radius:0 0 5px 5px!important;width:39px!important;height:19px!important}
+.topdown-self .topdown-shoulders:before{background:linear-gradient(135deg,#263e54,#7890a4 48%,#304a62)!important}
+</style>
 </head>
 <body>
 <div class="wrap">
