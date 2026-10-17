@@ -916,6 +916,37 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 .topdown-shoulders:before{background:linear-gradient(135deg,#263e54,#7890a4 48%,#304a62)!important;clip-path:polygon(0 0,100% 0,70% 100%,50% 72%,30% 100%)!important;border:0!important;border-radius:0 0 5px 5px!important;width:39px!important;height:19px!important}
 .topdown-self .topdown-shoulders:before{background:linear-gradient(135deg,#263e54,#7890a4 48%,#304a62)!important}
 </style>
+<style>
+
+/* Perbesar pemain dari sudut atas: lebar bahu menyamai lebar papan dan kepala tepat di tengah */
+.tabletop-scene .topdown-player{position:relative!important;min-height:116px!important;overflow:visible!important}
+.tabletop-scene .topdown-person{position:absolute!important;left:0!important;right:0!important;top:2px!important;width:auto!important;height:112px!important;align-items:stretch!important;z-index:1!important}
+.tabletop-scene .topdown-head{align-self:center!important;flex:0 0 54px!important;width:54px!important;height:54px!important;margin:0 0 -8px!important;box-sizing:border-box!important}
+.tabletop-scene .topdown-shoulders{width:100%!important;max-width:none!important;height:59px!important;box-sizing:border-box!important}
+.tabletop-scene .topdown-hands,.tabletop-scene .topdown-player-name{position:relative!important;z-index:3!important}
+.tabletop-scene .topdown-opponent .topdown-head:before{
+  content:""!important;position:absolute!important;z-index:4!important;left:50%!important;top:-9px!important;transform:translateX(-50%)!important;
+  width:72px!important;height:36px!important;inset-block:auto!important;inset-inline:auto!important;
+  border:2px solid #5b351b!important;border-radius:48% 48% 44% 44%!important;
+  background:radial-gradient(ellipse at 50% 55%,#bd8544 0 22%,#8b5728 24% 42%,transparent 44%),linear-gradient(180deg,#e3b76f 0%,#b77a37 44%,#75451f 100%)!important;
+  box-shadow:0 3px 5px #0009!important;opacity:1!important;
+}
+.tabletop-scene .topdown-self .topdown-head:before{
+  content:""!important;position:absolute!important;z-index:4!important;left:50%!important;top:-3px!important;transform:translateX(-50%) rotate(180deg)!important;
+  width:54px!important;height:39px!important;inset-block:auto!important;inset-inline:auto!important;
+  border:2px solid #292d33!important;border-radius:48% 48% 42% 42%!important;
+  background:linear-gradient(180deg,#303640 0 24%,#59616b 26% 67%,#252a31 69% 100%)!important;
+  box-shadow:0 3px 5px #0009!important;opacity:1!important;
+}
+@media(max-width:600px){
+ .tabletop-scene .topdown-player{min-height:86px!important}
+ .tabletop-scene .topdown-person{height:82px!important}
+ .tabletop-scene .topdown-head{width:42px!important;height:42px!important;flex-basis:42px!important}
+ .tabletop-scene .topdown-shoulders{height:43px!important}
+ .tabletop-scene .topdown-opponent .topdown-head:before{width:56px!important;height:28px!important;top:-7px!important}
+ .tabletop-scene .topdown-self .topdown-head:before{width:43px!important;height:31px!important;top:-2px!important}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
