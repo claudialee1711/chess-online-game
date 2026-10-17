@@ -370,6 +370,31 @@ body:has(#loginScreen:not(.hidden)) .wrap { min-height: 100vh; padding: 20px 16p
 }
 }
 }
+
+/* Perbaikan Android: bidak lebih ramping, subtitle terbaca, dan chat dalam room */
+@media (max-width: 760px) {
+  #board .sq > .piece-white, #board .sq > .piece-black {
+    font-size: clamp(25px, 7.1vw, 38px) !important;
+    -webkit-text-stroke-width: 1px !important;
+    transform: scale(.94) !important;
+  }
+  #board .sq > .knight-glyph {
+    font-size: clamp(1.55rem, 7.1vw, 2.25rem) !important;
+  }
+  header.top .brand .sub { font-size: 13px !important; line-height: 1.2 !important; font-weight: 700 !important; letter-spacing: .02em; }
+}
+.room-chat-panel { margin: 12px 0 14px; padding: 12px; border: 1px solid #8b6748; border-radius: 14px; background: rgba(25,18,14,.94); }
+.room-chat-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:8px; color:#f4dfc4; }
+.room-chat-messages { display:flex; flex-direction:column; gap:7px; max-height:180px; min-height:48px; overflow-y:auto; padding:5px 2px 9px; }
+.room-chat-bubble { display:flex; flex-direction:column; align-self:flex-start; max-width:88%; gap:2px; padding:7px 10px; border-radius:11px 11px 11px 3px; background:#2a3038; color:#f3f4f6; overflow-wrap:anywhere; font-size:13px; }
+.room-chat-bubble strong { color:#e9c18d; font-size:11px; }
+.room-chat-bubble.mine { align-self:flex-end; border-radius:11px 11px 3px 11px; background:#654321; }
+.room-chat-bubble.mine strong { color:#ffe2b9; }
+.room-chat-form { display:flex; align-items:center; gap:8px; }
+.room-chat-form input { min-width:0; flex:1; }
+.room-chat-form button { flex:0 0 auto; padding:10px 14px; }
+@media(max-width:600px){.room-chat-panel{padding:10px;margin:10px 0}.room-chat-messages{max-height:145px}.room-chat-form button{padding:10px 12px}}
+
 </style>
 <style>
 .game-header-actions{display:none;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
@@ -864,6 +889,11 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 <section id="gameScreen" class="panel hidden">
  <div class="game-topbar"><div class="game-topline"><h2 id="gameTitle">Permainan</h2></div><div class="game-controls"><div class="status turn-status"><div class="muted small">Status giliran</div><strong id="gameStatus">Giliran putih</strong></div><div id="gameHeaderActions" class="game-header-actions"><button id="newGameBtn" class="secondary compact">↻ Ulangi</button><button id="resignBtn" class="danger compact">Menyerah</button><button id="backToMenuBtn" class="secondary compact" data-home>← Balik ke Menu</button></div></div></div>
   <div id="opponentProfile" class="opponent-profile"><div id="opponentAvatar" class="opponent-avatar">♟</div><div class="opponent-summary"><div class="opponent-identity"><strong id="opponentInfo">—</strong><div id="opponentProfileMeta" class="muted small">Profil lawan</div></div><div id="opponentActions" class="opponent-actions hidden"><button id="addOpponentBtn" type="button" class="secondary compact">＋ Tambah teman</button></div></div></div>
+  <div id="roomChatPanel" class="room-chat-panel hidden">
+    <div class="room-chat-heading"><strong>💬 Chat pertandingan</strong><span id="roomChatStatus" class="muted small">Kirim pesan ke lawanmu</span></div>
+    <div id="roomChatMessages" class="room-chat-messages" aria-live="polite"><p class="muted small">Pesan akan muncul di sini.</p></div>
+    <form id="roomChatForm" class="room-chat-form"><input id="roomChatInput" maxlength="300" autocomplete="off" placeholder="Ketik pesan untuk lawan…" aria-label="Pesan untuk lawan"><button id="roomChatSendBtn" type="submit">Kirim</button></form>
+  </div>
   <div id="gameResultOverlay" class="game-result-overlay hidden" role="dialog" aria-modal="true" aria-live="assertive"></div><div class="board-layout"><div><div id="board" class="board" aria-label="Papan catur"></div></div></div>
 </section>
 
@@ -890,7 +920,7 @@ const auth = getAuth(app);
 // Pastikan domain hosting (mis. username.github.io atau domain kustom) ditambahkan di Firebase Console > Authentication > Settings > Authorized domains.
 const db = getFirestore(app);
 const $ = id => document.getElementById(id);
-let currentUser = null, game = null, gameMode = "local", currentRoomId = null, roomUnsub = null, queueUnsub = null, friendsUnsub = null, chatUnsub = null, inviteUnsub = null, friendRequestsUnsub = null, chatNoticeUnsubs = [], selectedSquare = null, botColor = "b", gameOver = false, myRoomColor = null, roomStatus = "", pendingRoomMode = "private", pendingRoomTitle = "Private Match", opponentUid = "", opponentShortUid = "", opponentName = "Lawan", activeChatUid = "", activeChatName = "";
+let currentUser = null, game = null, gameMode = "local", currentRoomId = null, roomUnsub = null, roomChatUnsub = null, queueUnsub = null, friendsUnsub = null, chatUnsub = null, inviteUnsub = null, friendRequestsUnsub = null, chatNoticeUnsubs = [], selectedSquare = null, botColor = "b", gameOver = false, myRoomColor = null, roomStatus = "", pendingRoomMode = "private", pendingRoomTitle = "Private Match", opponentUid = "", opponentShortUid = "", opponentName = "Lawan", activeChatUid = "", activeChatName = "";
 
 function showScreen(name) {
   ["loginScreen","homeScreen","randomScreen","botScreen","privateScreen","friendsScreen","chatScreen","gameScreen"].forEach(id => $(id).classList.add("hidden"));
@@ -901,7 +931,7 @@ function showScreen(name) {
 }
 function msg(id, text, kind="muted") { const el=$(id); el.textContent=text; el.className=kind; }
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-$("googleBtn").onclick = async () => { try { msg("loginMessage","Membuka login Google…"); await signInWithPopup(auth,new GoogleAuthProvider()); } catch(e){console.error("Login Google gagal:",e);const m=e.code==="auth/unauthorized-domain"?"Domain website belum diizinkan Firebase. Tambahkan domain website di Firebase Console → Authentication → Settings → Authorized domains, lalu coba lagi.":(e.code||e.message);msg("loginMessage",m,"error");} };
+$("googleBtn").onclick = async () => { try { msg("loginMessage","Membuka login Google…"); await signInWithPopup(auth,new GoogleAuthProvider()); } catch(e){console.error("Login Google gagal:",e);const inAndroidApp=!!(window.AndroidGoogleAuth||/;\s*wv\)|Version\\/[0-9.]+ Chrome\\/[0-9.]+ Mobile Safari/i.test(navigator.userAgent));const m=e.code==="auth/unauthorized-domain"?"Domain website belum diizinkan Firebase. Tambahkan domain website di Firebase Console → Authentication → Settings → Authorized domains, lalu coba lagi.":(inAndroidApp?"Login Google perlu integrasi login native Android; Google memblokir login dari WebView. Gunakan login Google di website Chrome sementara ini.":(e.code||e.message));msg("loginMessage",m,"error");} };
 $("guestBtn").onclick = async () => { const btn=$("guestBtn"); btn.disabled=true; window.__guestLoginRequested=true; try { msg("loginMessage","Membuat sesi pengunjung…"); await signInAnonymously(auth); msg("loginMessage","Berhasil masuk sebagai pengunjung.","success"); } catch(e){ window.__guestLoginRequested=false; console.error("Login pengunjung gagal:",e); msg("loginMessage","Gagal masuk: "+(e.code||e.message||"Periksa koneksi dan pengaturan Firebase Authentication."),"error"); } finally { btn.disabled=false; } };
 $("logoutBtn").onclick = async () => { const btn=$("logoutBtn"); btn.disabled=true; try { await cleanupListeners(); await signOut(auth); $("profilePanel").classList.add("hidden"); msg("loginMessage","Kamu sudah logout. Masuk kembali untuk bermain.","success"); } catch(e) { console.error("Logout gagal:",e); msg("profileStatus","Logout gagal: "+(e.code||e.message||"Coba lagi."),"error"); } finally { btn.disabled=false; } };
 onAuthStateChanged(auth, async user => {
@@ -921,8 +951,12 @@ $("copyUidBtn").onclick=async()=>{try{await navigator.clipboard.writeText($("uid
 $("profileBtn").onclick=()=>$("profilePanel").classList.toggle("hidden");$("closeProfileBtn").onclick=()=>$("profilePanel").classList.add("hidden");
 document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>{showScreen(b.dataset.screen);if(b.dataset.screen==="friends"){loadFriends();loadIncomingChallenges();}if(b.dataset.screen==="chat"){loadChatContacts();}});
 document.querySelectorAll("[data-home]").forEach(b=>b.onclick=async()=>{await cleanupListeners();showScreen("home");});
-async function cleanupListeners(){if(roomUnsub){roomUnsub();roomUnsub=null;}if(queueUnsub){queueUnsub();queueUnsub=null;}if(friendsUnsub){friendsUnsub();friendsUnsub=null;}if(chatUnsub){chatUnsub();chatUnsub=null;}if(inviteUnsub){inviteUnsub();inviteUnsub=null;}if(friendRequestsUnsub){friendRequestsUnsub();friendRequestsUnsub=null;}for(const unsub of chatNoticeUnsubs)unsub();chatNoticeUnsubs=[];if($("findMatchBtn"))$("findMatchBtn").disabled=false;}
+async function cleanupListeners(){if(roomChatUnsub){roomChatUnsub();roomChatUnsub=null;}if(roomUnsub){roomUnsub();roomUnsub=null;}if(queueUnsub){queueUnsub();queueUnsub=null;}if(friendsUnsub){friendsUnsub();friendsUnsub=null;}if(chatUnsub){chatUnsub();chatUnsub=null;}if(inviteUnsub){inviteUnsub();inviteUnsub=null;}if(friendRequestsUnsub){friendRequestsUnsub();friendRequestsUnsub=null;}for(const unsub of chatNoticeUnsubs)unsub();chatNoticeUnsubs=[];if($("findMatchBtn"))$("findMatchBtn").disabled=false;}
 function startGame(mode,title,opponent="—",fen=null,preserveRoom=false){
+ $("roomChatPanel")?.classList.toggle("hidden",!(mode==="online"||mode==="private"));
+ if(roomChatUnsub){roomChatUnsub();roomChatUnsub=null;}
+ if($("roomChatMessages"))$("roomChatMessages").innerHTML='<p class="muted small">Menghubungkan chat…</p>';
+
  $("gameResultOverlay")?.classList.add("hidden");
  gameMode=mode;if(!preserveRoom){currentRoomId=null;myRoomColor=null;roomStatus="";}opponentUid="";opponentShortUid="";opponentName=opponent;game=new Chess(fen||undefined);selectedSquare=null;gameOver=false;
  $("gameTitle").textContent=title;$("newGameBtn").classList.toggle("hidden",mode!=="bot");$("opponentInfo").textContent=opponent;$("opponentProfileMeta").textContent="Memuat profil lawan…";$("opponentAvatar").textContent="♟";$("opponentAvatar").innerHTML="♟";$("opponentActions").classList.add("hidden");showScreen("game");renderBoard();
@@ -1026,9 +1060,41 @@ async function persistRoomPosition(move,previousFen){if(!currentRoomId||!game||!
 $("createRoomBtn").onclick=async()=>{const btn=$("createRoomBtn");btn.disabled=true;try{msg("privateStatus","Membuat room…");const room=await createRoom();$("roomCodeInput").value=room.code;$("copyRoomCodeBtn").classList.remove("hidden");currentRoomId=room.id;pendingRoomMode="private";pendingRoomTitle="Private Match";msg("privateStatus","Room berhasil dibuat! Kode: "+room.code+". Tekan Salin kode room untuk membagikannya. Permainan dimulai setelah teman bergabung.","success");watchRoom(room.id);}catch(e){msg("privateStatus","Gagal membuat room: "+e.message,"error");}finally{btn.disabled=false;}};
 $("copyRoomCodeBtn").onclick=async()=>{const code=$("roomCodeInput").value.trim().toUpperCase();if(!code){msg("privateStatus","Buat room terlebih dahulu.","error");return;}try{await navigator.clipboard.writeText(code);msg("privateStatus","Kode room "+code+" berhasil disalin! Bagikan kepada teman.","success");}catch(e){$("roomCodeInput").focus();$("roomCodeInput").select();msg("privateStatus","Clipboard tidak tersedia. Kode room: "+code+" — salin manual dari kolom kode.","error");}};
 $("joinRoomBtn").onclick=async()=>{const code=$("roomCodeInput").value.trim().toUpperCase();if(!code){msg("privateStatus","Masukkan kode room dulu.","error");return;}try{let d=null;const waitingSnap=await getDocs(query(collection(db,"rooms"),where("code","==",code),where("status","==","waiting")));if(!waitingSnap.empty)d=waitingSnap.docs[0];if(!d){const hostSnap=await getDocs(query(collection(db,"rooms"),where("code","==",code),where("hostUid","==",currentUser.uid)));if(!hostSnap.empty)d=hostSnap.docs[0];}if(!d){const guestSnap=await getDocs(query(collection(db,"rooms"),where("code","==",code),where("guestUid","==",currentUser.uid)));if(!guestSnap.empty)d=guestSnap.docs[0];}if(!d){msg("privateStatus","Room tidak ditemukan, sudah penuh, atau kamu tidak punya akses ke room yang sudah dimulai.","error");return;}const room=d.data(),isHost=room.hostUid===currentUser.uid,isGuest=room.guestUid===currentUser.uid;if(isHost||isGuest){currentRoomId=d.id;pendingRoomMode="private";pendingRoomTitle="Private Match";if(room.status==="playing"){startGame("private","Private Match","Menyiapkan permainan…",room.fen||null,true);watchRoom(d.id);}else if(room.status==="waiting"){await cleanupListeners();watchRoom(d.id);msg("privateStatus","Room milikmu aktif kembali. Kode: "+room.code+". Bagikan kode ini kepada teman.","success");}else{msg("privateStatus","Room ini sudah selesai. Buat room baru untuk bermain lagi.","error");}return;}if(room.status!=="waiting"){msg("privateStatus","Room sudah dimulai atau selesai dan tidak menerima pemain baru.","error");return;}if(room.guestUid&&room.guestUid!==currentUser.uid){msg("privateStatus","Room ini sudah memiliki pemain kedua.","error");return;}const me=await getDoc(doc(db,"players",currentUser.uid));const md=me.exists()?me.data():{};await updateDoc(d.ref,{guestUid:currentUser.uid,guestName:md.name||currentUser.displayName||"Pemain",guestShortUid:md.shortUid||$("uidText").textContent,status:"playing",updatedAt:serverTimestamp()});currentRoomId=d.id;pendingRoomMode="private";pendingRoomTitle="Private Match";startGame("private","Private Match","Menyiapkan permainan…",room.fen||null,true);watchRoom(d.id);}catch(e){console.error("Gagal masuk Private Match:",e);msg("privateStatus","Gagal masuk room: "+(e.code||e.message||"Periksa izin Firestore."),"error");}};
+
+function subscribeRoomChat(roomId){
+ if(!currentUser||!roomId)return;
+ $("roomChatPanel")?.classList.remove("hidden");
+ if(roomChatUnsub){roomChatUnsub();roomChatUnsub=null;}
+ $("roomChatStatus").textContent="Chat dengan lawan";
+ roomChatUnsub=onSnapshot(collection(db,"rooms",roomId,"messages"),snap=>{
+  const area=$("roomChatMessages");if(!area)return;area.innerHTML="";
+  const items=snap.docs.slice().sort((a,b)=>(a.data().createdAt?.toMillis?.()||0)-(b.data().createdAt?.toMillis?.()||0)).slice(-100);
+  if(!items.length){area.innerHTML='<p class="muted small">Belum ada pesan. Sapa lawanmu 👋</p>';return;}
+  for(const item of items){
+   const d=item.data(),bubble=document.createElement("div");
+   bubble.className="room-chat-bubble"+(d.senderUid===currentUser.uid?" mine":"");
+   const who=document.createElement("strong");who.textContent=d.senderName||"Pemain";
+   const body=document.createElement("span");body.textContent=String(d.text||"");
+   bubble.append(who,body);area.appendChild(bubble);
+  }
+  area.scrollTop=area.scrollHeight;
+ },e=>{$("roomChatStatus").textContent="Chat belum tersedia";console.warn("Room chat:",e.message);});
+}
+$("roomChatForm").onsubmit=async e=>{
+ e.preventDefault();const input=$("roomChatInput"),textValue=input.value.trim();
+ if(!textValue||!currentUser||!currentRoomId)return;
+ const btn=$("roomChatSendBtn");btn.disabled=true;
+ try{
+  await addDoc(collection(db,"rooms",currentRoomId,"messages"),{senderUid:currentUser.uid,senderName:currentUser.displayName||$("uidText").textContent||"Pemain",text:textValue,createdAt:serverTimestamp()});
+  input.value="";$("roomChatStatus").textContent="Pesan terkirim";
+ }catch(err){$("roomChatStatus").textContent="Gagal mengirim. Periksa Firestore Rules untuk rooms/{roomId}/messages.";console.error("Gagal mengirim chat room:",err);}
+ finally{btn.disabled=false;input.focus();}
+};
 function watchRoom(roomId){
+ if(roomChatUnsub){roomChatUnsub();roomChatUnsub=null;}
+
  if(roomUnsub)roomUnsub();
- roomUnsub=onSnapshot(doc(db,"rooms",roomId),snap=>{if(!snap.exists())return;const d=snap.data();roomStatus=d.status||"waiting";myRoomColor=d.hostUid===currentUser.uid?"w":"b";const otherIsHost=d.hostUid!==currentUser.uid;setOpponentDetails(otherIsHost?(d.hostName||"Lawan"):(d.guestName||"Menunggu teman"),otherIsHost?d.hostUid:d.guestUid,otherIsHost?d.hostShortUid:d.guestShortUid,otherIsHost?(d.hostAvatar||""):(d.guestAvatar||""));if(d.status==="waiting"){if($("privateStatus")&&currentRoomId===roomId)$ ("privateStatus").textContent="Room "+d.code+" menunggu pemain bergabung. Bagikan kodenya.";return;}if(d.status==="playing"&&$("gameScreen").classList.contains("hidden")){startGame(pendingRoomMode,pendingRoomTitle,d.code?"Room "+d.code:"Lawan",d.fen||null,true);setOpponentDetails(otherIsHost?(d.hostName||"Lawan"):(d.guestName||"Menunggu teman"),otherIsHost?d.hostUid:d.guestUid,otherIsHost?d.hostShortUid:d.guestShortUid,otherIsHost?(d.hostAvatar||""):(d.guestAvatar||""));}if(game&&d.fen&&d.fen!==game.fen()){try{game.load(d.fen);selectedSquare=null;renderBoard();}catch(e){console.warn("FEN room tidak valid",e);}}if(d.status==="finished"||game?.game_over()){gameOver=true;const isResign=d.result==="resign";let winnerUid=d.winnerUid||null;if(!winnerUid&&!isResign&&game?.in_checkmate()){const winnerColor=game.turn()==="w"?"b":"w";winnerUid=winnerColor==="w"?d.hostUid:d.guestUid;}const isDraw=d.result==="draw"||(!isResign&&game?.in_draw());const didWin=!!winnerUid&&winnerUid===currentUser.uid;showResultOverlay(isDraw?"Remis":didWin?"Kamu menang!":"Kamu kalah",isDraw?"🤝":didWin?"🏆":"🏳️");msg("gameStatus",isDraw?"Permainan remis.":didWin?"Kamu menang!":"Kamu kalah.",isDraw?"muted":didWin?"success":"error");}if(game)renderBoard();});
+ roomUnsub=onSnapshot(doc(db,"rooms",roomId),snap=>{if(!snap.exists())return;const d=snap.data();roomStatus=d.status||"waiting";if(d.status==="playing")subscribeRoomChat(roomId);else if($("roomChatPanel"))$("roomChatPanel").classList.add("hidden");myRoomColor=d.hostUid===currentUser.uid?"w":"b";const otherIsHost=d.hostUid!==currentUser.uid;setOpponentDetails(otherIsHost?(d.hostName||"Lawan"):(d.guestName||"Menunggu teman"),otherIsHost?d.hostUid:d.guestUid,otherIsHost?d.hostShortUid:d.guestShortUid,otherIsHost?(d.hostAvatar||""):(d.guestAvatar||""));if(d.status==="waiting"){if($("privateStatus")&&currentRoomId===roomId)$ ("privateStatus").textContent="Room "+d.code+" menunggu pemain bergabung. Bagikan kodenya.";return;}if(d.status==="playing"&&$("gameScreen").classList.contains("hidden")){startGame(pendingRoomMode,pendingRoomTitle,d.code?"Room "+d.code:"Lawan",d.fen||null,true);setOpponentDetails(otherIsHost?(d.hostName||"Lawan"):(d.guestName||"Menunggu teman"),otherIsHost?d.hostUid:d.guestUid,otherIsHost?d.hostShortUid:d.guestShortUid,otherIsHost?(d.hostAvatar||""):(d.guestAvatar||""));}if(game&&d.fen&&d.fen!==game.fen()){try{game.load(d.fen);selectedSquare=null;renderBoard();}catch(e){console.warn("FEN room tidak valid",e);}}if(d.status==="finished"||game?.game_over()){gameOver=true;const isResign=d.result==="resign";let winnerUid=d.winnerUid||null;if(!winnerUid&&!isResign&&game?.in_checkmate()){const winnerColor=game.turn()==="w"?"b":"w";winnerUid=winnerColor==="w"?d.hostUid:d.guestUid;}const isDraw=d.result==="draw"||(!isResign&&game?.in_draw());const didWin=!!winnerUid&&winnerUid===currentUser.uid;showResultOverlay(isDraw?"Remis":didWin?"Kamu menang!":"Kamu kalah",isDraw?"🤝":didWin?"🏆":"🏳️");msg("gameStatus",isDraw?"Permainan remis.":didWin?"Kamu menang!":"Kamu kalah.",isDraw?"muted":didWin?"success":"error");}if(game)renderBoard();});
 }
 async function enterMatchedRoom(roomId,roomCode,otherUid,otherName){
  currentRoomId=roomId;pendingRoomMode="online";pendingRoomTitle="Random Match";startGame("online","Random Match",otherName||"Lawan",null,true);watchRoom(roomId);$("findMatchBtn").disabled=false;msg("randomStatus","Lawan ditemukan! Permainan dimulai.","success");
