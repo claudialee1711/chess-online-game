@@ -1087,7 +1087,7 @@ $("roomChatForm").onsubmit=async e=>{
  try{
   await addDoc(collection(db,"rooms",currentRoomId,"messages"),{senderUid:currentUser.uid,senderName:currentUser.displayName||$("uidText").textContent||"Pemain",text:textValue,createdAt:serverTimestamp()});
   input.value="";$("roomChatStatus").textContent="Pesan terkirim";
- }catch(err){$("roomChatStatus").textContent="Gagal mengirim. Periksa Firestore Rules untuk rooms/{roomId}/messages.";console.error("Gagal mengirim chat room:",err);}
+ }catch(err){const code=err?.code||"unknown";$("roomChatStatus").textContent="Pesan gagal ("+code+"). Cek Firestore Rules chat room.";console.error("Gagal mengirim chat room:",err);}
  finally{btn.disabled=false;input.focus();}
 };
 function watchRoom(roomId){
