@@ -965,21 +965,21 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 
 /* Kotak info dibuat lebih ramping ke samping, lebih tinggi, dan tepat di tengah lebar 6 petak */
 .tabletop-scene{width:100%!important;max-width:640px!important;justify-items:center!important}
-.player-info-card{width:75%!important;max-width:480px!important;min-height:88px!important;padding:13px 16px!important;gap:12px!important;justify-self:center!important;border-radius:14px!important}
+.player-info-card{width:37.5%!important;max-width:240px!important;aspect-ratio:1/1!important;min-height:0!important;padding:12px!important;gap:10px!important;justify-self:center!important;border-radius:14px!important;flex-direction:column!important;justify-content:center!important;text-align:center!important}
 .player-info-avatar{flex:0 0 48px!important;width:48px!important;height:48px!important;font-size:31px!important}
-.player-info-details{align-items:flex-start!important;text-align:left!important}
+.player-info-details{align-items:center!important;text-align:center!important}
 .player-info-details strong{font-size:15px!important}
 .player-info-details span{font-size:12px!important}
-.player-info-actions{max-width:42%!important}
+.player-info-actions{max-width:100%!important;width:100%!important}
 .player-info-actions button{white-space:normal!important;line-height:1.2!important;max-width:100%!important}
 .tabletop-scene .board-layout{width:100%!important}
 @media(max-width:600px){
- .player-info-card{width:75%!important;min-height:74px!important;padding:9px 10px!important;gap:8px!important}
- .player-info-avatar{flex-basis:38px!important;width:38px!important;height:38px!important;font-size:25px!important}
- .player-info-details strong{font-size:12px!important}
- .player-info-details span{font-size:10px!important}
- .player-info-actions{max-width:43%!important}
- .player-info-actions button{font-size:10px!important;padding:5px 6px!important}
+ .player-info-card{width:37.5%!important;max-width:none!important;aspect-ratio:1/1!important;min-height:0!important;padding:7px!important;gap:6px!important}
+ .player-info-avatar{flex-basis:34px!important;width:34px!important;height:34px!important;font-size:23px!important}
+ .player-info-details strong{font-size:11px!important}
+ .player-info-details span{font-size:9px!important;overflow-wrap:anywhere!important}
+ .player-info-actions{max-width:100%!important;width:100%!important}
+ .player-info-actions button{font-size:9px!important;padding:4px 5px!important}
 }
 </style>
 </head>
