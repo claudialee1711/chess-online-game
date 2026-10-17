@@ -990,7 +990,7 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signInAnonymously, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, getDocs, onSnapshot, serverTimestamp, runTransaction, deleteDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 const Chess = window.Chess;
 
@@ -1032,7 +1032,35 @@ const LEADERBOARD_RESET_VERSION=2;
 async function recordLeaderboardResult(roomId,winnerUid,isDraw){if(!currentUser||!roomId)return;try{await runTransaction(db,async tx=>{const ref=doc(db,"players",currentUser.uid),snap=await tx.get(ref),d=snap.exists()?snap.data():{},processed=Array.isArray(d.processedRoomIds)?d.processedRoomIds:[];if(processed.includes(roomId))return;const fresh=d.leaderboardVersion===LEADERBOARD_RESET_VERSION,baseWins=fresh?(Number(d.wins)||0):0,baseLosses=fresh?(Number(d.losses)||0):0,baseDraws=fresh?(Number(d.draws)||0):0,won=!!winnerUid&&winnerUid===currentUser.uid,draw=!!isDraw;tx.set(ref,{leaderboardVersion:LEADERBOARD_RESET_VERSION,wins:baseWins+(won?1:0),losses:baseLosses+(!won&&!draw?1:0),draws:baseDraws+(draw?1:0),processedRoomIds:[...processed.slice(-49),roomId],updatedAt:serverTimestamp()},{merge:true});});}catch(e){console.warn("Hasil pertandingan belum masuk leaderboard:",e.message);}}
 async function loadLeaderboard(){const list=$("leaderboardList"),status=$("leaderboardStatus");if(!list||!status)return;list.innerHTML="";status.textContent="Memuat peringkat pemain…";try{const snap=await getDocs(collection(db,"players"));const players=snap.docs.map(d=>({uid:d.id,...d.data()})).filter(p=>p.leaderboardVersion===LEADERBOARD_RESET_VERSION).map(raw=>({...raw,wins:Number(raw.wins)||0,losses:Number(raw.losses)||0,draws:Number(raw.draws)||0})).sort((a,b)=>(Number(b.wins)||0)-(Number(a.wins)||0)||(Number(b.draws)||0)-(Number(a.draws)||0)).slice(0,100);if(!players.length){status.textContent="Belum ada data pemain.";return;}status.textContent="Leaderboard direset · 100 teratas berdasarkan kemenangan · "+players.length+" pemain ditampilkan.";players.forEach((p,i)=>{const row=document.createElement("div");row.className="list-item leader-row";const seen=p.lastSeen?.toMillis?.()||0,online=!!p.isOnline&&Date.now()-seen<120000,publicId=String(p.shortUid||p.uid||"");row.innerHTML='<div class="leader-rank">#'+(i+1)+'</div><div class="leader-person"><strong>'+esc(p.name||"Pemain")+'</strong><div class="leader-presence"><span class="presence-dot '+(online?"online":"")+'"></span>'+(online?"Online":"Offline")+'</div><div class="leader-id">ID: <code>'+esc(publicId)+'</code></div><div class="leader-stats">🏆 '+(Number(p.wins)||0)+' menang · '+(Number(p.losses)||0)+' kalah · '+(Number(p.draws)||0)+' remis</div></div><div class="leader-actions"><button type="button" class="compact" data-add-leader-friend>＋ Teman</button></div>';list.appendChild(row);const addBtn=row.querySelector("[data-add-leader-friend]");addBtn.disabled=!p.uid||p.uid===currentUser?.uid;if(addBtn.disabled)addBtn.title=p.uid===currentUser?.uid?"Itu akunmu sendiri":"ID pemain tidak tersedia";addBtn.onclick=async()=>{addBtn.disabled=true;try{await addFriendByAuthUid(p.uid,p.shortUid||"",p.name||"Pemain");addBtn.textContent="Terkirim ✓";}catch(e){addBtn.disabled=false;alert(e.message||"Gagal mengirim permintaan teman.");}};});}catch(e){status.textContent="Leaderboard gagal dimuat: "+e.message;list.innerHTML="";}}
 
-$("googleBtn").onclick = async () => { try { msg("loginMessage","Membuka login Google…"); await signInWithPopup(auth,new GoogleAuthProvider()); } catch(e){console.error("Login Google gagal:",e);const inAndroidApp=!!(window.AndroidGoogleAuth||/;\s*wv\)|Version\/[0-9.]+ Chrome\/[0-9.]+ Mobile Safari/i.test(navigator.userAgent));const m=e.code==="auth/unauthorized-domain"?"Domain website belum diizinkan Firebase. Tambahkan domain website di Firebase Console → Authentication → Settings → Authorized domains, lalu coba lagi.":(inAndroidApp?"Login Google perlu integrasi login native Android; Google memblokir login dari WebView. Gunakan login Google di website Chrome sementara ini.":(e.code||e.message));msg("loginMessage",m,"error");} };
+$("googleBtn").onclick = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    msg("loginMessage","Membuka login Google…");
+    await signInWithPopup(auth,provider);
+  } catch(e) {
+    console.error("Login Google popup gagal:",e);
+    const inAndroidApp=!!(window.AndroidGoogleAuth||/;\s*wv\)|Version\/[0-9.]+ Chrome\/[0-9.]+ Mobile Safari/i.test(navigator.userAgent));
+    if(e.code==="auth/network-request-failed" && !inAndroidApp) {
+      try {
+        msg("loginMessage","Popup login gagal terhubung. Mencoba login Google lewat halaman penuh…");
+        await signInWithRedirect(auth,provider);
+        return;
+      } catch(redirectError) {
+        console.error("Login Google redirect gagal:",redirectError);
+        msg("loginMessage","Login Google gagal lewat popup dan halaman penuh ("+(redirectError.code||redirectError.message)+"). Coba Chrome Incognito tanpa ekstensi, lalu pastikan koneksi tidak memblokir accounts.google.com dan chess-online-game-7cbb9.firebaseapp.com.","error");
+        return;
+      }
+    }
+    const m=e.code==="auth/unauthorized-domain"?"Domain website belum diizinkan Firebase. Tambahkan claudialee1711.github.io di Firebase Console → Authentication → Settings → Authorized domains.":(inAndroidApp?"Login Google perlu integrasi login native Android; gunakan website di Chrome sementara ini.":(e.code||e.message));
+    msg("loginMessage",m,"error");
+  }
+};
+getRedirectResult(auth).then(result => {
+  if(result?.user) msg("loginMessage","Login Google berhasil.","success");
+}).catch(e => {
+  console.error("Hasil redirect login Google gagal:",e);
+  msg("loginMessage","Login Google setelah kembali ke website gagal: "+(e.code||e.message)+". Periksa koneksi dan pengaturan domain Firebase.","error");
+});
 $("guestBtn").onclick = async () => { const btn=$("guestBtn"); btn.disabled=true; window.__guestLoginRequested=true; try { msg("loginMessage","Membuat sesi pengunjung…"); await signInAnonymously(auth); msg("loginMessage","Berhasil masuk sebagai pengunjung.","success"); } catch(e){ window.__guestLoginRequested=false; console.error("Login pengunjung gagal:",e); msg("loginMessage","Gagal masuk: "+(e.code||e.message||"Periksa koneksi dan pengaturan Firebase Authentication."),"error"); } finally { btn.disabled=false; } };
 $("logoutBtn").onclick = async () => { const btn=$("logoutBtn"); btn.disabled=true; try { await cleanupListeners(); await signOut(auth); $("profilePanel").classList.add("hidden"); msg("loginMessage","Kamu sudah logout. Masuk kembali untuk bermain.","success"); } catch(e) { console.error("Logout gagal:",e); msg("profileStatus","Logout gagal: "+(e.code||e.message||"Coba lagi."),"error"); } finally { btn.disabled=false; } };
 onAuthStateChanged(auth, async user => {
