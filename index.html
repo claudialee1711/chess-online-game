@@ -963,23 +963,24 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 </style>
 <style>
 
-/* Kotak info dibuat lebih ramping ke samping, lebih tinggi, dan tepat di tengah lebar 6 petak */
+/* Kartu info transparan, avatar besar setara kira-kira 2x2 petak papan */
 .tabletop-scene{width:100%!important;max-width:640px!important;justify-items:center!important}
-.player-info-card{width:37.5%!important;max-width:240px!important;aspect-ratio:1/1!important;min-height:0!important;padding:12px!important;gap:10px!important;justify-self:center!important;border-radius:14px!important;flex-direction:column!important;justify-content:center!important;text-align:center!important}
-.player-info-avatar{flex:0 0 48px!important;width:48px!important;height:48px!important;font-size:31px!important}
-.player-info-details{align-items:center!important;text-align:center!important}
-.player-info-details strong{font-size:15px!important}
-.player-info-details span{font-size:12px!important}
-.player-info-actions{max-width:100%!important;width:100%!important}
-.player-info-actions button{white-space:normal!important;line-height:1.2!important;max-width:100%!important}
+.player-info-card{width:37.5%!important;max-width:240px!important;aspect-ratio:auto!important;min-height:160px!important;padding:8px 0!important;gap:12px!important;justify-self:center!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;text-align:left!important}
+.player-info-avatar{flex:0 0 100px!important;width:100px!important;height:100px!important;font-size:76px!important;background:transparent!important;border-radius:0!important}
+.player-info-details{align-items:flex-start!important;text-align:left!important;gap:7px!important;min-width:0!important}
+.player-info-details strong{font-size:15px!important;overflow-wrap:anywhere!important}
+.player-info-details span{font-size:12px!important;overflow-wrap:anywhere!important}
+.player-info-actions{max-width:100%!important;width:100%!important;justify-content:flex-start!important}
+.player-info-actions button{white-space:nowrap!important;line-height:1.2!important;max-width:100%!important}
 .tabletop-scene .board-layout{width:100%!important}
 @media(max-width:600px){
- .player-info-card{width:37.5%!important;max-width:none!important;aspect-ratio:1/1!important;min-height:0!important;padding:7px!important;gap:6px!important}
- .player-info-avatar{flex-basis:34px!important;width:34px!important;height:34px!important;font-size:23px!important}
+ .player-info-card{width:75%!important;max-width:none!important;min-height:110px!important;padding:4px 0!important;gap:7px!important}
+ .player-info-avatar{flex-basis:70px!important;width:70px!important;height:70px!important;font-size:54px!important}
+ .player-info-details{gap:5px!important}
  .player-info-details strong{font-size:11px!important}
  .player-info-details span{font-size:9px!important;overflow-wrap:anywhere!important}
  .player-info-actions{max-width:100%!important;width:100%!important}
- .player-info-actions button{font-size:9px!important;padding:4px 5px!important}
+ .player-info-actions button{font-size:10px!important;padding:4px 6px!important}
 }
 </style>
 </head>
@@ -1056,7 +1057,7 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
     <div id="roomChatMessages" class="room-chat-messages" aria-live="polite"><p class="muted small">Pesan akan muncul di sini.</p></div>
     <form id="roomChatForm" class="room-chat-form"><input id="roomChatInput" maxlength="300" autocomplete="off" placeholder="Ketik pesan untuk lawan…" aria-label="Pesan untuk lawan"><button id="roomChatSendBtn" type="submit">Kirim</button></form>
   </div></div>
-  <div id="gameResultOverlay" class="game-result-overlay hidden" role="dialog" aria-modal="true" aria-live="assertive"></div><div class="tabletop-scene" aria-label="Info pemain dan papan catur"><div class="player-info-card opponent-info-card" aria-label="Info lawan"><div class="player-info-avatar" id="opponentAvatar">👨🏻</div><div class="player-info-details"><strong id="opponentInfo">Lawan</strong><span id="opponentProfileMeta">ID belum tersedia</span></div><div id="opponentActions" class="player-info-actions hidden"><button id="addOpponentBtn" type="button" class="secondary compact">＋ Tambah teman</button></div></div><div class="board-layout"><div><div id="board" class="board" aria-label="Papan catur"></div></div></div><div class="player-info-card self-info-card" aria-label="Info kamu"><div class="player-info-avatar">👨🏻</div><div class="player-info-details"><strong id="topSelfName">Kamu</strong><span id="topSelfId">ID memuat…</span></div></div></div>
+  <div id="gameResultOverlay" class="game-result-overlay hidden" role="dialog" aria-modal="true" aria-live="assertive"></div><div class="tabletop-scene" aria-label="Info pemain dan papan catur"><div class="player-info-card opponent-info-card" aria-label="Info lawan"><div class="player-info-avatar" id="opponentAvatar">👨🏻</div><div class="player-info-details"><strong id="opponentInfo">Lawan</strong><span id="opponentProfileMeta">ID belum tersedia</span><div id="opponentActions" class="player-info-actions hidden"><button id="addOpponentBtn" type="button" class="secondary compact">+Teman</button></div></div></div><div class="board-layout"><div><div id="board" class="board" aria-label="Papan catur"></div></div></div><div class="player-info-card self-info-card" aria-label="Info kamu"><div class="player-info-avatar">👨🏻</div><div class="player-info-details"><strong id="topSelfName">Kamu</strong><span id="topSelfId">ID memuat…</span></div></div></div>
 </section>
 
 </div>
