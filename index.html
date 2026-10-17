@@ -963,24 +963,24 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 </style>
 <style>
 
-/* Kartu info transparan, avatar besar setara kira-kira 2x2 petak papan */
+/* Info pemain transparan, avatar tepat di tengah lebar papan; teks berada di bawahnya */
 .tabletop-scene{width:100%!important;max-width:640px!important;justify-items:center!important}
-.player-info-card{width:37.5%!important;max-width:240px!important;aspect-ratio:auto!important;min-height:160px!important;padding:8px 0!important;gap:12px!important;justify-self:center!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;text-align:left!important}
+.player-info-card{width:100%!important;max-width:640px!important;min-height:0!important;padding:8px 0!important;gap:3px!important;justify-self:center!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important}
 .player-info-avatar{flex:0 0 100px!important;width:100px!important;height:100px!important;font-size:76px!important;background:transparent!important;border-radius:0!important}
-.player-info-details{align-items:flex-start!important;text-align:left!important;gap:7px!important;min-width:0!important}
-.player-info-details strong{font-size:15px!important;overflow-wrap:anywhere!important}
-.player-info-details span{font-size:12px!important;overflow-wrap:anywhere!important}
-.player-info-actions{max-width:100%!important;width:100%!important;justify-content:flex-start!important}
+.player-info-details{align-items:center!important;text-align:center!important;gap:5px!important;min-width:0!important}
+.player-info-details strong{font-size:17px!important;overflow-wrap:anywhere!important}
+.player-info-details span{font-size:14px!important;overflow-wrap:anywhere!important}
+.player-info-actions{max-width:100%!important;width:100%!important;justify-content:center!important}
 .player-info-actions button{white-space:nowrap!important;line-height:1.2!important;max-width:100%!important}
 .tabletop-scene .board-layout{width:100%!important}
 @media(max-width:600px){
- .player-info-card{width:75%!important;max-width:none!important;min-height:110px!important;padding:4px 0!important;gap:7px!important}
- .player-info-avatar{flex-basis:70px!important;width:70px!important;height:70px!important;font-size:54px!important}
- .player-info-details{gap:5px!important}
- .player-info-details strong{font-size:11px!important}
- .player-info-details span{font-size:9px!important;overflow-wrap:anywhere!important}
+ .player-info-card{width:100%!important;max-width:none!important;min-height:0!important;padding:5px 0!important;gap:2px!important}
+ .player-info-avatar{flex-basis:84px!important;width:84px!important;height:84px!important;font-size:64px!important}
+ .player-info-details{gap:4px!important}
+ .player-info-details strong{font-size:14px!important}
+ .player-info-details span{font-size:12px!important;overflow-wrap:anywhere!important}
  .player-info-actions{max-width:100%!important;width:100%!important}
- .player-info-actions button{font-size:10px!important;padding:4px 6px!important}
+ .player-info-actions button{font-size:11px!important;padding:4px 7px!important}
 }
 </style>
 </head>
