@@ -979,7 +979,7 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 </style>
 \n<style id="self-chat-layout-fix">
 /* Samakan batas papan antartampilan, panel chat sejajar tepi kanan papan. */
-.tabletop-scene{width:min(100%,560px)!important;max-width:560px!important;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box!important}.tabletop-scene .board-layout{width:100%!important;max-width:560px!important;margin:0 auto!important}.self-info-card{position:relative!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:flex-start!important;gap:8px!important;overflow:visible!important;min-width:0!important;width:100%!important;box-sizing:border-box!important;padding-top:0!important;justify-content:center!important;padding-right:12px!important}
+.tabletop-scene{width:min(100%,560px)!important;max-width:560px!important;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box!important}.tabletop-scene .board-layout{width:100%!important;max-width:560px!important;margin:0 auto!important}.self-info-card{position:relative!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:flex-start!important;gap:8px!important;overflow:visible!important;min-width:0!important;width:100%!important;box-sizing:border-box!important;padding-top:0!important;justify-content:center!important;padding-right:0!important}
 .self-info-card .player-info-avatar{flex:0 0 100px!important;width:100px!important;height:100px!important;font-size:76px!important;line-height:1!important}
 .self-info-card .player-info-details{position:absolute!important;left:auto!important;right:calc(100% - 100px)!important;top:102px!important;display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:3px!important;width:100px!important;min-width:100px!important;max-width:100px!important;font-size:12px!important;overflow-wrap:anywhere!important}
 .self-info-card .player-info-details strong{font-size:12px!important;line-height:1.2!important}
@@ -993,20 +993,20 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 .self-info-card #roomChatPanel .room-chat-form{display:flex!important;flex-direction:row!important;align-items:center!important;gap:5px!important;width:100%!important;min-width:0!important;margin-top:6px!important}
 .self-info-card #roomChatPanel .room-chat-form input{min-width:0!important;flex:1 1 auto!important;width:0!important;box-sizing:border-box!important;padding:7px!important;font-size:11px!important}
 .self-info-card #roomChatPanel .room-chat-form button{flex:0 0 auto!important;white-space:nowrap!important;padding:6px 9px!important;font-size:10px!important;min-height:27px!important}
-.opponent-info-card{position:relative!important;overflow:visible!important}.opponent-info-card .player-info-avatar{position:relative!important}
-.opponent-speech-cloud{position:absolute;z-index:30;left:calc(100% + 10px);bottom:14px;transform:none;max-width:min(230px,70vw);width:max-content;padding:9px 12px;border:1px solid #d9ad78;border-radius:15px 15px 15px 4px;background:#fff5df;color:#432719;font-size:13px;line-height:1.35;overflow-wrap:anywhere;box-shadow:0 4px 12px #0004;animation:opponentCloudIn .18s ease-out;pointer-events:none}
+.opponent-info-card{position:relative!important;overflow:visible!important;isolation:isolate!important}.opponent-info-card .player-info-avatar{position:relative!important}
+.opponent-speech-cloud{position:absolute;z-index:30;left:calc(100% + 5px);bottom:8px;transform:none;max-width:min(180px,42vw);width:max-content;padding:7px 10px;border:1px solid #d9ad78;border-radius:15px 15px 15px 4px;background:#fff5df;color:#432719;font-size:13px;line-height:1.35;overflow-wrap:anywhere;box-shadow:0 4px 12px #0004;animation:opponentCloudIn .18s ease-out;pointer-events:none}
 .opponent-speech-cloud:after{content:"";position:absolute;left:-6px;bottom:12px;width:10px;height:10px;background:#fff5df;border-right:1px solid #d9ad78;border-bottom:1px solid #d9ad78;transform:rotate(45deg)}
 @keyframes opponentCloudIn{from{opacity:0;transform:translate(-4px,0)}to{opacity:1;transform:translate(0,0)}}
 @media(max-width:900px){
- .self-info-card{flex-wrap:wrap!important;row-gap:8px!important;justify-content:center!important;padding-right:0!important}
+ .self-info-card{flex-wrap:wrap!important;row-gap:8px!important;justify-content:center!important;padding-right:0!important}.self-info-card .player-info-avatar{margin-right:0!important}.self-info-card .room-chat-tail-label{margin-left:0!important}.self-info-card #roomChatPanel{margin-right:0!important}
  .tabletop-scene{width:min(100%,560px)!important;max-width:560px!important}.self-info-card .player-info-avatar{flex-basis:100px!important;width:100px!important;height:100px!important;font-size:76px!important}
- .self-info-card .player-info-details{top:62px!important;width:60px!important;min-width:60px!important;max-width:60px!important}
+ .self-info-card .player-info-details{top:102px!important;right:calc(100% - 100px)!important;width:100px!important;min-width:100px!important;max-width:100px!important}
  .self-info-card .room-chat-tail-label{flex-basis:27px!important;width:27px!important;height:22px!important;margin:5px 0 0 auto!important}
  .self-info-card #roomChatPanel{flex:0 1 230px!important;width:230px!important;max-width:230px!important;min-width:185px!important;padding:7px!important}
 }
 @media(max-width:480px){
  .tabletop-scene{width:100%!important;max-width:560px!important}.self-info-card .player-info-avatar{flex-basis:84px!important;width:84px!important;height:84px!important;font-size:64px!important}
- .self-info-card .player-info-details{top:50px!important;width:48px!important;min-width:48px!important;max-width:48px!important}
+ .self-info-card .player-info-details{top:86px!important;right:calc(100% - 84px)!important;width:84px!important;min-width:84px!important;max-width:84px!important}
  .self-info-card .player-info-details strong{font-size:10px!important}
  .self-info-card .player-info-details span{font-size:9px!important}
  .self-info-card #roomChatPanel{flex:1 1 170px!important;min-width:150px!important;max-width:calc(100vw - 105px)!important}
