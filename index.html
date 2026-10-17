@@ -977,7 +977,30 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
  .player-info-actions button{font-size:11px!important;padding:4px 7px!important}
 }
 </style>
-\n<style id="self-chat-layout-fix">\n/* Chat pertandingan melekat pada profil sendiri dan tetap di luar area papan. */\n.self-info-card{position:relative!important;display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important;overflow:visible!important}\n.self-info-card .room-chat-tail-label{position:static!important;flex:0 0 24px;width:24px;height:18px;background:rgba(54,32,21,.72)!important;color:#e8c39a!important;border:1px solid rgba(183,132,88,.55);font-size:9px;letter-spacing:1px;border-radius:10px 10px 10px 3px;box-shadow:0 2px 5px #0003}\n.self-info-card #roomChatPanel{position:relative!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;flex:0 1 188px;width:188px;max-width:100%;min-width:0;margin:0 0 0 auto!important;padding:6px!important;box-sizing:border-box;border:1px solid #b88755;border-radius:9px;background:rgba(40,27,20,.88)!important;color:#fff0d8;box-shadow:0 3px 9px #0004;text-align:left}\n.self-info-card #roomChatPanel:before{display:none!important}\n.self-info-card #roomChatPanel .room-chat-heading{display:flex;align-items:flex-start;flex-direction:column;gap:1px;margin-bottom:3px;font-size:10px}\n.self-info-card #roomChatPanel .room-chat-heading .small{font-size:9px}\n.self-info-card #roomChatPanel .room-chat-messages{min-height:20px;max-height:48px;padding:3px;font-size:10px;overflow-y:auto}\n.self-info-card #roomChatPanel .room-chat-form{display:flex;align-items:center;gap:3px;margin-top:4px}\n.self-info-card #roomChatPanel .room-chat-form input{min-width:0;flex:1;width:0;padding:5px;font-size:10px}\n.self-info-card #roomChatPanel .room-chat-form button{flex:0 0 auto;padding:4px 6px;font-size:10px;min-height:23px}\n@media(max-width:600px){.self-info-card{gap:6px!important}.self-info-card .room-chat-tail-label{flex-basis:21px;width:21px;height:16px;font-size:8px}.self-info-card #roomChatPanel{flex-basis:158px;width:158px;padding:5px!important}.self-info-card #roomChatPanel .room-chat-messages{max-height:40px;min-height:18px}.self-info-card #roomChatPanel .room-chat-heading{font-size:9px}.self-info-card #roomChatPanel .room-chat-form input{font-size:9px;padding:4px}.self-info-card #roomChatPanel .room-chat-form button{font-size:9px;padding:3px 5px;min-height:22px}}\n</style>\n</head>
+\n<style id="self-chat-layout-fix">
+/* Bubble dan kotak chat sejajar di profil sendiri, dengan ukuran ringkas. */
+.self-info-card{position:relative!important;display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:6px!important;overflow:visible!important;min-width:0!important}
+.self-info-card .room-chat-tail-label{position:static!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 22px!important;width:22px;height:17px;background:rgba(54,32,21,.72)!important;color:#e8c39a!important;border:1px solid rgba(183,132,88,.55);font-size:8px;letter-spacing:1px;border-radius:10px 10px 10px 3px;box-shadow:0 2px 5px #0003}
+.self-info-card #roomChatPanel{position:relative!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;flex:0 1 168px!important;width:168px;max-width:168px;min-width:0;margin:0!important;padding:5px!important;box-sizing:border-box;border:1px solid #b88755;border-radius:9px;background:rgba(40,27,20,.88)!important;color:#fff0d8;box-shadow:0 3px 9px #0004;text-align:left}
+.self-info-card #roomChatPanel:before{display:none!important}
+.self-info-card #roomChatPanel .room-chat-heading{display:flex;align-items:flex-start;flex-direction:column;gap:1px;margin-bottom:3px;font-size:10px}
+.self-info-card #roomChatPanel .room-chat-heading .small{font-size:9px}
+.self-info-card #roomChatPanel .room-chat-messages{min-height:18px;max-height:42px;padding:3px;font-size:10px;overflow-y:auto}
+.self-info-card #roomChatPanel .room-chat-form{display:flex;align-items:center;gap:3px;margin-top:4px}
+.self-info-card #roomChatPanel .room-chat-form input{min-width:0;flex:1;width:0;padding:4px;font-size:10px}
+.self-info-card #roomChatPanel .room-chat-form button{flex:0 0 auto;padding:4px 5px;font-size:9px;min-height:22px}
+@media(max-width:600px){
+ .self-info-card{gap:4px!important}
+ .self-info-card .player-info-avatar{flex:0 0 30px!important;width:30px!important;height:30px!important;font-size:20px!important}
+ .self-info-card .player-info-details{min-width:0!important;flex:0 1 74px!important;font-size:10px!important;overflow-wrap:anywhere}
+ .self-info-card .room-chat-tail-label{flex-basis:18px!important;width:18px;height:15px;font-size:7px}
+ .self-info-card #roomChatPanel{flex:0 1 142px!important;width:142px;max-width:142px;padding:4px!important}
+ .self-info-card #roomChatPanel .room-chat-messages{max-height:34px;min-height:16px}
+ .self-info-card #roomChatPanel .room-chat-heading{font-size:9px}
+ .self-info-card #roomChatPanel .room-chat-form input{font-size:9px;padding:4px}
+ .self-info-card #roomChatPanel .room-chat-form button{font-size:9px;padding:3px 4px;min-height:21px}
+}
+</style>\n</head>
 <body>
 <div class="wrap">
 <header class="top">
