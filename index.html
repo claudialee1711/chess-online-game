@@ -1293,19 +1293,32 @@ $("joinRoomBtn").onclick=async()=>{const code=$("roomCodeInput").value.trim().to
 function subscribeRoomChat(roomId){
  if(!currentUser||!roomId)return;
  if(roomChatUnsub){roomChatUnsub();roomChatUnsub=null;}
+ let firstChatSnapshot=true;
  $("roomChatStatus").textContent="Chat dengan lawan";
  roomChatUnsub=onSnapshot(collection(db,"rooms",roomId,"messages"),snap=>{
   const area=$("roomChatMessages");if(!area)return;area.innerHTML="";
   const items=snap.docs.slice().sort((a,b)=>(a.data().createdAt?.toMillis?.()||0)-(b.data().createdAt?.toMillis?.()||0)).slice(-100);
-  if(!items.length){area.innerHTML='<p class="muted small">Belum ada pesan. Sapa lawanmu 👋</p>';return;}
+  if(!items.length){area.innerHTML='<p class="muted small">Belum ada pesan. Sapa lawanmu 👋</p>';firstChatSnapshot=false;return;}
   for(const item of items){
    const d=item.data(),bubble=document.createElement("div");
    bubble.className="room-chat-bubble"+(d.senderUid===currentUser.uid?" mine":"");
    const who=document.createElement("strong");who.textContent=d.senderName||"Pemain";
    const body=document.createElement("span");body.textContent=String(d.text||"");
    bubble.append(who,body);area.appendChild(bubble);
-   if(d.senderUid!==currentUser.uid){const cloud=$("opponentSpeechCloud");if(cloud){cloud.textContent=String(d.text||"");cloud.classList.remove("hidden");if(window.__opponentCloudTimer)clearTimeout(window.__opponentCloudTimer);window.__opponentCloudTimer=setTimeout(()=>cloud.classList.add("hidden"),3500);}}
   }
+  // Awan hanya muncul untuk pesan baru setelah listener aktif, bukan saat listener
+  // dimulai ulang oleh sinkronisasi langkah catur.
+  if(!firstChatSnapshot){
+   for(const change of snap.docChanges()){
+    if(change.type!=="added")continue;
+    const d=change.doc.data();
+    if(d.senderUid!==currentUser.uid){
+     const cloud=$("opponentSpeechCloud");
+     if(cloud){cloud.textContent=String(d.text||"");cloud.classList.remove("hidden");if(window.__opponentCloudTimer)clearTimeout(window.__opponentCloudTimer);window.__opponentCloudTimer=setTimeout(()=>cloud.classList.add("hidden"),3500);}
+    }
+   }
+  }
+  firstChatSnapshot=false;
   area.scrollTop=area.scrollHeight;
  },e=>{$("roomChatStatus").textContent="Chat belum tersedia";console.warn("Room chat:",e.message);});
 }
@@ -1317,7 +1330,6 @@ $("roomChatForm").onsubmit=async e=>{
  try{
   await addDoc(collection(db,"rooms",currentRoomId,"messages"),{senderUid:currentUser.uid,senderName:currentUser.displayName||$("uidText").textContent||"Pemain",text:textValue,createdAt:serverTimestamp()});
   input.value="";$("roomChatStatus").textContent="Pesan terkirim";
-  const cloud=$("opponentSpeechCloud");if(cloud){cloud.textContent=textValue;cloud.classList.remove("hidden");if(window.__opponentCloudTimer)clearTimeout(window.__opponentCloudTimer);window.__opponentCloudTimer=setTimeout(()=>cloud.classList.add("hidden"),3500);}
  }catch(err){const code=err?.code||"unknown";$("roomChatStatus").textContent="Pesan gagal ("+code+"). Cek Firestore Rules chat room.";console.error("Gagal mengirim chat room:",err);}
  finally{btn.disabled=false;input.focus();}
 };
