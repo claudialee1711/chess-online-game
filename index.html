@@ -1281,41 +1281,45 @@ $("resignBtn").onclick=async()=>{
 };
 function multiplayerColorName(color){return color==="w"?"Bidak coklat":"Bidak hitam";}
 function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverlay");if(!overlay)return;overlay.innerHTML='<div class="result-card"><div class="result-trophy">'+emoji+'</div><h2>'+esc(title)+'</h2><p>'+esc(game?.in_draw()?"Permainan berakhir remis.":"Permainan telah selesai.")+'</p><button type="button" id="resultBackBtn">Balik ke Menu</button></div>';overlay.classList.remove("hidden");$("resultBackBtn").onclick=async()=>{overlay.classList.add("hidden");await cleanupListeners();currentRoomId=null;showScreen("home");};}
+
+/* Bidak vektor bergaya Staunton: bentuk klasik dengan alas, badan, detail ukiran dan highlight. */
+function chessPieceSvg(type,color){
+ const light=color==="w";
+ const wood=light?"#f3dfb8":"#202a3a";
+ const mid=light?"#c49a60":"#46556b";
+ const shade=light?"#70451f":"#090e18";
+ const edge=light?"#593719":"#070b12";
+ const shine=light?"#fff0d0":"#aabbd0";
+ const shapes={
+  p:'<path d="M39 39 C34 34 35 26 40 22 C44 18 51 18 56 22 C61 27 61 34 56 39 L60 47 C62 53 64 60 67 68 L73 83 L29 83 L35 68 C38 60 40 53 42 47 Z"/><path d="M41 45 Q50 50 59 45 M37 67 Q50 72 64 67" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
+  r:'<path d="M29 22 L29 35 L37 35 L37 29 L44 29 L44 35 L56 35 L56 29 L63 29 L63 35 L71 35 L71 22 L79 22 L76 45 L70 52 L70 76 L77 86 L23 86 L30 76 L30 52 L24 45 L21 22 Z"/><path d="M31 47 L69 47 M35 56 L65 56 M34 74 L66 74" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
+  n:'<path d="M25 85 L31 73 L34 61 L31 51 L34 39 L43 31 L43 21 L54 25 L61 34 L73 39 L78 49 L69 54 L58 50 L54 61 L62 72 L74 85 Z"/><path d="M43 31 L53 38 L64 41 L58 47 L49 43 L42 50 L45 59 M39 69 L61 69" fill="none" stroke="HIGHLIGHT" stroke-width="2.3" opacity=".9"/><circle cx="53" cy="33" r="2.7" fill="HIGHLIGHT"/>',
+  b:'<path d="M50 17 C60 23 63 31 58 40 C55 45 51 49 48 53 L61 64 L69 80 L76 86 L24 86 L31 80 L39 64 L51 53 C41 47 35 39 38 30 C40 24 45 20 50 17 Z"/><path d="M42 29 L56 43 M38 65 Q50 71 63 65 M34 78 Q50 84 67 78" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".85"/>',
+  q:'<path d="M26 34 L36 45 L42 34 L50 43 L58 34 L64 45 L75 34 L69 57 L65 75 L75 85 L25 85 L35 75 L31 57 Z"/><path d="M26 34 L23 25 L30 21 L36 29 L42 21 L50 28 L58 21 L64 29 L70 21 L77 25 L75 34 M36 56 L64 56 M35 73 L65 73" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".9"/>',
+  k:'<path d="M43 25 L43 15 L48 15 L48 8 L54 8 L54 15 L59 15 L59 25 L67 34 L63 47 L60 55 L67 75 L77 85 L23 85 L33 75 L40 55 L37 47 L33 34 Z"/><path d="M40 34 L63 34 M38 48 Q50 54 62 48 M36 69 L64 69 M34 78 Q50 84 66 78" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".9"/>'
+ };
+ const svg='<svg class="piece-svg" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+shine+'"/><stop offset=".28" stop-color="'+wood+'"/><stop offset=".68" stop-color="'+mid+'"/><stop offset="1" stop-color="'+shade+'"/></linearGradient><linearGradient id="baseGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+shine+'"/><stop offset=".45" stop-color="'+mid+'"/><stop offset="1" stop-color="'+shade+'"/></linearGradient></defs><ellipse cx="50" cy="92" rx="29" ry="4" fill="#000" opacity=".28"/><path d="M17 82 Q50 76 83 82 L88 89 Q50 98 12 89 Z" fill="url(#baseGrad)" stroke="'+edge+'" stroke-width="2"/><path d="M22 83 Q50 87 78 83 M17 89 Q50 96 83 89" fill="none" stroke="'+shine+'" stroke-width="1.7" opacity=".75"/><path d="'+shapes[type].split("</path>")[0].replace("<path d="","")+'" fill="url(#bodyGrad)" stroke="'+edge+'" stroke-width="2.6" stroke-linejoin="round"/>'+shapes[type].slice(shapes[type].indexOf("</path>")+7).replaceAll("HIGHLIGHT",shine)+'</svg>';
+ return svg;
+}
 function renderBoard(){
  if(!game)return;
  const board=$("board");board.innerHTML="";
- const files="abcdefgh", pieces={w:{k:"♔",q:"♕",r:"♖",b:"♗",n:"♘",p:"♙"},b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}}, flipped=(gameMode==="online"||gameMode==="private")&&myRoomColor==="b";
+ const files="abcdefgh", pieces={w:{k:chessPieceSvg("k","w"),q:chessPieceSvg("q","w"),r:chessPieceSvg("r","w"),b:chessPieceSvg("b","w"),n:chessPieceSvg("n","w"),p:chessPieceSvg("p","w")},b:{k:chessPieceSvg("k","b"),q:chessPieceSvg("q","b"),r:chessPieceSvg("r","b"),b:chessPieceSvg("b","b"),n:chessPieceSvg("n","b"),p:chessPieceSvg("p","b")},}, flipped=(gameMode==="online"||gameMode==="private")&&myRoomColor==="b";
  const legal=selectedSquare?game.moves({square:selectedSquare,verbose:true}).map(m=>m.to):[];
  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
   const file=flipped?files[7-c]:files[c], rank=flipped?r+1:8-r, sq=file+rank, piece=game.get(sq), btn=document.createElement("button");
   btn.className="sq "+((files.indexOf(file)+rank)%2?"dark":"light");btn.setAttribute("aria-label",sq+(piece? " "+piece.color+piece.type:""));
   if(selectedSquare===sq)btn.classList.add("selected");if(legal.includes(sq))btn.classList.add(piece?"capture":"legal");
   btn.innerHTML=(c===0?`<span class="coord">${rank}</span>`:"")+(r===7?`<span class="coord" style="left:auto;right:4px;top:auto;bottom:2px">${file}</span>`:"")+(piece?'<span class="piece-'+(piece.color==="w"?"white":"black")+'">'+pieces[piece.color][piece.type]+'</span>':"");
-  /* Inline !important styles ensure the requested piece colors/glow win over older CSS rules. */
   const pieceEl=btn.querySelector(".piece-white, .piece-black");
   if(pieceEl){
-    pieceEl.style.setProperty("display","inline-block","important");
-    pieceEl.style.setProperty("font-family",'"Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",serif',"important");
-    pieceEl.style.setProperty("font-size","clamp(28px, 6.1vw, 52px)","important");
-    pieceEl.style.setProperty("font-weight","900","important");
-    pieceEl.style.setProperty("line-height","1","important");
-    pieceEl.style.setProperty("paint-order","stroke fill","important");
-    if(piece.color==="w"){
-      pieceEl.style.setProperty("animation","brownRedPiecePulse 1.8s ease-in-out infinite","important");
-      /* Brown side: clearly brown fill with a restrained amber edge, not a white/gold glare. */
-      pieceEl.style.setProperty("color","#70421f","important");
-      pieceEl.style.setProperty("-webkit-text-fill-color","#70421f","important");
-      pieceEl.style.setProperty("-webkit-text-stroke","1.35px #f1d9ad","important");
-      pieceEl.style.setProperty("text-shadow","0 -1px 0 rgba(255,239,204,.8), 0 1px 0 rgba(55,28,12,.85), 0 2px 2px rgba(20,12,8,.72), 0 0 4px rgba(255,145,55,.42)","important");
-      pieceEl.style.setProperty("filter","drop-shadow(0 2px 2px rgba(25,14,7,.55)) drop-shadow(0 0 3px rgba(255,135,45,.38))","important");
-    } else {
-      pieceEl.style.setProperty("animation","blackBluePiecePulse 1.8s ease-in-out infinite","important");
-      pieceEl.style.setProperty("color","#151c2b","important");
-      pieceEl.style.setProperty("-webkit-text-fill-color","#151c2b","important");
-      pieceEl.style.setProperty("-webkit-text-stroke","1.35px #dceefa","important");
-      pieceEl.style.setProperty("text-shadow","0 -1px 0 rgba(255,255,255,.95), 0 1px 0 rgba(5,10,20,.95), 0 2px 2px rgba(0,0,0,.82), 0 0 4px rgba(110,200,255,.48)","important");
-      pieceEl.style.setProperty("filter","drop-shadow(0 2px 2px rgba(0,0,0,.62)) drop-shadow(0 0 3px rgba(100,195,255,.42))","important");
-    }
+    pieceEl.style.setProperty("display","inline-flex","important");
+    pieceEl.style.setProperty("width","88%","important");
+    pieceEl.style.setProperty("height","88%","important");
+    pieceEl.style.setProperty("align-items","center","important");
+    pieceEl.style.setProperty("justify-content","center","important");
+    pieceEl.style.setProperty("position","relative","important");
+    pieceEl.style.setProperty("z-index","2","important");
   }
   btn.onclick=()=>handleSquare(sq);board.appendChild(btn);
  }
@@ -1808,3 +1812,20 @@ $("addFriendBtn").onclick=async()=>{
   #gameScreen #board { border-color: #172b49 !important; }
 }
 </style>
+
+<style id="chess-arena-navy-staunton-v4">
+/* Biru navy gelap, bukan biru langit; bidak vektor Staunton lebih mirip set catur fisik. */
+#gameScreen #board { border-color:#101b2d!important; background:#101b2d!important; box-shadow:0 0 0 1px #61738d,0 14px 30px #0008!important; }
+#gameScreen #board .sq.light { background:#f5f5f2!important; background-image:linear-gradient(145deg,#fff 0%,#e8ebef 100%)!important; color:#27364c!important; }
+#gameScreen #board .sq.dark { background:#263b59!important; background-image:linear-gradient(145deg,#304866 0%,#1b2c45 100%)!important; color:#eaf0f8!important; }
+#gameScreen #board .sq.light .coord {color:#31445e!important}
+#gameScreen #board .sq.dark .coord {color:#e7edf5!important}
+#gameScreen #board .sq.selected {background-image:linear-gradient(rgba(255,205,76,.35),rgba(255,205,76,.35))!important;box-shadow:inset 0 0 0 3px #e7b94c,inset 0 0 0 5px #101b2d66!important}
+#gameScreen #board .sq.legal::after {background:#d7e5f3a8!important;box-shadow:0 0 0 2px #101b2d44!important}
+#gameScreen #board .sq.capture::after {border-color:#c9434d!important}
+#board .sq .piece-svg {display:block!important;width:100%!important;height:100%!important;overflow:visible!important;filter:drop-shadow(0 2px 1px #0007)!important}
+#board .sq .piece-white,#board .sq .piece-black {display:inline-flex!important;width:88%!important;height:88%!important;align-items:center!important;justify-content:center!important;line-height:1!important;font-size:initial!important;animation:none!important}
+#board .sq .piece-svg * {vector-effect:non-scaling-stroke}
+@media(max-width:600px){#board .sq .piece-white,#board .sq .piece-black{width:92%!important;height:92%!important}#gameScreen #board .sq.dark{background-color:#263b59!important}}
+</style>
+
