@@ -1298,7 +1298,7 @@ function chessPieceSvg(type,color){
   q:'<path d="M26 34 L36 45 L42 34 L50 43 L58 34 L64 45 L75 34 L69 57 L65 75 L75 85 L25 85 L35 75 L31 57 Z"/><path d="M26 34 L23 25 L30 21 L36 29 L42 21 L50 28 L58 21 L64 29 L70 21 L77 25 L75 34 M36 56 L64 56 M35 73 L65 73" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".9"/>',
   k:'<path d="M43 25 L43 15 L48 15 L48 8 L54 8 L54 15 L59 15 L59 25 L67 34 L63 47 L60 55 L67 75 L77 85 L23 85 L33 75 L40 55 L37 47 L33 34 Z"/><path d="M40 34 L63 34 M38 48 Q50 54 62 48 M36 69 L64 69 M34 78 Q50 84 66 78" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".9"/>'
  };
- const firstEnd=shapes[type].indexOf('"/>')+2;
+ const firstEnd=shapes[type].indexOf('"/>')+3;
  const firstPath=shapes[type].slice(0,firstEnd);
  const body=firstPath.slice(firstPath.indexOf('d="')+3,firstPath.lastIndexOf('"'));
  const detail=shapes[type].slice(firstEnd).replaceAll("HIGHLIGHT",shine);
