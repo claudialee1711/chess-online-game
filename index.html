@@ -1144,7 +1144,10 @@ $("googleBtn").onclick = async () => {
   } catch(e) {
     console.error("Login Google popup gagal:",e);
     const inAndroidApp=!!(window.AndroidGoogleAuth||/;\s*wv\)|Version\/[0-9.]+ Chrome\/[0-9.]+ Mobile Safari/i.test(navigator.userAgent));
-    if(["auth/network-request-failed","auth/popup-blocked","auth/operation-not-supported-in-this-environment","auth/cancelled-popup-request"].includes(e.code) && !inAndroidApp) {
+    const isMobileBrowser=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    // Jangan gunakan signInWithRedirect di browser seluler karena sessionStorage
+    // yang dipartisi dapat membuat Firebase kehilangan initial state.
+    if(["auth/network-request-failed","auth/popup-blocked","auth/operation-not-supported-in-this-environment","auth/cancelled-popup-request"].includes(e.code) && !inAndroidApp && !isMobileBrowser) {
       try {
         msg("loginMessage","Popup login gagal terhubung. Mencoba login Google lewat halaman penuh…");
         await signInWithRedirect(auth,provider);
@@ -1155,7 +1158,7 @@ $("googleBtn").onclick = async () => {
         return;
       }
     }
-    const m=e.code==="auth/unauthorized-domain"?"Domain website belum diizinkan Firebase. Tambahkan claudialee1711.github.io di Firebase Console → Authentication → Settings → Authorized domains.":(inAndroidApp?"Login Google perlu integrasi login native Android; gunakan website di Chrome sementara ini.":(e.code||e.message));
+    const m=e.code==="auth/unauthorized-domain"?"Domain website belum diizinkan Firebase. Tambahkan claudialee1711.github.io di Firebase Console → Authentication → Settings → Authorized domains.":(inAndroidApp?"Login Google perlu integrasi login native Android; gunakan website di Chrome sementara ini.":(isMobileBrowser && ["auth/network-request-failed","auth/popup-blocked","auth/operation-not-supported-in-this-environment","auth/cancelled-popup-request"].includes(e.code)?"Login popup Google gagal di browser HP. Buka situs langsung di Chrome, izinkan pop-up sementara, lalu coba lagi. Login redirect tidak digunakan di HP agar sesi tidak hilang.":(e.code||e.message)));
     msg("loginMessage",m,"error");
   }
 };
@@ -1164,7 +1167,7 @@ getRedirectResult(auth).then(result => {
 }).catch(e => {
   console.error("Hasil redirect login Google gagal:",e);
   showScreen("login");
-  msg("loginMessage","Login Google belum selesai ("+(e.code||e.message)+"). Coba masuk lagi. Jika berulang, buka situs langsung di Chrome dan periksa izin cookie pihak ketiga.","error");
+  msg("loginMessage","Login Google lewat redirect gagal ("+(e.code||e.message)+"). Coba tombol Google lagi; di HP gunakan popup agar sesi tidak hilang.","error");
 });
 $("guestBtn").onclick = async () => { const btn=$("guestBtn"); btn.disabled=true; window.__guestLoginRequested=true; try { msg("loginMessage","Membuat sesi pengunjung…"); await signInAnonymously(auth); msg("loginMessage","Berhasil masuk sebagai pengunjung.","success"); } catch(e){ window.__guestLoginRequested=false; console.error("Login pengunjung gagal:",e); msg("loginMessage","Gagal masuk: "+(e.code||e.message||"Periksa koneksi dan pengaturan Firebase Authentication."),"error"); } finally { btn.disabled=false; } };
 $("logoutBtn").onclick = async () => { const btn=$("logoutBtn"); btn.disabled=true; try { await cleanupListeners(); await signOut(auth); $("profilePanel").classList.add("hidden"); msg("loginMessage","Kamu sudah logout. Masuk kembali untuk bermain.","success"); } catch(e) { console.error("Logout gagal:",e); msg("profileStatus","Logout gagal: "+(e.code||e.message||"Coba lagi."),"error"); } finally { btn.disabled=false; } };
