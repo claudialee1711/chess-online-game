@@ -1285,11 +1285,11 @@ function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverla
 /* Bidak vektor bergaya Staunton: bentuk klasik dengan alas, badan, detail ukiran dan highlight. */
 function chessPieceSvg(type,color){
  const light=color==="w";
- const wood=light?"#f3dfb8":"#202a3a";
- const mid=light?"#c49a60":"#46556b";
- const shade=light?"#70451f":"#090e18";
- const edge=light?"#593719":"#070b12";
- const shine=light?"#fff0d0":"#aabbd0";
+ const wood=light?"#fff7e8":"#d94b35";
+ const mid=light?"#e8d1a8":"#a91f25";
+ const shade=light?"#987044":"#54111d";
+ const edge=light?"#49301d":"#310b13";
+ const shine=light?"#ffffff":"#ffb18b";
  const shapes={
   p:'<path d="M39 39 C34 34 35 26 40 22 C44 18 51 18 56 22 C61 27 61 34 56 39 L60 47 C62 53 64 60 67 68 L73 83 L29 83 L35 68 C38 60 40 53 42 47 Z"/><path d="M41 45 Q50 50 59 45 M37 67 Q50 72 64 67" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
   r:'<path d="M29 22 L29 35 L37 35 L37 29 L44 29 L44 35 L56 35 L56 29 L63 29 L63 35 L71 35 L71 22 L79 22 L76 45 L70 52 L70 76 L77 86 L23 86 L30 76 L30 52 L24 45 L21 22 Z"/><path d="M31 47 L69 47 M35 56 L65 56 M34 74 L66 74" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
@@ -1833,3 +1833,10 @@ $("addFriendBtn").onclick=async()=>{
 @media(max-width:600px){#board .sq .piece-white,#board .sq .piece-black{width:92%!important;height:92%!important}#gameScreen #board .sq.dark{background-color:#263b59!important}}
 </style>
 
+<style id="chess-arena-piece-contrast-v5">
+/* Kontras tinggi: bidak ivory terang vs merah marun, terlihat jelas di kotak putih dan navy. */
+#board .sq .piece-svg { width:100%!important;height:100%!important;display:block!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.8)) drop-shadow(0 0 1px rgba(0,0,0,.8))!important; }
+#board .sq .piece-white, #board .sq .piece-black { background:transparent!important;border:0!important;box-shadow:none!important; }
+#board .sq .piece-white .piece-svg { filter:drop-shadow(0 2px 2px #000c) drop-shadow(0 0 1px #5a3b1b)!important; }
+#board .sq .piece-black .piece-svg { filter:drop-shadow(0 2px 2px #000d) drop-shadow(0 0 2px #fff1)!important; }
+</style>
