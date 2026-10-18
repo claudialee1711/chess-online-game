@@ -1563,3 +1563,99 @@ $("addFriendBtn").onclick=async()=>{
  #roomChatInput{font-size:16px!important}
 }
 </style>
+
+
+<style id="chess-arena-modern-board-v1">
+/* Visual-only refresh: preserve board generation, chess rules, and Firebase sync. */
+#gameScreen #board,
+#board.board {
+  border: 5px solid #182a29 !important;
+  border-radius: 14px !important;
+  background: #182a29 !important;
+  box-shadow:
+    0 0 0 1px rgba(226, 205, 160, .75),
+    0 12px 28px rgba(0, 0, 0, .28),
+    inset 0 0 0 1px rgba(255, 255, 255, .12) !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+#board .sq {
+  position: relative !important;
+  overflow: hidden;
+  border: 0 !important;
+  transition: background-color .16s ease, filter .16s ease, box-shadow .16s ease !important;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+#board .sq.light {
+  background: linear-gradient(145deg, #f4ecd9 0%, #e6d8bd 100%) !important;
+  color: #34413a !important;
+}
+#board .sq.dark {
+  background: linear-gradient(145deg, #5d8a79 0%, #376858 100%) !important;
+  color: #f7f0df !important;
+}
+#board .sq:hover {
+  filter: brightness(1.055);
+}
+#board .sq .coord {
+  z-index: 3 !important;
+  pointer-events: none !important;
+  font-family: ui-sans-serif, system-ui, sans-serif !important;
+  font-size: clamp(9px, 1.45vw, 11px) !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  opacity: .88;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .12);
+}
+#board .sq.light .coord {
+  color: #376052 !important;
+}
+#board .sq.dark .coord {
+  color: #f7f0df !important;
+}
+#board .sq > .piece-white,
+#board .sq > .piece-black {
+  position: relative !important;
+  z-index: 2 !important;
+  transform: scale(1.06);
+  transform-origin: center;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+#board .sq.selected {
+  z-index: 1;
+  box-shadow: inset 0 0 0 4px #f5d76e, inset 0 0 0 7px rgba(28, 39, 34, .28) !important;
+  filter: brightness(1.08);
+}
+#board .sq.legal::after {
+  z-index: 1 !important;
+  width: 24% !important;
+  height: 24% !important;
+  background: rgba(18, 37, 31, .34) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .16);
+  pointer-events: none !important;
+}
+#board .sq.capture::after {
+  z-index: 1 !important;
+  inset: 5px !important;
+  border: 4px solid rgba(202, 72, 67, .9) !important;
+  border-radius: 50% !important;
+  box-shadow: inset 0 0 0 2px rgba(255, 239, 213, .32);
+  pointer-events: none !important;
+}
+@media (max-width: 600px) {
+  #gameScreen #board,
+  #board.board {
+    border-width: 4px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 0 0 1px rgba(226, 205, 160, .68), 0 8px 18px rgba(0, 0, 0, .24) !important;
+  }
+  #board .sq.selected {
+    box-shadow: inset 0 0 0 3px #f5d76e, inset 0 0 0 5px rgba(28, 39, 34, .24) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #board .sq { transition: none !important; }
+}
+</style>
