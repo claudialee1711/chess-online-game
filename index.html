@@ -1284,7 +1284,7 @@ function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverla
 function renderBoard(){
  if(!game)return;
  const board=$("board");board.innerHTML="";
- const files="abcdefgh", pieces={w:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"},b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}}, flipped=(gameMode==="online"||gameMode==="private")&&myRoomColor==="b";
+ const files="abcdefgh", pieces={w:{k:"♔",q:"♕",r:"♖",b:"♗",n:"♘",p:"♙"},b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}}, flipped=(gameMode==="online"||gameMode==="private")&&myRoomColor==="b";
  const legal=selectedSquare?game.moves({square:selectedSquare,verbose:true}).map(m=>m.to):[];
  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
   const file=flipped?files[7-c]:files[c], rank=flipped?r+1:8-r, sq=file+rank, piece=game.get(sq), btn=document.createElement("button");
