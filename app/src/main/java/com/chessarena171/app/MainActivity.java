@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+// Native Google account chooser for the Firebase-backed WebView app.
 public class MainActivity extends Activity {
     private static final int RC_GOOGLE_SIGN_IN = 17101;
     private static final String HOME_URL = "https://claudialee1711.github.io/chess-online-game/";
