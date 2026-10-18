@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "189359456636-pj1rl6lm97fplue3uir9hcfe0ansjk5h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chessarena171.app",
+            "certificate_hash": "02219750388ed21a765286a21a1c5300a3e8cc26"
+          }
+        },
+        {
           "client_id": "189359456636-h3ncol3l9bs512mnefjac724c75qbaql.apps.googleusercontent.com",
           "client_type": 3
         }
