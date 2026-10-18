@@ -1136,6 +1136,8 @@ async function loadLeaderboard(){const list=$("leaderboardList"),status=$("leade
 
 $("googleBtn").onclick = async () => {
   const provider = new GoogleAuthProvider();
+  // Paksa Google menampilkan pemilih akun agar pengguna bisa memilih akun yang tersimpan.
+  provider.setCustomParameters({prompt:"select_account"});
   try {
     msg("loginMessage","Menyiapkan login Google…");
     await setPersistence(auth,browserLocalPersistence);
