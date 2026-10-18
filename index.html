@@ -1296,7 +1296,7 @@ function renderBoard(){
   if(pieceEl){
     pieceEl.style.setProperty("display","inline-block","important");
     pieceEl.style.setProperty("font-family",'"Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",serif',"important");
-    pieceEl.style.setProperty("font-size","clamp(26px, 5.4vw, 54px)","important");
+    pieceEl.style.setProperty("font-size","clamp(28px, 6.1vw, 52px)","important");
     pieceEl.style.setProperty("font-weight","900","important");
     pieceEl.style.setProperty("line-height","1","important");
     pieceEl.style.setProperty("paint-order","stroke fill","important");
@@ -1657,5 +1657,121 @@ $("addFriendBtn").onclick=async()=>{
 }
 @media (prefers-reduced-motion: reduce) {
   #board .sq { transition: none !important; }
+}
+</style>
+
+
+<style id="chess-arena-board-polish-v2">
+/* Second visual pass: cleaner contrast, more legible pieces, and consistent responsive sizing. */
+#gameScreen #board {
+  gap: 0 !important;
+  padding: 0 !important;
+  border: 5px solid #172923 !important;
+  border-radius: 12px !important;
+  background: #172923 !important;
+  box-shadow: 0 0 0 1px rgba(235,218,178,.7), 0 14px 30px rgba(0,0,0,.34) !important;
+}
+#gameScreen #board .sq {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  background-image: none !important;
+}
+#gameScreen #board .sq.light {
+  background-color: #eee3ca !important;
+  color: #2c4b3e !important;
+}
+#gameScreen #board .sq.dark {
+  background-color: #54816d !important;
+  color: #f8f0df !important;
+}
+#gameScreen #board .sq:hover {
+  filter: brightness(1.045) !important;
+}
+#gameScreen #board .sq:focus-visible {
+  outline: 3px solid #f8d66d !important;
+  outline-offset: -4px !important;
+  z-index: 4 !important;
+}
+#gameScreen #board .sq.selected {
+  background-image: linear-gradient(rgba(255,211,91,.25),rgba(255,211,91,.25)) !important;
+  box-shadow: inset 0 0 0 3px #f7d66e, inset 0 0 0 5px rgba(29,43,34,.22) !important;
+  z-index: 2 !important;
+}
+#gameScreen #board .sq.legal::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%,-50%) !important;
+  width: 25% !important;
+  height: 25% !important;
+  border-radius: 50% !important;
+  background: rgba(18,43,31,.42) !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.17) !important;
+  z-index: 1 !important;
+}
+#gameScreen #board .sq.capture::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 5px !important;
+  width: auto !important;
+  height: auto !important;
+  transform: none !important;
+  border: clamp(2px, .45vw, 4px) solid rgba(171,48,47,.92) !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  box-shadow: inset 0 0 0 1px rgba(255,239,213,.45) !important;
+  z-index: 1 !important;
+}
+#gameScreen #board .sq > .piece-white,
+#gameScreen #board .sq > .piece-black {
+  z-index: 2 !important;
+  transform: none !important;
+  font-family: "DejaVu Sans","Segoe UI Symbol","Noto Sans Symbols 2",serif !important;
+  font-variant-emoji: text;
+  line-height: 1 !important;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+#gameScreen #board .sq .coord {
+  left: 3px !important;
+  top: 3px !important;
+  font-size: clamp(8px, 1.05vw, 11px) !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  z-index: 3 !important;
+}
+#gameScreen #board .sq .coord[style*="right:4px"] {
+  left: auto !important;
+  right: 3px !important;
+  top: auto !important;
+  bottom: 3px !important;
+}
+@media (max-width: 600px) {
+  #gameScreen #board {
+    border-width: 4px !important;
+    border-radius: 9px !important;
+    box-shadow: 0 0 0 1px rgba(235,218,178,.65), 0 8px 18px rgba(0,0,0,.3) !important;
+  }
+  #gameScreen #board .sq.selected {
+    box-shadow: inset 0 0 0 2px #f7d66e, inset 0 0 0 4px rgba(29,43,34,.2) !important;
+  }
+  #gameScreen #board .sq.capture::after {
+    inset: 3px !important;
+  }
+  #gameScreen #board .sq .coord {
+    left: 2px !important;
+    top: 2px !important;
+    font-size: 8px !important;
+  }
+  #gameScreen #board .sq .coord[style*="right:4px"] {
+    right: 2px !important;
+    bottom: 2px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #gameScreen #board .sq { transition: none !important; }
 }
 </style>
