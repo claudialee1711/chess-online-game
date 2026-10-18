@@ -1,3 +1,4 @@
+// Native Google Sign-In dependencies require AndroidX.
 plugins {
     id 'com.android.application'
 }
