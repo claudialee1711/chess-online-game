@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "189359456636",
+    "project_id": "chess-online-game-7cbb9",
+    "storage_bucket": "chess-online-game-7cbb9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189359456636:android:6248e63d94592173a764f9",
+        "android_client_info": {
+          "package_name": "com.chessarena171.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189359456636-h3ncol3l9bs512mnefjac724c75qbaql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8JPPYcYWxwB6_77YR3n52dqqgOYdlh8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "189359456636-h3ncol3l9bs512mnefjac724c75qbaql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
