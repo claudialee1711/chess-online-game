@@ -1092,7 +1092,7 @@ button:not(.secondary):not(.danger):not(.avatar-option):not(.menu-card):not(.sq)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signInAnonymously, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signInAnonymously, onAuthStateChanged, signOut, updateProfile, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, getDocs, onSnapshot, serverTimestamp, runTransaction, deleteDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 const Chess = window.Chess;
 
@@ -1137,6 +1137,8 @@ async function loadLeaderboard(){const list=$("leaderboardList"),status=$("leade
 $("googleBtn").onclick = async () => {
   const provider = new GoogleAuthProvider();
   try {
+    msg("loginMessage","Menyiapkan login Google…");
+    await setPersistence(auth,browserLocalPersistence);
     msg("loginMessage","Membuka login Google…");
     await signInWithPopup(auth,provider);
   } catch(e) {
@@ -1161,7 +1163,8 @@ getRedirectResult(auth).then(result => {
   if(result?.user) msg("loginMessage","Login Google berhasil.","success");
 }).catch(e => {
   console.error("Hasil redirect login Google gagal:",e);
-  msg("loginMessage","Login Google setelah kembali ke website gagal: "+(e.code||e.message)+". Periksa koneksi dan pengaturan domain Firebase.","error");
+  showScreen("login");
+  msg("loginMessage","Login Google belum selesai ("+(e.code||e.message)+"). Coba masuk lagi. Jika berulang, buka situs langsung di Chrome dan periksa izin cookie pihak ketiga.","error");
 });
 $("guestBtn").onclick = async () => { const btn=$("guestBtn"); btn.disabled=true; window.__guestLoginRequested=true; try { msg("loginMessage","Membuat sesi pengunjung…"); await signInAnonymously(auth); msg("loginMessage","Berhasil masuk sebagai pengunjung.","success"); } catch(e){ window.__guestLoginRequested=false; console.error("Login pengunjung gagal:",e); msg("loginMessage","Gagal masuk: "+(e.code||e.message||"Periksa koneksi dan pengaturan Firebase Authentication."),"error"); } finally { btn.disabled=false; } };
 $("logoutBtn").onclick = async () => { const btn=$("logoutBtn"); btn.disabled=true; try { await cleanupListeners(); await signOut(auth); $("profilePanel").classList.add("hidden"); msg("loginMessage","Kamu sudah logout. Masuk kembali untuk bermain.","success"); } catch(e) { console.error("Logout gagal:",e); msg("profileStatus","Logout gagal: "+(e.code||e.message||"Coba lagi."),"error"); } finally { btn.disabled=false; } };
