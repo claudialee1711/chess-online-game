@@ -1140,7 +1140,7 @@ $("googleBtn").onclick = async () => {
   } catch(e) {
     console.error("Login Google popup gagal:",e);
     const inAndroidApp=!!(window.AndroidGoogleAuth||/;\s*wv\)|Version\/[0-9.]+ Chrome\/[0-9.]+ Mobile Safari/i.test(navigator.userAgent));
-    if(e.code==="auth/network-request-failed" && !inAndroidApp) {
+    if(["auth/network-request-failed","auth/popup-blocked","auth/operation-not-supported-in-this-environment","auth/cancelled-popup-request"].includes(e.code) && !inAndroidApp) {
       try {
         msg("loginMessage","Popup login gagal terhubung. Mencoba login Google lewat halaman penuh…");
         await signInWithRedirect(auth,provider);
@@ -1498,4 +1498,26 @@ $("addFriendBtn").onclick=async()=>{
 .opponent-speech-cloud{top:44px!important;border-radius:18px 18px 18px 6px!important;padding:8px 11px!important;background:#fff8e9!important;border:1.5px solid #d9ad78!important;box-shadow:0 4px 12px #0004!important}
 .opponent-speech-cloud:after{left:-7px!important;top:16px!important;width:11px!important;height:11px!important;background:#fff8e9!important;border-left:1.5px solid #d9ad78!important;border-bottom:1.5px solid #d9ad78!important;border-right:0!important;transform:rotate(45deg)!important}
 @media(max-width:900px){.opponent-speech-cloud{top:40px!important}}
+</style>
+
+
+<style id="mobile-keyboard-board-fix">
+/* Di HP, ukuran papan mengikuti lebar layar, bukan tinggi viewport yang berubah saat keyboard muncul. */
+@media(max-width:600px){
+ #gameScreen .board-layout>div:first-child,
+ #gameScreen .board-layout>div:first-child #board,
+ #gameScreen #board{
+   max-height:none!important;
+ }
+ #gameScreen .board-layout>div:first-child{
+   width:min(100%,calc(100vw - 36px))!important;
+   max-width:calc(100vw - 36px)!important;
+ }
+ #gameScreen #board{
+   width:100%!important;
+   height:auto!important;
+   aspect-ratio:1/1!important;
+ }
+ #roomChatInput{font-size:16px!important}
+}
 </style>
