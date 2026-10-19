@@ -1285,11 +1285,11 @@ function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverla
 /* Bidak vektor bergaya Staunton: bentuk klasik dengan alas, badan, detail ukiran dan highlight. */
 function chessPieceSvg(type,color){
  const light=color==="w";
- const wood=light?"#c49a60":"#202a3a";
- const mid=light?"#a8783e":"#46556b";
- const shade=light?"#70451f":"#090e18";
- const edge=light?"#fff0d0":"#f3f6ff";
- const shine=light?"#fff0d0":"#dbe7f7";
+ const wood=light?"#d6ad78":"#17191e";
+ const mid=light?"#bd8b50":"#090a0d";
+ const shade=light?"#80552c":"#000000";
+ const edge=light?"#68421f":"#d9dde5";
+ const shine=light?"#ffebc8":"#8f969f";
  const shapes={
   p:'<path d="M39 39 C34 34 35 26 40 22 C44 18 51 18 56 22 C61 27 61 34 56 39 L60 47 C62 53 64 60 67 68 L73 83 L29 83 L35 68 C38 60 40 53 42 47 Z"/><path d="M41 45 Q50 50 59 45 M37 67 Q50 72 64 67" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
   r:'<path d="M29 22 L29 35 L37 35 L37 29 L44 29 L44 35 L56 35 L56 29 L63 29 L63 35 L71 35 L71 22 L79 22 L76 45 L70 52 L70 76 L77 86 L23 86 L30 76 L30 52 L24 45 L21 22 Z"/><path d="M31 47 L69 47 M35 56 L65 56 M34 74 L66 74" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
