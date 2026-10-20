@@ -1957,70 +1957,18 @@ $("addFriendBtn").onclick=async()=>{
 
 
 
-<style id="stable-board-fit-v16">
-/* Compact game-only layout: keep player info, board and controls within the available screen. */
-#gameScreen { padding:10px 14px 8px !important; }
-#gameScreen .game-topbar { gap:5px !important; margin-bottom:5px !important; }
-#gameScreen .game-topline { gap:6px !important; margin-bottom:0 !important; }
-#gameScreen .game-controls { gap:6px 10px !important; row-gap:6px !important; }
-#gameScreen .game-controls .turn-status { padding:5px 8px !important; margin:0 !important; }
-#gameScreen .tabletop-scene {
-  width:100% !important; max-width:620px !important;
-  grid-template-rows:auto auto auto !important;
-  gap:3px !important; padding:2px 0 3px !important;
-}
-#gameScreen .player-info-card {
-  width:100% !important; min-height:0 !important; max-width:100% !important;
-  flex-direction:row !important; justify-content:flex-start !important;
-  align-items:center !important; text-align:left !important;
-  gap:8px !important; padding:4px 8px !important;
-}
-#gameScreen .player-info-avatar {
-  flex:0 0 38px !important; width:38px !important; height:38px !important;
-  font-size:27px !important; line-height:1 !important;
-}
-#gameScreen .player-info-details { align-items:flex-start !important; text-align:left !important; gap:1px !important; }
-#gameScreen .player-info-details strong { font-size:12px !important; line-height:1.2 !important; }
-#gameScreen .player-info-details span { font-size:10px !important; line-height:1.2 !important; }
-#gameScreen .player-info-actions { width:auto !important; justify-content:flex-start !important; }
-#gameScreen .player-info-actions button { font-size:10px !important; padding:4px 7px !important; min-height:27px !important; }
-#gameScreen .tabletop-scene .board-layout {
-  display:grid !important; grid-template-columns:minmax(0,1fr) !important;
-  justify-items:center !important; gap:0 !important; width:100% !important;
-  max-width:100% !important; margin:0 auto !important;
-}
-#gameScreen .board-layout>div:first-child {
-  width:min(100%, calc(100vh - 300px)) !important;
-  max-width:100% !important; min-width:0 !important; margin:0 auto !important;
-}
-#gameScreen #board { width:100% !important; height:auto !important; aspect-ratio:1 / 1 !important; }
-#gameScreen .self-info-card { position:relative !important; }
-#gameScreen #roomChatPanel { max-width:min(220px, calc(100vw - 24px)) !important; }
-@media (max-width:760px) {
-  #gameScreen.panel { padding:7px 7px 8px !important; border-radius:14px !important; }
-  #gameScreen .game-topbar { gap:4px !important; margin-bottom:4px !important; }
-  #gameScreen .game-topline h2 { font-size:15px !important; }
-  #gameScreen .game-controls { gap:5px 7px !important; row-gap:5px !important; }
-  #gameScreen .game-controls .turn-status { flex:1 1 100% !important; padding:4px 7px !important; }
-  #gameScreen .game-controls button { min-height:30px !important; padding:5px 7px !important; font-size:11px !important; }
-  #gameScreen .tabletop-scene { gap:3px !important; padding:1px 0 2px !important; }
-  #gameScreen .player-info-card { padding:3px 6px !important; gap:6px !important; }
-  #gameScreen .player-info-avatar { flex-basis:32px !important; width:32px !important; height:32px !important; font-size:23px !important; }
-  #gameScreen .player-info-details strong { font-size:11px !important; }
-  #gameScreen .player-info-details span { font-size:9px !important; }
-  #gameScreen .player-info-actions button { min-height:24px !important; padding:3px 5px !important; font-size:9px !important; }
-  #gameScreen .board-layout>div:first-child {
-    width:min(calc(100vw - 22px), calc(100svh - 285px)) !important;
-    max-width:calc(100vw - 22px) !important;
+<style id="stable-board-fit-v15">
+/* Ukuran papan stabil di HP: jangan ikut mengecil saat keyboard chat membuka viewport. */
+@media (max-width: 760px) {
+  #gameScreen .tabletop-scene .board-layout {
+    width: min(100%, calc(100vw - 28px)) !important;
+    max-width: calc(100vw - 28px) !important;
+    margin: 0 auto !important;
   }
-  #gameScreen #roomChatPanel { max-width:calc(100vw - 24px) !important; }
-}
-@media (max-height:650px) {
-  #gameScreen .player-info-avatar { flex-basis:28px !important; width:28px !important; height:28px !important; font-size:20px !important; }
-  #gameScreen .player-info-card { padding-top:2px !important; padding-bottom:2px !important; }
-  #gameScreen .board-layout>div:first-child { width:min(100%, calc(100vh - 255px)) !important; }
-}
-@media (max-width:760px) and (max-height:700px) {
-  #gameScreen .board-layout>div:first-child { width:min(calc(100vw - 22px), calc(100svh - 250px)) !important; }
+  #gameScreen #board {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+  }
 }
 </style>
