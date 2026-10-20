@@ -1300,7 +1300,7 @@ function chessPieceSvg(type,color){
  q:'<path class="piece-body" d="M29 29 L37 43 L43 31 L50 41 L57 31 L63 43 L72 29 L68 55 L63 71 L76 81 H24 L37 71 L32 55 Z"/><circle class="piece-body" cx="28" cy="24" r="4"/><circle class="piece-body" cx="41" cy="19" r="4"/><circle class="piece-body" cx="50" cy="25" r="4"/><circle class="piece-body" cx="59" cy="19" r="4"/><circle class="piece-body" cx="73" cy="24" r="4"/><path class="piece-detail" d="M36 55 H64 M34 71 H66"/>',
  k:'<path class="piece-body" d="M44 27 V19 H38 V13 H45 V6 H51 V13 H58 V19 H62 V28 L69 36 L64 48 L60 55 L66 71 L78 81 H22 L34 71 L40 55 L36 48 L31 36 Z"/><path class="piece-detail" d="M40 35 H60 M38 47 Q50 53 62 47 M36 67 H64 M34 75 Q50 80 66 75"/>'
  };
- const svg='<svg class="piece-svg '+(light?'piece-svg-white':'piece-svg-black')+'" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="'+uid+'-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+shine+'"/><stop offset=".32" stop-color="'+mid+'"/><stop offset=".75" stop-color="'+wood+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient><linearGradient id="'+uid+'-base" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+mid+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient></defs><ellipse cx="50" cy="92" rx="30" ry="4" fill="#000" opacity=".28"/><path class="piece-base" d="M17 80 Q50 75 83 80 L89 89 Q50 98 11 89 Z" fill="url(#'+uid+'-base)"/><path class="piece-detail" d="M23 83 Q50 88 77 83 M17 89 Q50 96 83 89"/>'+shapes[type]+'</svg>';
+ const svg='<svg class="piece-svg '+(light?'piece-svg-white':'piece-svg-black')+'" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="staunton-fill-white" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5d19a"/><stop offset=".32" stop-color="#dba968"/><stop offset=".75" stop-color="#bd8547"/><stop offset="1" stop-color="#805126"/></linearGradient><linearGradient id="staunton-fill-black" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffcf6a"/><stop offset=".32" stop-color="#292f39"/><stop offset=".75" stop-color="#171b23"/><stop offset="1" stop-color="#080a0e"/></linearGradient><linearGradient id="'+uid+'-base" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+mid+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient></defs><ellipse cx="50" cy="92" rx="30" ry="4" fill="#000" opacity=".28"/><path class="piece-base" d="M17 80 Q50 75 83 80 L89 89 Q50 98 11 89 Z" fill="url(#'+uid+'-base)"/><path class="piece-detail" d="M23 83 Q50 88 77 83 M17 89 Q50 96 83 89"/>'+shapes[type]+'</svg>';
  return svg;
 }
 function renderBoard(){
@@ -1916,9 +1916,9 @@ $("addFriendBtn").onclick=async()=>{
 
 <style id="staunton-piece-redesign-v10">
 #board .sq .piece-svg {width:100%!important;height:100%!important;display:block!important;overflow:visible!important;filter:none!important}
-#board .sq .piece-svg .piece-body {fill:url(#piece-fill)!important;stroke-width:3.2;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-#board .sq .piece-svg-white .piece-body {fill:#bd8547!important;stroke:#17100b!important;animation:white-black-outline 1.15s ease-in-out infinite alternate}
-#board .sq .piece-svg-black .piece-body {fill:#171b23!important;stroke:#ff7622!important;animation:black-fire-outline .85s ease-in-out infinite alternate}
+#board .sq .piece-svg .piece-body {stroke-width:2.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#board .sq .piece-svg-white .piece-body {fill:url(#staunton-fill-white)!important;stroke:#17100b!important;animation:white-black-outline 1.15s ease-in-out infinite alternate}
+#board .sq .piece-svg-black .piece-body {fill:url(#staunton-fill-black)!important;stroke:#ff7622!important;animation:black-fire-outline .85s ease-in-out infinite alternate}
 #board .sq .piece-svg .piece-base {stroke-width:2.4;stroke-linejoin:round}
 #board .sq .piece-svg-white .piece-base {stroke:#17100b;animation:white-black-outline 1.15s ease-in-out infinite alternate}
 #board .sq .piece-svg-black .piece-base {stroke:#ff7622;animation:black-fire-outline .85s ease-in-out infinite alternate}
