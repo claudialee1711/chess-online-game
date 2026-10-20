@@ -2023,3 +2023,45 @@ body:has(#gameScreen:not(.hidden)) #gameScreen.panel {
  #gameScreen #gameHeaderActions button { padding:3px 5px!important; font-size:9px!important; }
 }
 </style>
+
+
+<style id="game-mobile-layout-fix-v20">
+/* Mobile: reserve the top for controls, keep the board clear, place chat below/alongside without overlap. */
+@media(max-width:760px) {
+ body:has(#gameScreen:not(.hidden)) .wrap { height:100dvh!important; max-height:100dvh!important; padding:2px 5px!important; }
+ body:has(#gameScreen:not(.hidden)) #gameScreen.panel { padding:4px!important; }
+ #gameScreen .game-topbar { margin-bottom:2px!important; gap:2px!important; }
+ #gameScreen .game-topline { display:flex!important; justify-content:space-between!important; align-items:center!important; }
+ #gameScreen .game-topline h2 { font-size:12px!important; }
+ #gameScreen .game-controls { display:grid!important; grid-template-columns:minmax(0,1fr) auto!important; gap:3px!important; }
+ #gameScreen .game-controls .turn-status { grid-column:1!important; grid-row:1!important; }
+ #gameScreen #gameHeaderActions { grid-column:1 / -1!important; grid-row:2!important; display:grid!important; grid-template-columns:1fr 1fr!important; }
+ #gameScreen #backToMenuBtn { grid-column:1 / -1!important; }
+ #gameScreen .tabletop-scene {
+   display:grid!important; grid-template-rows:auto minmax(0,1fr) auto!important;
+   gap:0!important; width:100%!important; max-width:none!important; padding:0!important;
+   overflow:visible!important; flex:1 1 auto!important; min-height:0!important;
+ }
+ #gameScreen .opponent-info-card { display:flex!important; flex-direction:row!important; align-items:center!important; justify-content:center!important; gap:8px!important; padding:1px 0!important; }
+ #gameScreen .opponent-info-card .player-info-avatar { flex:0 0 30px!important; width:30px!important; height:30px!important; font-size:25px!important; }
+ #gameScreen .opponent-info-card .player-info-details { display:flex!important; flex-direction:row!important; align-items:center!important; justify-content:center!important; gap:6px!important; }
+ #gameScreen .opponent-info-card .player-info-details strong { font-size:12px!important; }
+ #gameScreen .opponent-info-card .player-info-details span { font-size:10px!important; }
+ #gameScreen .tabletop-scene .board-layout { width:100%!important; min-height:0!important; display:flex!important; align-items:center!important; justify-content:center!important; }
+ #gameScreen .tabletop-scene .board-layout>div { width:min(100%, calc(100dvh - 290px))!important; max-width:100%!important; margin:0 auto!important; }
+ #gameScreen #board { width:100%!important; height:auto!important; aspect-ratio:1!important; }
+ #gameScreen .self-info-card { display:grid!important; grid-template-columns:44px minmax(0,1fr)!important; align-items:center!important; justify-content:stretch!important; gap:5px!important; padding:3px 0 0!important; width:100%!important; }
+ #gameScreen .self-info-card .player-info-avatar { grid-column:1!important; grid-row:1 / span 2!important; width:40px!important; height:40px!important; flex-basis:40px!important; font-size:31px!important; }
+ #gameScreen .self-info-card .player-info-details { position:static!important; grid-column:2!important; grid-row:1!important; width:auto!important; min-width:0!important; max-width:none!important; align-items:flex-start!important; text-align:left!important; }
+ #gameScreen .self-info-card .player-info-details strong { font-size:11px!important; }
+ #gameScreen .self-info-card .player-info-details span { font-size:9px!important; }
+ #gameScreen .self-info-card .room-chat-tail-label { display:none!important; }
+ #gameScreen .self-info-card #roomChatPanel { grid-column:2!important; grid-row:2!important; position:static!important; inset:auto!important; width:100%!important; max-width:none!important; min-width:0!important; max-height:100px!important; padding:5px!important; margin:0!important; overflow:hidden!important; }
+ #gameScreen .self-info-card #roomChatPanel .room-chat-heading { margin:0 0 3px!important; font-size:10px!important; }
+ #gameScreen .self-info-card #roomChatPanel .room-chat-heading .small { font-size:9px!important; }
+ #gameScreen .self-info-card #roomChatPanel .room-chat-messages { min-height:0!important; max-height:24px!important; padding:2px!important; }
+ #gameScreen .self-info-card #roomChatPanel .room-chat-form { margin-top:3px!important; gap:4px!important; }
+ #gameScreen .self-info-card #roomChatPanel .room-chat-form input { padding:5px!important; font-size:10px!important; }
+ #gameScreen .self-info-card #roomChatPanel .room-chat-form button { min-height:24px!important; padding:4px 7px!important; }
+}
+</style>
