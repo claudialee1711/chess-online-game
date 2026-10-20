@@ -1908,8 +1908,8 @@ $("addFriendBtn").onclick=async()=>{
 <style id="staunton-piece-redesign-v10">
 #board .sq .piece-svg {width:100%!important;height:100%!important;display:block!important;overflow:visible!important;filter:none!important}
 #board .sq .piece-svg .piece-body {stroke-width:2.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-#board .sq .piece-svg-white .piece-body {fill:url(#staunton-fill-white)!important;stroke:#17100b!important;animation:white-black-outline 1.15s ease-in-out infinite alternate}
-#board .sq .piece-svg-black .piece-body {fill:url(#staunton-fill-black)!important;stroke:#ff7622!important;animation:black-fire-outline .85s ease-in-out infinite alternate}
+#board .sq .piece-svg-white .piece-body {fill:url(#staunton-fill-white)!important;stroke:#17100b!important;animation:white-black-outline 2.8s ease-in-out infinite alternate}
+#board .sq .piece-svg-black .piece-body {fill:url(#staunton-fill-black)!important;stroke:#ff7622!important;animation:black-fire-outline 2.6s ease-in-out infinite alternate}
 #board .sq .piece-svg .piece-base {stroke-width:2.4;stroke-linejoin:round}
 #board .sq .piece-svg-white .piece-base {stroke:#17100b;animation:white-black-outline 1.15s ease-in-out infinite alternate}
 #board .sq .piece-svg-black .piece-base {stroke:#ff7622;animation:black-fire-outline .85s ease-in-out infinite alternate}
@@ -1917,8 +1917,8 @@ $("addFriendBtn").onclick=async()=>{
 #board .sq .piece-svg-white .piece-detail {stroke:#f4d5a1}
 #board .sq .piece-svg-black .piece-detail {stroke:#ffbd52}
 #board .sq .piece-svg .piece-eye {fill:#ffd98a;stroke:#ff7b20;stroke-width:1}
-@keyframes white-black-outline {0%{stroke:#ffe66d;filter:drop-shadow(0 0 2px #ffd21c)}50%{stroke:#fff6a8;filter:drop-shadow(0 0 7px #ffda32)}100%{stroke:#ffc928;filter:drop-shadow(0 0 4px #fff078)}}
-@keyframes black-fire-outline {0%{stroke:#5ad8ff;filter:drop-shadow(0 0 2px #009dff)}50%{stroke:#267bff;filter:drop-shadow(0 0 7px #167bff)}100%{stroke:#b0f2ff;filter:drop-shadow(0 0 4px #00aaff)}}
+@keyframes white-black-outline {0%{stroke:#d9a928;filter:drop-shadow(0 0 1px #b98212)}50%{stroke:#f1cf50;filter:drop-shadow(0 0 3px #d7a91f)}100%{stroke:#c99a25;filter:drop-shadow(0 0 2px #f0cc46)}}
+@keyframes black-fire-outline {0%{stroke:#3697d9;filter:drop-shadow(0 0 1px #1768a8)}50%{stroke:#3479d5;filter:drop-shadow(0 0 3px #236ac2)}100%{stroke:#70bce8;filter:drop-shadow(0 0 2px #287fc4)}}
 @media(prefers-reduced-motion:reduce){#board .sq .piece-svg *{animation:none!important}}
 </style>
 <style id="staunton-piece-glyph-v11">
@@ -1926,4 +1926,18 @@ $("addFriendBtn").onclick=async()=>{
 #board .sq .piece-glyph{vector-effect:non-scaling-stroke}
 #board .sq .piece-svg-white .piece-glyph{animation:white-black-outline 1.15s ease-in-out infinite alternate}
 #board .sq .piece-svg-black .piece-glyph{animation:black-fire-outline .85s ease-in-out infinite alternate}
+</style>
+
+<style id="piece-tone-soft-glow-v13">
+#board .sq .piece-svg-white defs linearGradient stop:nth-child(1){stop-color:#d7a05c!important}
+#board .sq .piece-svg-white defs linearGradient stop:nth-child(2){stop-color:#b87936!important}
+#board .sq .piece-svg-white defs linearGradient stop:nth-child(3){stop-color:#8b5427!important}
+#board .sq .piece-svg-white defs linearGradient stop:nth-child(4){stop-color:#603719!important}
+#board .sq .piece-svg-white .piece-detail{stroke:#e0b574!important}
+#board .sq .piece-svg-white .piece-base{animation:white-black-outline 2.8s ease-in-out infinite alternate!important}
+#board .sq .piece-svg-black .piece-base{animation:black-fire-outline 2.6s ease-in-out infinite alternate!important}
+#board .sq .piece-svg-white .piece-body{animation:white-black-outline 2.8s ease-in-out infinite alternate!important}
+#board .sq .piece-svg-black .piece-body{animation:black-fire-outline 2.6s ease-in-out infinite alternate!important}
+#board .sq .piece-svg-white .piece-glyph{animation:white-black-outline 2.8s ease-in-out infinite alternate!important}
+#board .sq .piece-svg-black .piece-glyph{animation:black-fire-outline 2.6s ease-in-out infinite alternate!important}
 </style>
