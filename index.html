@@ -1982,3 +1982,44 @@ body:has(#gameScreen:not(.hidden)) .wrap { padding-top:4px!important; padding-bo
   #gameScreen .tabletop-scene .board-layout { margin:0!important; padding:0!important; }
 }
 </style>
+
+
+<style id="game-viewport-compact-v19">
+/* Keep match controls compact at the top; stop page scrolling caused by wrap/header whitespace. */
+body:has(#gameScreen:not(.hidden)) { overflow:hidden!important; }
+body:has(#gameScreen:not(.hidden)) .wrap {
+  height:100dvh!important; max-height:100dvh!important; box-sizing:border-box!important;
+  overflow:hidden!important; padding:4px 12px 8px!important; margin:0 auto!important;
+  display:flex!important; flex-direction:column!important;
+}
+body:has(#gameScreen:not(.hidden)) .top { display:none!important; }
+body:has(#gameScreen:not(.hidden)) #gameScreen.panel {
+  flex:1 1 auto!important; min-height:0!important; overflow:hidden!important;
+  margin:0!important; padding:5px 10px!important; box-sizing:border-box!important;
+  display:flex!important; flex-direction:column!important;
+}
+#gameScreen .game-topbar { flex:0 0 auto!important; gap:2px!important; margin:0 0 3px!important; }
+#gameScreen .game-topline { min-height:0!important; gap:6px!important; margin:0!important; }
+#gameScreen .game-topline h2 { font-size:14px!important; line-height:1.15!important; }
+#gameScreen #soundToggle { min-height:24px!important; padding:3px 7px!important; font-size:10px!important; }
+#gameScreen .game-controls { align-items:center!important; gap:3px 5px!important; margin:0!important; }
+#gameScreen .game-controls .turn-status {
+  flex:0 1 auto!important; width:auto!important; max-width:none!important; margin:0!important;
+  padding:3px 7px!important; font-size:10px!important; line-height:1.15!important;
+}
+#gameScreen .game-controls .turn-status .small { font-size:9px!important; }
+#gameScreen .game-controls .turn-status strong { font-size:10px!important; }
+#gameScreen #gameHeaderActions { display:flex!important; flex:1 1 auto!important; flex-wrap:wrap!important; gap:4px!important; min-width:0!important; }
+#gameScreen #gameHeaderActions button { min-height:24px!important; padding:3px 7px!important; margin:0!important; font-size:10px!important; line-height:1.1!important; }
+#gameScreen .tabletop-scene { flex:1 1 auto!important; min-height:0!important; margin:0 auto!important; padding:0!important; gap:0!important; overflow:hidden!important; }
+#gameScreen .tabletop-scene .board-layout { min-height:0!important; margin:0!important; padding:0!important; }
+#gameScreen .player-info-card { margin:0!important; }
+@media(max-width:760px) {
+ body:has(#gameScreen:not(.hidden)) .wrap { padding:2px 5px 4px!important; }
+ #gameScreen.panel { padding:4px!important; border-radius:10px!important; }
+ #gameScreen .game-topline h2 { font-size:12px!important; }
+ #gameScreen .game-controls { gap:3px!important; }
+ #gameScreen #gameHeaderActions { gap:3px!important; }
+ #gameScreen #gameHeaderActions button { padding:3px 5px!important; font-size:9px!important; }
+}
+</style>
