@@ -1285,23 +1285,14 @@ function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverla
 /* Bidak vektor bergaya Staunton: bentuk klasik dengan alas, badan, detail ukiran dan highlight. */
 let chessPieceSvgSerial=0;
 function chessPieceSvg(type,color){
- const uid="staunton"+(++chessPieceSvgSerial);
  const light=color==="w";
- const wood=light?"#bd8547":"#171b23";
- const mid=light?"#dba968":"#292f39";
- const dark=light?"#805126":"#080a0e";
- const edge=light?"#17100b":"#ff7622";
- const shine=light?"#f5d19a":"#ffcf6a";
- const shapes={
- p:'<circle class="piece-body" cx="50" cy="25" r="11"/><path class="piece-body" d="M43 36 Q44 43 39 48 C34 55 34 64 30 73 L24 81 Q50 87 76 81 L70 73 C66 64 66 55 61 48 Q56 43 57 36 Z"/><path class="piece-detail" d="M38 57 Q50 62 62 57 M31 73 Q50 78 69 73"/>',
- r:'<path class="piece-body" d="M23 17 H34 V29 H42 V21 H48 V29 H52 V21 H58 V29 H66 V17 H77 V39 L69 47 V71 L78 81 H22 L31 71 V47 L23 39 Z"/><path class="piece-detail" d="M31 47 H69 M34 58 H66 M32 72 H68"/>',
- n:'<path class="piece-body" d="M24 82 L30 73 L37 61 L34 52 L35 43 Q38 34 49 29 L47 19 L58 23 L65 34 L73 39 L81 51 L70 57 L60 51 L56 60 L61 69 L74 77 L78 82 Z"/><path class="piece-detail" d="M39 36 L50 42 L64 43 L57 49 L48 46 L42 53 L45 60 M40 70 L59 70"/><circle class="piece-eye" cx="56" cy="35" r="2.5"/>',
- b:'<path class="piece-body" d="M50 15 C61 24 64 32 59 41 C56 47 52 50 50 53 C44 48 37 41 37 33 C37 25 43 19 50 15 Z"/><path class="piece-detail" d="M45 24 L56 41"/><path class="piece-body" d="M43 51 H57 L61 59 Q68 66 70 75 L78 81 H22 L30 75 Q32 66 39 59 Z"/><path class="piece-detail" d="M35 70 Q50 75 65 70"/>',
- q:'<path class="piece-body" d="M29 29 L37 43 L43 31 L50 41 L57 31 L63 43 L72 29 L68 55 L63 71 L76 81 H24 L37 71 L32 55 Z"/><circle class="piece-body" cx="28" cy="24" r="4"/><circle class="piece-body" cx="41" cy="19" r="4"/><circle class="piece-body" cx="50" cy="25" r="4"/><circle class="piece-body" cx="59" cy="19" r="4"/><circle class="piece-body" cx="73" cy="24" r="4"/><path class="piece-detail" d="M36 55 H64 M34 71 H66"/>',
- k:'<path class="piece-body" d="M44 27 V19 H38 V13 H45 V6 H51 V13 H58 V19 H62 V28 L69 36 L64 48 L60 55 L66 71 L78 81 H22 L34 71 L40 55 L36 48 L31 36 Z"/><path class="piece-detail" d="M40 35 H60 M38 47 Q50 53 62 47 M36 67 H64 M34 75 Q50 80 66 75"/>'
- };
- const svg='<svg class="piece-svg '+(light?'piece-svg-white':'piece-svg-black')+'" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="staunton-fill-white" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5d19a"/><stop offset=".32" stop-color="#dba968"/><stop offset=".75" stop-color="#bd8547"/><stop offset="1" stop-color="#805126"/></linearGradient><linearGradient id="staunton-fill-black" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffcf6a"/><stop offset=".32" stop-color="#292f39"/><stop offset=".75" stop-color="#171b23"/><stop offset="1" stop-color="#080a0e"/></linearGradient><linearGradient id="'+uid+'-base" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+mid+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient></defs><ellipse cx="50" cy="92" rx="30" ry="4" fill="#000" opacity=".28"/><path class="piece-base" d="M17 80 Q50 75 83 80 L89 89 Q50 98 11 89 Z" fill="url(#'+uid+'-base)"/><path class="piece-detail" d="M23 83 Q50 88 77 83 M17 89 Q50 96 83 89"/>'+shapes[type]+'</svg>';
- return svg;
+ const symbols={k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"};
+ const symbol=symbols[type]||"♟";
+ const uid="staunton"+(++chessPieceSvgSerial);
+ const fill=light?"#dba968":"#202630";
+ const stroke=light?"#17100b":"#ff7622";
+ const highlight=light?"#f5d19a":"#ffcf6a";
+ return '<svg class="piece-svg '+(light?'piece-svg-white':'piece-svg-black')+'" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="'+uid+'-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+highlight+'"/><stop offset=".42" stop-color="'+fill+'"/><stop offset="1" stop-color="'+(light?'#805126':'#080a0e')+'"/></linearGradient></defs><ellipse cx="50" cy="88" rx="30" ry="4" fill="#000" opacity=".3"/><text x="50" y="76" text-anchor="middle" font-family="Segoe UI Symbol, Noto Sans Symbols 2, DejaVu Sans, serif" font-size="'+(type==="p"?"77":"82")+'" font-weight="400" fill="url(#'+uid+'-fill)" stroke="'+stroke+'" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke fill" class="piece-glyph">'+symbol+'</text><path d="M25 83 Q50 89 75 83" fill="none" stroke="'+highlight+'" stroke-width="1.5" opacity=".9"/></svg>';
 }
 function renderBoard(){
  if(!game)return;
@@ -1929,4 +1920,10 @@ $("addFriendBtn").onclick=async()=>{
 @keyframes white-black-outline {from{stroke:#080706;filter:drop-shadow(0 0 1px #000)}to{stroke:#51402d;filter:drop-shadow(0 0 4px #000)}}
 @keyframes black-fire-outline {0%{stroke:#ffcf57;filter:drop-shadow(0 0 2px #ff4b12)}50%{stroke:#ff5a16;filter:drop-shadow(0 0 6px #ff3c08)}100%{stroke:#ffe18a;filter:drop-shadow(0 0 3px #ff6a00)}}
 @media(prefers-reduced-motion:reduce){#board .sq .piece-svg *{animation:none!important}}
+</style>
+<style id="staunton-piece-glyph-v11">
+#board .sq .piece-svg{width:100%!important;height:100%!important;display:block!important;overflow:visible!important}
+#board .sq .piece-glyph{vector-effect:non-scaling-stroke}
+#board .sq .piece-svg-white .piece-glyph{animation:white-black-outline 1.15s ease-in-out infinite alternate}
+#board .sq .piece-svg-black .piece-glyph{animation:black-fire-outline .85s ease-in-out infinite alternate}
 </style>
