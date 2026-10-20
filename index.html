@@ -1289,10 +1289,10 @@ function chessPieceSvg(type,color){
  const symbols={k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"};
  const symbol=symbols[type]||"♟";
  const uid="staunton"+(++chessPieceSvgSerial);
- const fill=light?"#dba968":"#202630";
+ const fill=light?"#75421f":"#090c12";
  const stroke=light?"#17100b":"#ff7622";
- const highlight=light?"#f5d19a":"#ffcf6a";
- return '<svg class="piece-svg '+(light?'piece-svg-white':'piece-svg-black')+'" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="'+uid+'-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+highlight+'"/><stop offset=".42" stop-color="'+fill+'"/><stop offset="1" stop-color="'+(light?'#805126':'#080a0e')+'"/></linearGradient></defs><ellipse cx="50" cy="88" rx="30" ry="4" fill="#000" opacity=".3"/><text x="50" y="76" text-anchor="middle" font-family="Segoe UI Symbol, Noto Sans Symbols 2, DejaVu Sans, serif" font-size="'+(type==="p"?"77":"82")+'" font-weight="400" fill="url(#'+uid+'-fill)" stroke="'+stroke+'" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke fill" class="piece-glyph">'+symbol+'</text><path d="M25 83 Q50 89 75 83" fill="none" stroke="'+highlight+'" stroke-width="1.5" opacity=".9"/></svg>';
+ const highlight=light?"#a66b32":"#182b49";
+ return '<svg class="piece-svg '+(light?'piece-svg-white':'piece-svg-black')+'" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="'+uid+'-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+highlight+'"/><stop offset=".42" stop-color="'+fill+'"/><stop offset="1" stop-color="'+(light?'#3d2111':'#020408')+'"/></linearGradient></defs><ellipse cx="50" cy="88" rx="30" ry="4" fill="#000" opacity=".3"/><text x="50" y="76" text-anchor="middle" font-family="Segoe UI Symbol, Noto Sans Symbols 2, DejaVu Sans, serif" font-size="'+(type==="p"?"77":"82")+'" font-weight="400" fill="url(#'+uid+'-fill)" stroke="'+stroke+'" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke fill" class="piece-glyph">'+symbol+'</text><path d="M25 83 Q50 89 75 83" fill="none" stroke="'+highlight+'" stroke-width="1.5" opacity=".9"/></svg>';
 }
 function renderBoard(){
  if(!game)return;
@@ -1940,4 +1940,16 @@ $("addFriendBtn").onclick=async()=>{
 #board .sq .piece-svg-black .piece-body{animation:black-fire-outline 2.6s ease-in-out infinite alternate!important}
 #board .sq .piece-svg-white .piece-glyph{animation:white-black-outline 2.8s ease-in-out infinite alternate!important}
 #board .sq .piece-svg-black .piece-glyph{animation:black-fire-outline 2.6s ease-in-out infinite alternate!important}
+</style>
+<style id="piece-deeper-colors-v14">
+#board .sq .piece-svg-white defs linearGradient stop:nth-child(1){stop-color:#a66b32!important}
+#board .sq .piece-svg-white defs linearGradient stop:nth-child(2){stop-color:#75421f!important}
+#board .sq .piece-svg-white defs linearGradient stop:nth-child(3){stop-color:#512b14!important}
+#board .sq .piece-svg-white defs linearGradient stop:nth-child(4){stop-color:#32190c!important}
+#board .sq .piece-svg-black defs linearGradient stop:nth-child(1){stop-color:#182b49!important}
+#board .sq .piece-svg-black defs linearGradient stop:nth-child(2){stop-color:#090c12!important}
+#board .sq .piece-svg-black defs linearGradient stop:nth-child(3){stop-color:#05070b!important}
+#board .sq .piece-svg-black defs linearGradient stop:nth-child(4){stop-color:#010204!important}
+#board .sq .piece-svg-white .piece-detail{stroke:#bd874b!important}
+#board .sq .piece-svg-black .piece-detail{stroke:#526e99!important}
 </style>
