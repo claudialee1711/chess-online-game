@@ -1285,11 +1285,11 @@ function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverla
 /* Bidak vektor bergaya Staunton: bentuk klasik dengan alas, badan, detail ukiran dan highlight. */
 function chessPieceSvg(type,color){
  const light=color==="w";
- const wood=light?"#c99a63":"#202124";
- const mid=light?"#b7834b":"#111214";
- const shade=light?"#80552c":"#050506";
- const edge=light?"#a57440":"#080809";
- const shine=light?"#e2bc8a":"#303238";
+ const wood=light?"#f0dfbd":"#292f3a";
+ const mid=light?"#d8bd8d":"#171d27";
+ const shade=light?"#b08a55":"#080c12";
+ const edge=light?"#8a683d":"#64758d";
+ const shine=light?"#fff3d8":"#aebed3";
  const shapes={
   p:'<path d="M39 39 C34 34 35 26 40 22 C44 18 51 18 56 22 C61 27 61 34 56 39 L60 47 C62 53 64 60 67 68 L73 83 L29 83 L35 68 C38 60 40 53 42 47 Z"/><path d="M41 45 Q50 50 59 45 M37 67 Q50 72 64 67" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
   r:'<path d="M29 22 L29 35 L37 35 L37 29 L44 29 L44 35 L56 35 L56 29 L63 29 L63 35 L71 35 L71 22 L79 22 L76 45 L70 52 L70 76 L77 86 L23 86 L30 76 L30 52 L24 45 L21 22 Z"/><path d="M31 47 L69 47 M35 56 L65 56 M34 74 L66 74" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
@@ -1839,4 +1839,49 @@ $("addFriendBtn").onclick=async()=>{
 #board .sq .piece-white, #board .sq .piece-black { background:transparent!important;border:0!important;box-shadow:none!important; }
 #board .sq .piece-white .piece-svg { filter:drop-shadow(0 2px 2px #000c) drop-shadow(0 0 1px #5a3b1b)!important; }
 #board .sq .piece-black .piece-svg { filter:drop-shadow(0 2px 2px #000d) drop-shadow(0 0 2px #fff1)!important; }
+</style>
+
+
+<style id="piece-palette-and-mobile-fit-v6">
+/* Bidak ivory hangat dan charcoal navy agar serasi dengan papan putih-navy. */
+#board .piece-svg { filter: drop-shadow(0 2px 2px rgba(0,0,0,.58)) !important; }
+#board .piece-svg path, #board .piece-svg circle, #board .piece-svg ellipse {
+  stroke-linejoin:round;
+}
+#board .sq .piece-white .piece-svg { filter:drop-shadow(0 2px 1px #18223488)!important; }
+#board .sq .piece-black .piece-svg { filter:drop-shadow(0 2px 2px #000b)!important; }
+/* Rapikan tampilan pertandingan di layar ponsel: kurangi ruang profil dan jarak vertikal. */
+@media (max-width: 600px) {
+  #gameScreen.panel { padding:8px 8px 10px!important; }
+  #gameScreen .game-topbar { gap:5px!important; margin-bottom:7px!important; }
+  #gameScreen .game-topline { gap:5px!important; margin-bottom:2px!important; }
+  #gameScreen .board-layout { gap:0!important; }
+  #gameScreen .board-layout>div:first-child {
+    width:min(calc(100vw - 28px), calc(100dvh - 225px))!important;
+    max-width:calc(100vw - 28px)!important;
+    margin:0 auto!important;
+  }
+  #gameScreen #board { width:100%!important; aspect-ratio:1/1!important; }
+  #opponentProfile {
+    padding:5px 8px!important;
+    margin:3px 0 6px!important;
+    gap:8px!important;
+    min-height:0!important;
+  }
+  #opponentProfile .opponent-avatar {
+    width:38px!important;height:38px!important;flex:0 0 38px!important;
+    font-size:23px!important;
+  }
+  #opponentProfile .opponent-summary {
+    display:flex!important;flex-direction:row!important;align-items:center!important;
+    justify-content:center!important;gap:6px!important;flex-wrap:wrap!important;
+  }
+  #opponentProfile .opponent-summary > * { margin:0!important; }
+  #gameScreen .board-layout>div:first-child { margin-bottom:0!important; }
+  #gameScreen .room-chat-panel, #gameScreen .chat-panel {
+    margin-top:7px!important;padding:9px!important;
+  }
+  #gameScreen .chat-messages { max-height:130px!important; }
+  #gameScreen .footer { margin-top:6px!important; }
+}
 </style>
