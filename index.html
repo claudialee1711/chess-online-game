@@ -1958,63 +1958,27 @@ $("addFriendBtn").onclick=async()=>{
 
 
 
-<style id="stable-board-fit-v17">
-/* Fit the whole game to the visible viewport; size the board from remaining height. */
-@media (min-width:761px) {
-  body:has(#gameScreen:not(.hidden)) .wrap { padding-top:8px!important; padding-bottom:84px!important; }
-  #gameScreen { padding:10px 14px!important; }
-  #gameScreen .game-topbar { gap:5px!important; margin-bottom:7px!important; }
-  #gameScreen .game-topline { gap:6px!important; }
-  #gameScreen .game-topline h2 { font-size:16px!important; }
-  #gameScreen .game-controls { gap:6px 8px!important; }
-  #gameScreen .game-controls .turn-status { flex:1 1 100%!important; width:100%!important; padding:5px 8px!important; }
-  #gameScreen .game-controls #newGameBtn,
-  #gameScreen .game-controls #resignBtn,
-  #gameScreen .game-controls #backToMenuBtn { min-height:30px!important; padding:5px 9px!important; font-size:11px!important; }
-  #gameScreen .tabletop-scene { display:grid!important; grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr) auto; gap:4px!important; width:100%!important; max-width:none!important; padding:0!important; }
-  #gameScreen .player-info-card { min-height:0!important; padding:3px 8px!important; gap:7px!important; }
-  #gameScreen .player-info-avatar { width:30px!important; height:30px!important; flex:0 0 30px!important; font-size:21px!important; }
-  #gameScreen .player-info-details { gap:0!important; }
-  #gameScreen .player-info-details strong { font-size:11px!important; line-height:1.15!important; }
-  #gameScreen .player-info-details span { font-size:9px!important; line-height:1.15!important; }
-  #gameScreen .board-layout { display:flex!important; justify-content:center!important; align-items:center!important; width:100%!important; min-height:0!important; }
-  #gameScreen .board-layout>div:first-child { width:min(100%, calc(100dvh - 390px))!important; max-width:100%!important; min-width:0!important; margin:0 auto!important; }
-  #gameScreen #board { width:100%!important; height:auto!important; aspect-ratio:1/1!important; }
-}
+
+<style id="remove-game-whitespace-v18">
+/* Keep the board and player avatars at their existing sizes; reclaim only empty spacing. */
+body:has(#gameScreen:not(.hidden)) .wrap { padding-top:4px!important; padding-bottom:64px!important; }
+#gameScreen.panel { margin-top:0!important; padding:8px 12px!important; }
+#gameScreen .game-topbar { gap:4px!important; margin:0 0 4px!important; }
+#gameScreen .game-topline { margin:0!important; gap:5px!important; }
+#gameScreen .game-controls { gap:5px 8px!important; margin:0!important; }
+#gameScreen .game-controls .turn-status { margin:0!important; }
+#gameScreen .tabletop-scene { margin:0 auto!important; padding:0!important; gap:0!important; }
+#gameScreen .tabletop-scene .board-layout { margin:0!important; padding:0!important; }
+#gameScreen .player-info-card { margin:0!important; }
+#gameScreen .player-info-details { margin:0!important; }
+#gameScreen #board { margin:0!important; }
 @media (max-width:760px) {
-  body:has(#gameScreen:not(.hidden)) .wrap { padding:5px 7px 70px!important; }
-  #gameScreen.panel { padding:7px!important; border-radius:13px!important; }
-  #gameScreen .game-topbar { gap:4px!important; margin-bottom:5px!important; }
-  #gameScreen .game-topline { gap:5px!important; }
-  #gameScreen .game-topline h2 { font-size:14px!important; }
-  #gameScreen .game-topline .compact { min-height:27px!important; padding:4px 7px!important; font-size:10px!important; }
-  #gameScreen .game-controls { gap:5px 6px!important; }
-  #gameScreen .game-controls .turn-status { flex:1 1 100%!important; width:100%!important; padding:4px 7px!important; margin:0!important; }
-  #gameScreen .game-controls .turn-status .small { font-size:10px!important; }
-  #gameScreen .game-controls .turn-status strong { font-size:11px!important; }
-  #gameScreen .game-controls #newGameBtn,
-  #gameScreen .game-controls #resignBtn,
-  #gameScreen .game-controls #backToMenuBtn { min-height:28px!important; padding:4px 6px!important; font-size:10px!important; }
-  #gameScreen .game-controls #newGameBtn,
-  #gameScreen .game-controls #resignBtn { flex:1 1 calc(50% - 4px)!important; }
-  #gameScreen .game-controls #backToMenuBtn { flex:1 1 100%!important; }
-  #gameScreen .tabletop-scene { display:grid!important; grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto auto; gap:3px!important; width:100%!important; max-width:none!important; padding:0!important; }
-  #gameScreen .player-info-card { min-height:0!important; padding:2px 6px!important; gap:5px!important; }
-  #gameScreen .player-info-avatar { width:27px!important; height:27px!important; flex:0 0 27px!important; font-size:19px!important; }
-  #gameScreen .player-info-details { gap:0!important; }
-  #gameScreen .player-info-details strong { font-size:10px!important; line-height:1.1!important; }
-  #gameScreen .player-info-details span { font-size:8px!important; line-height:1.1!important; }
-  #gameScreen .board-layout { display:flex!important; justify-content:center!important; align-items:center!important; width:100%!important; min-height:0!important; }
-  #gameScreen .board-layout>div:first-child { width:min(calc(100vw - 30px), calc(100svh - 405px))!important; max-width:100%!important; min-width:0!important; margin:0 auto!important; }
-  #gameScreen #board { width:100%!important; height:auto!important; aspect-ratio:1/1!important; }
-  #gameScreen #roomChatPanel { max-width:calc(100vw - 28px)!important; }
-}
-@media (max-height:700px) {
+  body:has(#gameScreen:not(.hidden)) .wrap { padding:3px 6px 66px!important; }
+  #gameScreen.panel { padding:5px!important; border-radius:12px!important; }
   #gameScreen .game-topbar { gap:3px!important; margin-bottom:3px!important; }
-  #gameScreen .tabletop-scene { gap:2px!important; }
-  #gameScreen .board-layout>div:first-child { width:min(100%, calc(100dvh - 350px))!important; }
-}
-@media (max-width:760px) and (max-height:700px) {
-  #gameScreen .board-layout>div:first-child { width:min(calc(100vw - 30px), calc(100svh - 365px))!important; }
+  #gameScreen .game-topline { gap:4px!important; }
+  #gameScreen .game-controls { gap:4px 5px!important; }
+  #gameScreen .tabletop-scene { gap:0!important; padding:0!important; }
+  #gameScreen .tabletop-scene .board-layout { margin:0!important; padding:0!important; }
 }
 </style>
