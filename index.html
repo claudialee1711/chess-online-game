@@ -1283,13 +1283,15 @@ function multiplayerColorName(color){return color==="w"?"Bidak coklat":"Bidak hi
 function showResultOverlay(title,emoji="🏆"){const overlay=$("gameResultOverlay");if(!overlay)return;overlay.innerHTML='<div class="result-card"><div class="result-trophy">'+emoji+'</div><h2>'+esc(title)+'</h2><p>'+esc(game?.in_draw()?"Permainan berakhir remis.":"Permainan telah selesai.")+'</p><button type="button" id="resultBackBtn">Balik ke Menu</button></div>';overlay.classList.remove("hidden");$("resultBackBtn").onclick=async()=>{overlay.classList.add("hidden");await cleanupListeners();currentRoomId=null;showScreen("home");};}
 
 /* Bidak vektor bergaya Staunton: bentuk klasik dengan alas, badan, detail ukiran dan highlight. */
+let chessPieceSvgSerial=0;
 function chessPieceSvg(type,color){
+ const uid="piece"+(++chessPieceSvgSerial);
  const light=color==="w";
- const wood=light?"#f4e7ca":"#343d4b";
- const mid=light?"#dfc99f":"#202a39";
- const shade=light?"#b99460":"#0b111b";
- const edge=light?"#967344":"#111a28";
- const shine=light?"#fff8e8":"#8497b2";
+ const wood=light?"#f1dfbb":"#303b4d";
+ const mid=light?"#d8bd8d":"#1c2738";
+ const shade=light?"#a9804b":"#080d16";
+ const edge=light?"#80613a":"#71839d";
+ const shine=light?"#fff2d6":"#a9bad2";
  const shapes={
   p:'<path d="M39 39 C34 34 35 26 40 22 C44 18 51 18 56 22 C61 27 61 34 56 39 L60 47 C62 53 64 60 67 68 L73 83 L29 83 L35 68 C38 60 40 53 42 47 Z"/><path d="M41 45 Q50 50 59 45 M37 67 Q50 72 64 67" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
   r:'<path d="M29 22 L29 35 L37 35 L37 29 L44 29 L44 35 L56 35 L56 29 L63 29 L63 35 L71 35 L71 22 L79 22 L76 45 L70 52 L70 76 L77 86 L23 86 L30 76 L30 52 L24 45 L21 22 Z"/><path d="M31 47 L69 47 M35 56 L65 56 M34 74 L66 74" fill="none" stroke="HIGHLIGHT" stroke-width="2.2" opacity=".8"/>',
@@ -1302,7 +1304,7 @@ function chessPieceSvg(type,color){
  const firstPath=shapes[type].slice(0,firstEnd);
  const body=firstPath.slice(firstPath.indexOf('d="')+3,firstPath.lastIndexOf('"'));
  const detail=shapes[type].slice(firstEnd).replaceAll("HIGHLIGHT",shine);
- const svg='<svg class="piece-svg" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+shine+'"/><stop offset=".28" stop-color="'+wood+'"/><stop offset=".68" stop-color="'+mid+'"/><stop offset="1" stop-color="'+shade+'"/></linearGradient><linearGradient id="baseGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+shine+'"/><stop offset=".45" stop-color="'+mid+'"/><stop offset="1" stop-color="'+shade+'"/></linearGradient></defs><ellipse cx="50" cy="92" rx="29" ry="4" fill="#000" opacity=".28"/><path d="M17 82 Q50 76 83 82 L88 89 Q50 98 12 89 Z" fill="url(#baseGrad)" stroke="'+edge+'" stroke-width="2"/><path d="M22 83 Q50 87 78 83 M17 89 Q50 96 83 89" fill="none" stroke="'+shine+'" stroke-width="1.7" opacity=".75"/><path d="'+body+'" fill="url(#bodyGrad)" stroke="'+edge+'" stroke-width="2.6" stroke-linejoin="round"/>'+detail+'</svg>';
+ const svg='<svg class="piece-svg" viewBox="0 0 100 100" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="'+uid+'-bodyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+shine+'"/><stop offset=".28" stop-color="'+wood+'"/><stop offset=".68" stop-color="'+mid+'"/><stop offset="1" stop-color="'+shade+'"/></linearGradient><linearGradient id="'+uid+'-baseGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+shine+'"/><stop offset=".45" stop-color="'+mid+'"/><stop offset="1" stop-color="'+shade+'"/></linearGradient></defs><ellipse cx="50" cy="92" rx="29" ry="4" fill="#000" opacity=".28"/><path d="M17 82 Q50 76 83 82 L88 89 Q50 98 12 89 Z" fill="url(#'+uid+'-baseGrad)" stroke="'+edge+'" stroke-width="2"/><path d="M22 83 Q50 87 78 83 M17 89 Q50 96 83 89" fill="none" stroke="'+shine+'" stroke-width="1.7" opacity=".75"/><path d="'+body+'" fill="url(#'+uid+'-bodyGrad)" stroke="'+edge+'" stroke-width="2.6" stroke-linejoin="round"/>'+detail+'</svg>';
  return svg;
 }
 function renderBoard(){
@@ -1887,61 +1889,31 @@ $("addFriendBtn").onclick=async()=>{
 </style>
 
 
-<style id="chess-final-cleanup-v7">
-/* Palette is carried by the SVG fill gradients; avoid the old gold/white outline look. */
-#gameScreen #board .piece-svg path[fill="url(#bodyGrad)"],
-#gameScreen #board .piece-svg path[fill="url(#baseGrad)"] { stroke-width:1.5!important; }
-#gameScreen #board .piece-white .piece-svg { filter:drop-shadow(0 2px 2px #0007)!important; }
-#gameScreen #board .piece-black .piece-svg { filter:drop-shadow(0 2px 2px #000b)!important; }
-@media(max-width:600px) {
-  #gameScreen.panel { padding:8px 8px 10px!important; margin-bottom:0!important; }
-  #gameScreen .game-topbar { gap:6px!important; margin-bottom:7px!important; }
-  #gameScreen .board-layout { display:grid!important; grid-template-columns:minmax(0,1fr)!important; gap:0!important; margin:0!important; padding:0!important; }
-  #gameScreen .board-layout>div:first-child {
-    width:min(calc(100vw - 32px), 570px)!important;
-    max-width:100%!important; margin:0 auto!important; padding:0!important;
-  }
-  #gameScreen #board { width:100%!important; height:auto!important; aspect-ratio:1/1!important; }
-  #opponentProfile { padding:4px 7px!important; margin:2px 0 5px!important; gap:7px!important; }
-  #opponentProfile .opponent-avatar { width:36px!important; height:36px!important; flex-basis:36px!important; font-size:22px!important; }
-  #opponentProfile .opponent-summary { gap:4px!important; }
-  #gameScreen .room-chat-panel, #gameScreen .chat-panel, #gameScreen .friend-chat {
-    margin-top:5px!important; padding:8px!important;
-  }
-  #gameScreen .chat-messages { height:auto!important; max-height:100px!important; }
-  #gameScreen .footer { margin-top:5px!important; }
-}
-</style>
 
 
-<style id="chess-piece-colors-real-fix-v8">
-/* Override the legacy gold/white glyph styling at the actual SVG shapes. */
-#board .sq .piece-white .piece-svg > path:nth-of-type(1) { fill:#d8c19a!important; stroke:#9e8053!important; }
-#board .sq .piece-white .piece-svg > path:nth-of-type(3) { fill:#f4e7ca!important; stroke:#9e8053!important; }
-#board .sq .piece-white .piece-svg > path:nth-of-type(2),
-#board .sq .piece-white .piece-svg > path:nth-of-type(n+4) { fill:none!important; stroke:#b99a6b!important; }
-#board .sq .piece-white .piece-svg > path:nth-of-type(2) { fill:none!important; }
-#board .sq .piece-black .piece-svg > path:nth-of-type(1) { fill:#151c28!important; stroke:#52637c!important; }
-#board .sq .piece-black .piece-svg > path:nth-of-type(3) { fill:#293548!important; stroke:#52637c!important; }
-#board .sq .piece-black .piece-svg > path:nth-of-type(2),
-#board .sq .piece-black .piece-svg > path:nth-of-type(n+4) { fill:none!important; stroke:#7f91aa!important; }
-#board .sq .piece-svg > ellipse { fill:#000!important; opacity:.22!important; }
-#board .sq .piece-svg { filter:drop-shadow(0 2px 2px #0007)!important; }
-@media(min-width:761px) {
- #gameScreen.panel { min-height:calc(100vh - 150px)!important; padding:10px 14px!important; }
- #gameScreen .board-layout { display:grid!important; grid-template-columns:minmax(0,1fr)!important; justify-items:center!important; gap:5px!important; }
- #gameScreen .board-layout>div:first-child { width:min(66vh, min(54vw, 620px))!important; max-width:100%!important; margin:0 auto!important; }
- #gameScreen #board { width:100%!important; aspect-ratio:1/1!important; }
- .opponent-chat-layout { margin-top:5px!important; gap:8px!important; }
+
+
+
+
+<style id="chess-layout-and-piece-fix-v9">
+#board .sq .piece-white .piece-svg,#board .sq .piece-black .piece-svg {
+  -webkit-text-stroke:0!important;text-shadow:none!important;
+  filter:drop-shadow(0 2px 2px rgba(4,10,18,.55))!important;
 }
+#board .sq .piece-white .piece-svg path[fill="none"] { stroke:#fff0d1!important; }
+#board .sq .piece-black .piece-svg path[fill="none"] { stroke:#8fa2bd!important; }
+#board .sq.light { background:#f1f3f5!important; }
+#board .sq.dark { background:#263a55!important; }
+#board { border-color:#18263a!important; }
+.tabletop-scene { max-width:620px!important;gap:5px!important;padding:4px 0 6px!important; }
+.tabletop-scene .board-layout { width:min(100%,62vh,620px)!important;margin:0 auto!important; }
 @media(max-width:760px) {
- #gameScreen.panel { padding:8px!important; margin-bottom:0!important; }
- #gameScreen .board-layout { gap:0!important; margin:0!important; padding:0!important; }
- #gameScreen .board-layout>div:first-child { width:min(calc(100vw - 28px), calc(100dvh - 235px))!important; max-width:100%!important; margin:0 auto!important; }
- #gameScreen #board { width:100%!important; height:auto!important; aspect-ratio:1/1!important; }
- #gameScreen .opponent-chat-layout { margin-top:5px!important; gap:6px!important; }
- #gameScreen .room-chat-panel,#gameScreen .chat-panel { margin-top:4px!important; padding:7px!important; }
- #gameScreen .room-chat-messages,#gameScreen .chat-messages { max-height:90px!important; }
- .wrap { padding-bottom:8px!important; }
+ #gameScreen { padding:8px!important; }
+ #gameScreen .tabletop-scene { width:100%!important;max-width:100%!important;gap:4px!important;padding:2px 0 4px!important; }
+ #gameScreen .tabletop-scene .board-layout { width:min(100%,calc(100dvh - 235px))!important;margin:0 auto!important; }
+ #gameScreen .player-info-card { padding:5px 7px!important;min-height:0!important;gap:6px!important; }
+ #gameScreen .player-info-avatar { width:38px!important;height:38px!important;font-size:25px!important; }
+ #gameScreen .room-chat-panel { padding:7px!important;margin-top:4px!important; }
+ #gameScreen .room-chat-messages { max-height:88px!important; }
 }
 </style>
