@@ -1955,3 +1955,20 @@ $("addFriendBtn").onclick=async()=>{
 </style>
 
 
+
+
+<style id="stable-board-fit-v15">
+/* Ukuran papan stabil di HP: jangan ikut mengecil saat keyboard chat membuka viewport. */
+@media (max-width: 760px) {
+  #gameScreen .tabletop-scene .board-layout {
+    width: min(100%, calc(100vw - 28px)) !important;
+    max-width: calc(100vw - 28px) !important;
+    margin: 0 auto !important;
+  }
+  #gameScreen #board {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+  }
+}
+</style>
