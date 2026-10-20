@@ -1912,3 +1912,36 @@ $("addFriendBtn").onclick=async()=>{
   #gameScreen .footer { margin-top:5px!important; }
 }
 </style>
+
+
+<style id="chess-piece-colors-real-fix-v8">
+/* Override the legacy gold/white glyph styling at the actual SVG shapes. */
+#board .sq .piece-white .piece-svg > path:nth-of-type(1) { fill:#d8c19a!important; stroke:#9e8053!important; }
+#board .sq .piece-white .piece-svg > path:nth-of-type(3) { fill:#f4e7ca!important; stroke:#9e8053!important; }
+#board .sq .piece-white .piece-svg > path:nth-of-type(2),
+#board .sq .piece-white .piece-svg > path:nth-of-type(n+4) { fill:none!important; stroke:#b99a6b!important; }
+#board .sq .piece-white .piece-svg > path:nth-of-type(2) { fill:none!important; }
+#board .sq .piece-black .piece-svg > path:nth-of-type(1) { fill:#151c28!important; stroke:#52637c!important; }
+#board .sq .piece-black .piece-svg > path:nth-of-type(3) { fill:#293548!important; stroke:#52637c!important; }
+#board .sq .piece-black .piece-svg > path:nth-of-type(2),
+#board .sq .piece-black .piece-svg > path:nth-of-type(n+4) { fill:none!important; stroke:#7f91aa!important; }
+#board .sq .piece-svg > ellipse { fill:#000!important; opacity:.22!important; }
+#board .sq .piece-svg { filter:drop-shadow(0 2px 2px #0007)!important; }
+@media(min-width:761px) {
+ #gameScreen.panel { min-height:calc(100vh - 150px)!important; padding:10px 14px!important; }
+ #gameScreen .board-layout { display:grid!important; grid-template-columns:minmax(0,1fr)!important; justify-items:center!important; gap:5px!important; }
+ #gameScreen .board-layout>div:first-child { width:min(66vh, min(54vw, 620px))!important; max-width:100%!important; margin:0 auto!important; }
+ #gameScreen #board { width:100%!important; aspect-ratio:1/1!important; }
+ .opponent-chat-layout { margin-top:5px!important; gap:8px!important; }
+}
+@media(max-width:760px) {
+ #gameScreen.panel { padding:8px!important; margin-bottom:0!important; }
+ #gameScreen .board-layout { gap:0!important; margin:0!important; padding:0!important; }
+ #gameScreen .board-layout>div:first-child { width:min(calc(100vw - 28px), calc(100dvh - 235px))!important; max-width:100%!important; margin:0 auto!important; }
+ #gameScreen #board { width:100%!important; height:auto!important; aspect-ratio:1/1!important; }
+ #gameScreen .opponent-chat-layout { margin-top:5px!important; gap:6px!important; }
+ #gameScreen .room-chat-panel,#gameScreen .chat-panel { margin-top:4px!important; padding:7px!important; }
+ #gameScreen .room-chat-messages,#gameScreen .chat-messages { max-height:90px!important; }
+ .wrap { padding-bottom:8px!important; }
+}
+</style>
